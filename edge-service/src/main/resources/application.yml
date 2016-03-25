@@ -1,0 +1,22 @@
+spring:
+  profiles:
+    active: development
+---
+spring:
+  profiles: development
+  application:
+    name: edge-service
+zuul:
+  ignored-services: '*'
+  routes:
+    account-service: /account/**
+    payment-service: /payment/**
+    inventory-service: /inventory/**
+    order-service: /order/**
+    user-service: /user/**
+    catalog-service: /catalog/**
+security:
+  oauth2:
+    resource:
+      userInfoUri: http://localhost:8181/uaa/user
+  ignored: /catalog/**

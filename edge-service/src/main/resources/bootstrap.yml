@@ -1,0 +1,5 @@
+spring:
+  application:
+    name: edge-service
+server:
+  port: 9999

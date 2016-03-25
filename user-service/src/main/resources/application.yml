@@ -1,0 +1,32 @@
+spring:
+  profiles:
+    active: development
+---
+server:
+  port: 8181
+  contextPath: /uaa
+security:
+  user:
+    password: password
+  enable-csrf: false
+logging.level.org.springframework.security: DEBUG
+spring:
+  profiles: development
+  jpa:
+    show_sql: false
+    database: MYSQL
+    generate-ddl: true
+  datasource:
+    url: jdbc:mysql://192.168.99.100:3306/dev
+    username: root
+    password: dbpass
+security.ignored: /resources/**
+
+---
+spring:
+  profiles: test
+  jpa:
+    show_sql: false
+    database: H2
+  datasource:
+    url: jdbc:h2:mem:testdb;DB_CLOSE_ON_EXIT=FALSE

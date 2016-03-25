@@ -1,0 +1,4 @@
+spring:
+  neo4j:
+    host: ${SPRING_NEO4J_HOST:192.168.99.100}
+    port: ${SPRING_NEO4J_PORT:7474}

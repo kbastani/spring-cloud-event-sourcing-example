@@ -1,0 +1,11 @@
+---
+applications:
+- name: account-service
+  memory: 512M
+  instances: 1
+  host: account-service-${random-word}
+  path: target/account-service-0.0.1-SNAPSHOT.jar
+  env:
+    SPRING_PROFILES_ACTIVE: cloud
+    DEBUG: "true"
+    debug: "true"

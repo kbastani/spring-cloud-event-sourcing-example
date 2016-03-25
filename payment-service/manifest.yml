@@ -1,0 +1,12 @@
+---
+applications:
+- name: redis-caching
+  memory: 512M
+  instances: 1
+  host: redis-caching-${random-word}
+  path: target/redis-0.0.1-SNAPSHOT.jar
+  env:
+    SPRING_PROFILES_ACTIVE: cloud
+    DEBUG: "true"
+  services:
+   - redis

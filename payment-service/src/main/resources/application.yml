@@ -1,0 +1,25 @@
+spring:
+  profiles:
+    active: test
+---
+spring:
+  profiles: development
+  redis:
+    host: localhost
+    port: 6379
+  jpa:
+    show_sql: false
+    database: MYSQL
+    generate-ddl: true
+  datasource:
+    url: jdbc:mysql://192.168.99.100:3306/dev?useSSL=false
+    username: root
+    password: dbpass
+---
+spring:
+  profiles: test
+  redis:
+    host: localhost
+    port: 6379
+  jpa:
+    database: H2

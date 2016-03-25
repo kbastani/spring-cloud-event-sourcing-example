@@ -1,0 +1,91 @@
+<div class="container hidden-content" ng-model="product">
+    <div class="row">
+        <div>
+            <ol class="breadcrumb">
+                <li><a href="#">Home</a></li>
+                <li><a href="#">Products</a></li>
+                <li class="active">{{product.name}}</li>
+            </ol>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-8 col-md-push-4 col-sm-8 col-sm-push-4">
+            <div class="row">
+                <div class="col-md-12">
+                    <!-- <ul class="nav nav-pills item-nav">
+                      <li class="active"><a href="#">Details</a></li>
+                      <li><a href="#">Related</a></li>
+                    </ul> -->
+                    <div class="panel panel-default">
+                        <!-- Default panel contents -->
+                        <div class="panel-heading">Product Details</div>
+                        <div class="panel-body">
+                            <p ng-bind-html="product.description | rawHtml"></p>
+                        </div>
+
+                        <!-- List group -->
+                        <ul class="list-group list-group-details">
+                            <li class="list-group-item">
+                                <div class="panel-heading">Price: <span
+                                        class="panel-heading">{{product.unitPrice}}</span></div>
+                            </li>
+                            <li class="list-group-item">
+                                <div class="panel-heading">Product number: <span class="panel-heading">{{product.productId}}</span>
+                                </div>
+                            </li>
+                            <li class="list-group-item">
+                                <div class="panel-heading form-inline">
+                                    <button class="btn btn-primary" type="button">Add to Cart</button>
+                                    <div class="form-group"><input type="text" placeholder="QTY"
+                                                                   class="form-control qty-text"></div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="panel panel-default">
+                        <!-- Default panel contents -->
+                        <div class="panel-heading">Related</div>
+                        <div class="panel-body">
+                            <div id="owl-demo-cast" carousel="products"
+                                 class="owl-carousel owl-theme products">
+                                <!-- Related products -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="clearfix visible-xs"></div>
+        <div class="col-md-4 col-md-pull-8 col-sm-4 col-sm-pull-8">
+            <div class="row">
+                <div class="col-md-12 col-sm-12 col-xs-12">
+                    <div class="thumbnail">
+                        <img ng-src="{{product.poster_image}}" alt="{{product.name}}">
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12 col-sm-12">
+
+                    <div class="panel panel-default item-left-panel">
+                        <!-- Default panel contents -->
+                        <div class="panel-heading">Summary</div>
+                        <!-- List group -->
+                        <div class="row">
+                            <div class="item-label col-md-12">Product name:</div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">{{product.name}}</div>
+                        </div>
+                        <div class="row">
+                            <div class="item-label col-md-12">Price:</div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">{{product.unitPrice}}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

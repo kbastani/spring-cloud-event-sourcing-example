@@ -1,0 +1,1 @@
+INSERT INTO dev.user VALUES('user', 'Kenny', 'Bastani', 'kb@socialmoon.com');

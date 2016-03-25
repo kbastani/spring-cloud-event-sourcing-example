@@ -1,0 +1,5 @@
+spring:
+  application:
+    name: online-store-web
+server:
+  port: 8787
