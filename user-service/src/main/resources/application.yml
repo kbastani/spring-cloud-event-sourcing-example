@@ -21,7 +21,34 @@ spring:
     username: root
     password: dbpass
 security.ignored: /resources/**
-
+---
+server:
+  port: 8181
+  contextPath: /uaa
+security:
+  user:
+    password: password
+  enable-csrf: false
+spring:
+  profiles: docker
+  jpa:
+    show_sql: false
+    database: MYSQL
+    generate-ddl: true
+  datasource:
+    url: jdbc:mysql://mysql:3306/dev
+    username: root
+    password: dbpass
+security.ignored: /resources/**
+eureka:
+  instance:
+    prefer-ip-address: true
+    non-secure-port: 8181
+  client:
+    registerWithEureka: true
+    fetchRegistry: true
+    serviceUrl:
+      defaultZone: http://discovery-service:8761/eureka/
 ---
 spring:
   profiles: test

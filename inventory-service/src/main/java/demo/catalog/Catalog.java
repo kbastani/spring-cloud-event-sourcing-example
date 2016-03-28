@@ -5,8 +5,8 @@ import org.neo4j.ogm.annotation.GraphId;
 import org.neo4j.ogm.annotation.NodeEntity;
 import org.neo4j.ogm.annotation.Relationship;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 @NodeEntity
 public class Catalog {
@@ -15,7 +15,7 @@ public class Catalog {
     private Long id;
 
     @Relationship(type = "HAS_PRODUCT", direction = "OUTGOING")
-    private Set<Product> products = new HashSet<>();
+    private List<Product> products = new ArrayList<>();
 
     private String name;
 
@@ -34,11 +34,11 @@ public class Catalog {
         this.id = id;
     }
 
-    public Set<Product> getProducts() {
+    public List<Product> getProducts() {
         return products;
     }
 
-    public void setProducts(Set<Product> products) {
+    public void setProducts(List<Product> products) {
         this.products = products;
     }
 

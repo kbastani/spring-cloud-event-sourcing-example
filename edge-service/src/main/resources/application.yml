@@ -21,3 +21,31 @@ security:
     resource:
       userInfoUri: http://localhost:8181/uaa/user
   ignored: /catalog/**
+---
+spring:
+  profiles: docker
+  application:
+    name: edge-service
+zuul:
+  ignored-services: '*'
+  routes:
+    account-service: /account/**
+    payment-service: /payment/**
+    inventory-service: /inventory/**
+    order-service: /order/**
+    user-service: /user/**
+    catalog-service: /catalog/**
+    shopping-cart-service: /shoppingcart/**
+security:
+  oauth2:
+    resource:
+      userInfoUri: http://${DOCKER_IP:192.168.99.100}:8181/uaa/user
+  ignored: /catalog/**
+eureka:
+  instance:
+    prefer-ip-address: true
+  client:
+    registerWithEureka: true
+    fetchRegistry: true
+    serviceUrl:
+      defaultZone: http://discovery-service:8761/eureka/

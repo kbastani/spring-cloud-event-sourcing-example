@@ -1,0 +1,103 @@
+mysql:
+  image: mysql:latest
+  ports:
+   - 3306:3306
+  environment:
+   - MYSQL_ROOT_PASSWORD=dbpass
+   - MYSQL_DATABASE=dev
+neo4j:
+  image: neo4j:latest
+  ports:
+   - 7474:7474
+  environment:
+   - NEO4J_AUTH=none
+mongo:
+  image: mongo:latest
+  ports:
+   - 27017:27017
+redis:
+  image: redis:latest
+  ports:
+   - 6379:6379
+user-service:
+  image: kbastani/user-service
+  ports:
+   - 8181:8181
+  links:
+   - mysql
+   - discovery-service
+  environment:
+   - SPRING_PROFILES_ACTIVE=docker
+   - DOCKER_IP=$DOCKER_IP
+discovery-service:
+  image: kbastani/discovery-service
+  ports:
+   - 8761:8761
+  environment:
+   - SPRING_PROFILES_ACTIVE=docker
+   - DOCKER_IP=$DOCKER_IP
+edge-service:
+  image: kbastani/edge-service
+  ports:
+   - 9999:9999
+  links:
+   - user-service
+   - discovery-service
+  environment:
+   - SPRING_PROFILES_ACTIVE=docker
+   - DOCKER_IP=$DOCKER_IP
+account-service:
+  image: kbastani/account-service
+  links:
+   - user-service
+   - discovery-service
+   - mysql
+  environment:
+   - SPRING_PROFILES_ACTIVE=docker
+   - DOCKER_IP=$DOCKER_IP
+inventory-service:
+  image: kbastani/inventory-service
+  links:
+   - neo4j
+   - discovery-service
+  environment:
+   - SPRING_PROFILES_ACTIVE=docker
+   - DOCKER_IP=$DOCKER_IP
+order-service:
+  image: kbastani/order-service
+  links:
+   - mongo
+   - discovery-service
+   - user-service
+  environment:
+   - SPRING_PROFILES_ACTIVE=docker
+   - DOCKER_IP=$DOCKER_IP
+catalog-service:
+  image: kbastani/catalog-service
+  links:
+   - redis
+   - mysql
+   - discovery-service
+  environment:
+   - SPRING_PROFILES_ACTIVE=docker
+   - DOCKER_IP=$DOCKER_IP
+shopping-cart-service:
+  image: kbastani/shopping-cart-service
+  links:
+   - mysql
+   - discovery-service
+   - user-service
+  environment:
+   - SPRING_PROFILES_ACTIVE=docker
+   - DOCKER_IP=$DOCKER_IP
+online-store-web:
+  image: kbastani/online-store-web
+  ports:
+   - 8787:8787
+  links:
+   - discovery-service
+   - user-service
+   - edge-service
+  environment:
+   - SPRING_PROFILES_ACTIVE=docker
+   - DOCKER_IP=$DOCKER_IP

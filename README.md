@@ -1,6 +1,6 @@
 # Spring Cloud Event Sourcing Example
 
-Spring Cloud example of event sourcing using microservices.
+This reference application is a Spring Cloud example of using event sourcing in microservices. The project is intended to demonstrate end-to-end best practices for building a _Netflix-like_ microservice architecture using Spring Cloud.
 
 * Spring Cloud OAuth2
   * Authorization Server
@@ -11,23 +11,9 @@ Spring Cloud example of event sourcing using microservices.
 * Event-driven Messaging
   * Event sourcing
 
-## Usage
+## Online Store Domain
 
-Some applications require database dependencies described in the application.yml files of each service.
-
-* MySQL
-* Neo4j
-* MongoDB
-* Redis
-
-If using Docker for integration testing, you can use these commands to start the database dependencies.
-
-    docker run -d -p 7474:7474 -e NEO4J_AUTH=none --name neo4j neo4j:latest
-    docker run -d -p 27017:27017 --name mongo mongo:latest
-    docker run --rm --env MYSQL_ROOT_PASSWORD=dbpass --env MYSQL_DATABASE=dev -p 3306:3306 --name mysql mysql:latest
-    docker run -d -p 6379:6379 --name redis redis:latest
-
-After starting the required database dependencies, run each service using `mvn spring-boot:run` in the following order.
+This reference application is based on common design patterns for building an ecommerce application. The application includes the following microservices.
 
 * Discovery Service
 * Edge Service
@@ -37,11 +23,29 @@ After starting the required database dependencies, run each service using `mvn s
 * Order Service
 * Inventory Service
 * Online Store Web
+* Shopping Cart Service
 
-When all the services have started up. Verify that the services are registered with Eureka at `http://localhost:8761`.
+## Usage
 
-If everything has loaded correctly, navigate to the online store at `http://localhost:8787/`. Click `Login`. You'll be navigated to the authorization server's gateway at `http://localhost:8181/uaa/login`. The username is `user` and the password is `password`. You'll be authenticated and asked to approve token grant to the online web store. After accepting the grant, you'll be redirected to the online store application where you'll be able to access protected resources from the edge service.
+Microservice architectures commonly use multiple databases. The resources of the business domain are distributed across the microservice architecture, with each service having its own exclusive database. Each type of database for a microservice is commonly chosen by a development team based on its advantages when solving a specific problem.
+
+This reference application uses the following mixture of databases.
+
+* MySQL - RDBMS
+* Neo4j - GraphDB
+* MongoDB - Document Store
+* Redis - Key/value Store
+
+### Integration Testing
+
+If you would like to use Docker for integration testing, a `docker-compose.yml` file has been provided in the root directory. To build all the images, first make sure that you have Docker installed and available in your command line tool. With Docker and Docker Compose installed, execute the provided `run.sh` script. This script will build each container and start each of the services and database dependencies. When all the services have started up. Verify that the services are registered with Eureka at `http://$DOCKER_IP:8761`.
+
+If everything has loaded correctly, navigate to the online store at `http://DOCKER_IP:8787/`. Click `Login`. You'll be navigated to the authorization server's gateway at `http://DOCKER_IP:8181/uaa/login`. The username is `user` and the password is `password`. You'll be authenticated and asked to approve token grant to the online web store. After accepting the grant, you'll be redirected to the online store application where you'll be able to access protected resources from the edge service.
 
 ## TODO
 
-Test data must be inserted into each of the databases before you can see any data.
+Test data must be inserted into each of the databases before you can see any data. For now, you can look at the unit and integration tests of the different business applications in the project.
+
+## License
+
+This project is licensed under Apache License 2.0.

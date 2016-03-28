@@ -27,3 +27,38 @@ security:
       userAuthorizationUri: http://localhost:8181/uaa/oauth/authorize
       clientId: acme
       clientSecret: acmesecret
+---
+spring:
+  profiles: docker
+  application:
+    name: online-store-web
+zuul:
+  ignored-services: '*'
+  routes:
+    edge-service:
+      path: /api/**
+      url: http://${DOCKER_IP:192.168.99.100}:9999
+    auth-service:
+      path: /user/**
+      url: http://${DOCKER_IP:192.168.99.100}:8181/uaa/user
+    user-service:
+      path: /users/**
+security:
+  enable-csrf: false
+  oauth2:
+    resource:
+      userInfoUri: http://${DOCKER_IP:192.168.99.100}:8181/uaa/user
+    client:
+      accessTokenUri: http://${DOCKER_IP:192.168.99.100}:8181/uaa/oauth/token
+      userAuthorizationUri: http://${DOCKER_IP:192.168.99.100}:8181/uaa/oauth/authorize
+      clientId: acme
+      clientSecret: acmesecret
+eureka:
+  instance:
+    non-secure-port: 8787
+    prefer-ip-address: true
+  client:
+    registerWithEureka: true
+    fetchRegistry: true
+    serviceUrl:
+      defaultZone: http://discovery-service:8761/eureka/
