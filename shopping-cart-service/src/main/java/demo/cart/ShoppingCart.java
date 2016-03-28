@@ -1,0 +1,93 @@
+package demo.cart;
+
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import demo.catalog.Catalog;
+
+import java.util.*;
+import java.util.stream.Collectors;
+
+/**
+ * The {@link ShoppingCart} object represents an aggregate of {@link CartEvent} that
+ * represent actions taken by a user to add/remove/clear/checkout products from their
+ * shopping cart
+ */
+public class ShoppingCart {
+
+    private Map<String, Integer> productMap = new HashMap<>();
+    private List<LineItem> lineItems = new ArrayList<>();
+    private Catalog catalog;
+
+    public ShoppingCart(Catalog catalog) {
+        this.catalog = catalog;
+    }
+
+    @JsonIgnore
+    public Map<String, Integer> getProductMap() {
+        return productMap;
+    }
+
+    public void setProductMap(Map<String, Integer> productMap) {
+        this.productMap = productMap;
+    }
+
+    @JsonIgnore
+    public Catalog getCatalog() {
+        return catalog;
+    }
+
+    public void setCatalog(Catalog catalog) {
+        this.catalog = catalog;
+    }
+
+    /**
+     * Get the line items from the aggregate of add cart events
+     * @return a new list of {@link LineItem} representing the state of the shopping cart
+     * @throws Exception if a product in the cart could not be found in the catalog
+     */
+    public List<LineItem> getLineItems() throws Exception {
+        lineItems = productMap.entrySet()
+                .stream()
+                .map(item -> new LineItem(item.getKey(), catalog.getProducts().stream()
+                        .filter(prd -> Objects.equals(prd.getProductId(), item.getKey()))
+                        .findFirst()
+                        .orElse(null), item.getValue()))
+                .filter(item -> item.getQuantity() > 0)
+                .collect(Collectors.toList());
+
+        if(lineItems.stream()
+                .anyMatch(item -> item.getProduct() == null)) {
+            throw new Exception("Product not found in catalog");
+        }
+
+        return lineItems;
+    }
+
+    public void setLineItems(List<LineItem> lineItems) {
+        this.lineItems = lineItems;
+    }
+
+    public ShoppingCart incorporate(CartEvent cartEvent) {
+        if (cartEvent.getCartEventType() == CartEventType.ADD_ITEM ||
+                cartEvent.getCartEventType() == CartEventType.REMOVE_ITEM) {
+            productMap.put(cartEvent.getProductId(),
+                    productMap.getOrDefault(cartEvent.getProductId(), 0) +
+                            (cartEvent.getQuantity() * (cartEvent.getCartEventType() == CartEventType.ADD_ITEM ? 1 : -1)));
+        }
+
+        return this;
+    }
+
+    public static Boolean isTerminal(CartEventType eventType) {
+        return (eventType == CartEventType.CLEAR_CART || eventType == CartEventType.CHECKOUT);
+    }
+
+    @Override
+    public String toString() {
+        return "ShoppingCart{" +
+                "productMap=" + productMap +
+                ", catalog=" + catalog +
+                ", lineItems=" + lineItems +
+                '}';
+    }
+}

@@ -27,6 +27,7 @@
         <module>online-store-web</module>
         <module>catalog-service</module>
         <module>edge-service</module>
+        <module>shopping-cart-service</module>
     </modules>
 
     <properties>

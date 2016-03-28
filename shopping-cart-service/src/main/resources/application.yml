@@ -1,0 +1,39 @@
+spring:
+  profiles:
+    active: development
+---
+spring:
+  profiles: development
+  jpa:
+    show_sql: false
+    database: MYSQL
+    generate-ddl: true
+  datasource:
+    url: jdbc:mysql://192.168.99.100:3306/dev
+    username: root
+    password: dbpass
+security:
+  oauth2:
+    resource:
+      userInfoUri: http://localhost:8181/uaa/user
+    client:
+      client-id: acme
+      access-token-uri: http://localhost:8787
+  enable-csrf: false
+---
+spring:
+  application:
+    name: account-service
+  profiles: test
+  jpa:
+    show_sql: false
+    database: H2
+  datasource:
+    url: jdbc:h2:mem:testdb;DB_CLOSE_ON_EXIT=FALSE
+security:
+  oauth2:
+    resource:
+      userInfoUri: http://localhost:8181/uaa/user
+    client:
+      client-id: acme
+      access-token-uri: http://localhost:8787
