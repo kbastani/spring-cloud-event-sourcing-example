@@ -6,29 +6,19 @@ angular.module('SharedServices', [])
     .config(function ($httpProvider) {
         $httpProvider.responseInterceptors.push('myHttpInterceptor');
         var spinnerFunction = function (data, headersGetter) {
-            // todo start the spinner here
-            //alert('start spinner');
-            $('#mydiv').show();
+            $('#mydiv, .ajax-loader').show();
             return data;
         };
         $httpProvider.defaults.transformRequest.push(spinnerFunction);
     })
-    // register the interceptor as a service, intercepts ALL angular ajax http calls
     .factory('myHttpInterceptor', function ($q, $window) {
         return function (promise) {
             return promise.then(function (response) {
-                // do something on success
-                // todo hide the spinner
-                //alert('stop spinner');
-                $('#mydiv').hide();
+                $('#mydiv, .ajax-loader').hide();
                 $('.hidden-content').removeClass('hidden-content');
                 return response;
-
             }, function (response) {
-                // do something on error
-                // todo hide the spinner
-                //alert('stop spinner');
-                $('#mydiv').hide();
+                $('#mydiv, .ajax-loader').hide();
                 $('.hidden-content').removeClass('hidden-content');
                 return $q.reject(response);
             });
@@ -91,15 +81,36 @@ contentApp.controller('ProductListCtrl', ['$scope', '$http', '$templateCache',
                 method: 'GET',
                 url: $scope.url,
                 cache: $templateCache
-            }).success(function (data, status, headers, config) {
+            }).success(function (data) {
                 $scope.products = data.products;
             }).error(function (data, status, headers, config) {
-                // called asynchronously if an error occurs
-                // or server returns response with an error status.
             });
         };
 
         fetchProducts();
+    }]);
+
+contentApp.controller('CartCtrl', ['$scope', '$http', '$templateCache',
+    function ($scope, $http, $templateCache) {
+        $scope.url = '/api/shoppingcart/v1/cart';
+        $scope.cart = {};
+
+        var fetchCart = function () {
+            $http({
+                method: 'GET',
+                url: $scope.url,
+                cache: $templateCache
+            }).success(function (data) {
+                $scope.cart = data;
+                for (var i = 0; i < $scope.cart.lineItems.length; i++) {
+                    $scope.cart.lineItems[i].posterImage = '/assets/img/posters/' + $scope.cart.lineItems[i].product.productId + '.png';
+                }
+                console.log($scope.cart);
+            }).error(function (data, status, headers, config) {
+            });
+        };
+
+        fetchCart();
     }]);
 
 contentApp.controller('HeaderCtrl', ['$scope', '$http', '$templateCache',
@@ -209,6 +220,44 @@ contentApp.directive('carouselrelatedproducts', function () {
 });
 
 
+contentApp.controller('ExampleController', ['$scope', '$http', function ($scope, $http) {
+    $scope.qty = 0;
+    $scope.productId = "";
+    $scope.addToCart = function () {
+        if ($scope.qty && $scope.qty > 0) {
+            var req = {
+                method: 'POST',
+                url: '/api/shoppingcart/v1/events',
+                headers: {
+                    'Content-Type': "application/json"
+                },
+                data: {
+                    "cartEventType": "ADD_ITEM",
+                    "productId": $scope.product.productId,
+                    "quantity": $scope.qty
+                }
+            };
+
+            $http(req).then(function () {
+                $scope.qty = 0;
+                function showAlert() {
+                    $("#addProductAlert").addClass("in");
+                }
+
+                function hideAlert() {
+                    $("#addProductAlert").removeClass("in");
+                }
+
+                window.setTimeout(function () {
+                    showAlert();
+                    window.setTimeout(function () {
+                        hideAlert();}, 2000);
+                }, 20);
+            });
+        }
+    };
+}]);
+
 contentApp.controller('ProductItemCtrl', ['$scope', '$routeParams', '$http', '$templateCache',
     function ($scope, $routeParams, $http, $templateCache) {
         $scope.productItemUrl = '/api/catalog/v1/products/' + $routeParams.productId;
@@ -233,6 +282,7 @@ contentApp.controller('ProductItemCtrl', ['$scope', '$routeParams', '$http', '$t
             }).success(function (data, status, headers, config) {
                 $scope.product = data;
                 $scope.product.poster_image = '/assets/img/posters/' + $scope.product.productId + '.png';
+
             }).error(function (data, status, headers, config) {
             });
         };
@@ -298,7 +348,6 @@ contentApp.directive('carouselrelatedpeople', function () {
                             '</div>';
 
                     }
-                    //src="assets/img/actors/' + actorTitleLink + '.jpg"
                     element[0].innerHTML = html;
 
                     setTimeout(function () {
@@ -340,8 +389,8 @@ contentApp.controller('PeopleItemCtrl', ['$scope', '$routeParams', '$http', '$te
         fetchPeople();
     }]);
 
-contentApp.filter('rawHtml', ['$sce', function($sce){
-    return function(val) {
+contentApp.filter('rawHtml', ['$sce', function ($sce) {
+    return function (val) {
         return $sce.trustAsHtml(val);
     };
 }]);

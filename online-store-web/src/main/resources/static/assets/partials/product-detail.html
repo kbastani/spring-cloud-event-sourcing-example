@@ -12,10 +12,6 @@
         <div class="col-md-8 col-md-push-4 col-sm-8 col-sm-push-4">
             <div class="row">
                 <div class="col-md-12">
-                    <!-- <ul class="nav nav-pills item-nav">
-                      <li class="active"><a href="#">Details</a></li>
-                      <li><a href="#">Related</a></li>
-                    </ul> -->
                     <div class="panel panel-default">
                         <!-- Default panel contents -->
                         <div class="panel-heading">Product Details</div>
@@ -34,11 +30,20 @@
                                 </div>
                             </li>
                             <li class="list-group-item">
-                                <div class="panel-heading form-inline">
-                                    <button class="btn btn-primary" type="button">Add to Cart</button>
-                                    <div class="form-group"><input type="text" placeholder="QTY"
-                                                                   class="form-control qty-text"></div>
-                                </div>
+                                <form ng-submit="addToCart()" ng-controller="ExampleController">
+                                    <div class="panel-heading form-inline">
+                                        <div class="form-group"><input type="text" ng-model="qty" placeholder="QTY"
+                                                                       class="form-control qty-text"></div>
+                                        <input type="hidden" ng-model="productId" value="{{product.productId}}"/>
+                                        <button class="btn btn-primary" id="addToCart" type="submit">Add to Cart
+                                        </button>
+                                        <div class="form-group">
+                                            <div id="addProductAlert" class="alert alert-success fade" role="alert">
+                                                <p>Product added to cart!</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
                             </li>
                         </ul>
                     </div>

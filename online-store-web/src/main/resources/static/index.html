@@ -63,7 +63,7 @@
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
                 <li ng-if="user.id != undefined"><span>Welcome, <b>{{ user.firstName }}</b>!</span></li>
-                <li ng-if="user.id != undefined"><a href="#"><i class="fa fa-shopping-cart"></i></a></li>
+                <li ng-if="user.id != undefined"><a href="/#/cart"><i class="fa fa-shopping-cart"></i></a></li>
                 <li ng-if="user.id == undefined"><a href="/login">Login</a></li>
                 <li ng-if="user.id != undefined"><a href="/login?logout">Logout</a></li>
             </ul>
@@ -74,8 +74,8 @@
 <div ng-view></div>
 
 <div id="mydiv">
-    <img src="assets/img/AjaxLoader.gif" class="ajax-loader"/>
 </div>
+<img src="assets/img/AjaxLoader.gif" class="ajax-loader"/>
 
 <!-- Bootstrap core JavaScript
 ================================================== -->

@@ -7908,7 +7908,7 @@ body {
     height: 100%;
     z-index: 1000;
     background-color: grey;
-    opacity: .5;
+    opacity: .2;
 }
 
 .ajax-loader {
@@ -7989,4 +7989,88 @@ h3.ng-binding {
     margin: 0 0.5em;
     text-align: center;
     width: 4em;
+}
+
+.alert {
+    border: 1px solid transparent;
+    border-radius: 4px;
+    font-weight: 400;
+    margin: 0 0.5em;
+    padding: 6px 12px;
+}
+
+.fade {
+    opacity: 0;
+    -webkit-transition: opacity 1s linear;
+    -moz-transition: opacity 1s linear;
+    -o-transition: opacity 1s linear;
+    transition: opacity 1s linear;
+}
+.fade.in {
+    opacity: 1;
+}
+
+.shopping-cart .thumbnail {
+    margin-bottom: 0;
+}
+
+.shopping-cart .qty-text {
+    display: block;
+    margin: auto;
+    width: 4em;
+}
+
+.cart-item-description {
+    text-align: left;
+}
+
+.shopping-cart.list-group-details .list-group-item {
+    font-weight: 400;
+    padding: 1em;
+}
+
+.cart-item-description .row {
+    padding-bottom: 1em;
+}
+
+.shopping-cart .row {
+    margin: 0;
+    padding: 0;
+}
+
+.shopping-cart .list-group-item.ng-scope {
+    padding: 1em;
+}
+
+.cart-item-description .row div {
+    margin-bottom: 1em;
+}
+
+.shopping-cart .cart-item-price {
+    text-align: center;
+}
+
+.shopping-cart .cart-item-qty {
+    text-align: center;
+}
+
+.shopping-cart label {
+    padding-right: 1em;
+}
+
+.shopping-cart .cart-item-description, .shopping-cart .cart-item-price, .shopping-cart .cart-item-qty {
+    padding-left: 0;
+    padding-right: 0;
+}
+
+.shopping-cart .thumbnail {
+    margin-bottom: 0;
+    margin-left: 0;
+    margin-right: auto;
+    max-width: 10em;
+    text-align: left;
+}
+
+.col-md-2.col-xs-2.cart-item-image {
+    padding: 0;
 }
