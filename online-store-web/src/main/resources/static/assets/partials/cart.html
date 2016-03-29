@@ -24,15 +24,16 @@
                     <div class="col-md-3 col-xs-3 cart-item-price"><label>Unit Price:</label>{{item.product.unitPrice}}
                     </div>
                     <div class="col-md-3 col-xs-3 cart-item-qty">
-                        <form ng-submit="addToCart()" ng-controller="ExampleController">
+                        <form ng-submit="updateCart()" ng-controller="UpdateCartCtrl">
                             <div class="form-inline">
                                 <div class="form-group"><input type="text" ng-model="item.quantity" placeholder="QTY"
                                                                class="form-control qty-text"></div>
-                                <input type="hidden" ng-model="productId" value="{{product.productId}}"/>
-                                <button class="btn btn-primary" id="addToCart" type="submit">Update Cart
+                                <input type="hidden" ng-model="item.productId" value="{{item.productId}}"/>
+                                <input type="hidden" ng-model="originalQuantity" value="{{item.quantity}}"/>
+                                <button class="btn btn-primary" id="updateCart-{{item.productId}}" type="submit">Update Cart
                                 </button>
                                 <div class="form-group">
-                                    <div id="addProductAlert" class="alert alert-success fade" role="alert">
+                                    <div id="updateProductAlert" class="{{item.productId}} alert alert-success fade" role="alert">
                                         <p>Cart updated!</p>
                                     </div>
                                 </div>

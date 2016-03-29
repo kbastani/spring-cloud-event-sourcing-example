@@ -25,6 +25,7 @@ angular.module('SharedServices', [])
         };
     });
 
+
 var contentappControllers = angular.module('contentappControllers', ['SharedServices']);
 
 contentApp.directive('carousel', function () {
@@ -71,6 +72,7 @@ contentApp.directive('carousel', function () {
     return res;
 });
 
+
 contentApp.controller('ProductListCtrl', ['$scope', '$http', '$templateCache',
     function ($scope, $http, $templateCache) {
         $scope.url = '/api/catalog/v1/catalog';
@@ -91,21 +93,24 @@ contentApp.controller('ProductListCtrl', ['$scope', '$http', '$templateCache',
     }]);
 
 contentApp.controller('CartCtrl', ['$scope', '$http', '$templateCache',
-    function ($scope, $http, $templateCache) {
+    function ($scope, $http) {
         $scope.url = '/api/shoppingcart/v1/cart';
         $scope.cart = {};
+
+        $scope.$on('cartEvents', function (event, msg) {
+            fetchCart();
+        });
 
         var fetchCart = function () {
             $http({
                 method: 'GET',
-                url: $scope.url,
-                cache: $templateCache
+                url: $scope.url
             }).success(function (data) {
                 $scope.cart = data;
                 for (var i = 0; i < $scope.cart.lineItems.length; i++) {
                     $scope.cart.lineItems[i].posterImage = '/assets/img/posters/' + $scope.cart.lineItems[i].product.productId + '.png';
+                    $scope.cart.lineItems[i].originalQuantity = $scope.cart.lineItems[i].quantity;
                 }
-                console.log($scope.cart);
             }).error(function (data, status, headers, config) {
             });
         };
@@ -113,28 +118,41 @@ contentApp.controller('CartCtrl', ['$scope', '$http', '$templateCache',
         fetchCart();
     }]);
 
-contentApp.controller('HeaderCtrl', ['$scope', '$http', '$templateCache',
-    function ($scope, $http, $templateCache) {
+contentApp.controller('HeaderCtrl', ['$scope', '$http',
+    function ($scope, $http) {
         $scope.authUrl = '/api/user/uaa/v1/me';
         $scope.meUrl = '/api/user/uaa/v1/me';
         $scope.user = {};
 
+        $scope.logout = function () {
+            $http.post('logout', {}).success(function () {
+                $rootScope.authenticated = false;
+                $scope.user = {};
+                $location.path("/");
+                $location.reload($location.path);
+                $rootScope.$broadcast('logout', "update");
+            }).error(function (data) {
+                $scope.user = {};
+                $rootScope.$broadcast('logout', "update");
+            });
+        };
+
+
         var fetchUser = function () {
             $http({
                 method: 'GET',
-                url: $scope.authUrl,
-                cache: $templateCache
+                url: $scope.authUrl
             }).success(function (data, status, headers, config) {
                 $http({
                     method: 'GET',
-                    url: $scope.meUrl,
-                    cache: $templateCache
+                    url: $scope.meUrl
                 }).success(function (data, status, headers, config) {
                     $scope.user = data;
                 }).error(function (data, status, headers, config) {
                 });
                 $scope.user = data;
             }).error(function (data, status, headers, config) {
+                scope.user = {};
             });
         };
 
@@ -220,7 +238,7 @@ contentApp.directive('carouselrelatedproducts', function () {
 });
 
 
-contentApp.controller('ExampleController', ['$scope', '$http', function ($scope, $http) {
+contentApp.controller('AddToCartCtrl', ['$scope', '$http', function ($scope, $http) {
     $scope.qty = 0;
     $scope.productId = "";
     $scope.addToCart = function () {
@@ -251,25 +269,100 @@ contentApp.controller('ExampleController', ['$scope', '$http', function ($scope,
                 window.setTimeout(function () {
                     showAlert();
                     window.setTimeout(function () {
-                        hideAlert();}, 2000);
+                        hideAlert();
+                    }, 2000);
                 }, 20);
             });
         }
     };
 }]);
 
-contentApp.controller('ProductItemCtrl', ['$scope', '$routeParams', '$http', '$templateCache',
-    function ($scope, $routeParams, $http, $templateCache) {
+contentApp.controller('UpdateCartCtrl', ['$rootScope', '$scope', '$http', '$location', function ($rootScope, $scope, $http, $location) {
+    $scope.productId = "";
+
+    $scope.updateCart = function () {
+        var delta = 0;
+        console.log($scope);
+        if ($scope.item.quantity >= 0 && $scope.item.originalQuantity > 0 &&
+            $scope.item.quantity != $scope.item.originalQuantity) {
+            var updateCount = $scope.item.quantity - $scope.item.originalQuantity;
+            delta = Math.abs(updateCount);
+            if (delta >= 0) {
+                var req = {
+                    method: 'POST',
+                    url: '/api/shoppingcart/v1/events',
+                    headers: {
+                        'Content-Type': "application/json"
+                    },
+                    data: {
+                        "cartEventType": updateCount <= 0 ? "REMOVE_ITEM" : "ADD_ITEM",
+                        "productId": $scope.item.productId,
+                        "quantity": delta
+                    }
+                };
+
+                var selector = "#updateProductAlert." + $scope.item.productId;
+
+                $http(req).then(function () {
+
+                    if (updateCount <= 0) {
+                        $rootScope.$broadcast('cartEvents', "update");
+                    }
+
+                    $scope.item.originalQuantity = $scope.item.quantity;
+
+                    function showAlert() {
+                        $(selector).find("p").text("Cart updated");
+                        $(selector).removeClass("alert-error")
+                            .addClass("alert-success")
+                            .addClass("in");
+                    }
+
+                    function hideAlert() {
+                        $(selector).removeClass("in");
+                    }
+
+                    window.setTimeout(function () {
+                        showAlert();
+                        window.setTimeout(function () {
+                            hideAlert();
+                        }, 2000);
+                    }, 20);
+                });
+            }
+        } else {
+            $rootScope.item.quantity = $scope.item.originalQuantity;
+            if ($scope.item.quantity <= 0) {
+                $scope.$broadcast('cartEvents', "update");
+            }
+            window.setTimeout(function () {
+                $(selector).find("p").text("Invalid quantity");
+                $(selector).removeClass("alert-success")
+                    .addClass("alert-error")
+                    .addClass("in");
+                window.setTimeout(function () {
+                    $(selector).removeClass("in");
+                }, 2000);
+            }, 20);
+        }
+    };
+}]);
+
+contentApp.controller('ProductItemCtrl', ['$scope', '$routeParams', '$http',
+    function ($scope, $routeParams, $http) {
         $scope.productItemUrl = '/api/catalog/v1/products/' + $routeParams.productId;
         $scope.productsUrl = '/api/catalog/v1/catalog';
         $scope.products = [];
+
+        $scope.$on('logout', function (event, msg) {
+            fetchProduct();
+        });
 
         var fetchProduct = function () {
 
             $http({
                 method: 'GET',
-                url: $scope.productsUrl,
-                cache: $templateCache
+                url: $scope.productsUrl
             }).success(function (data, status, headers, config) {
                 $scope.products = data.products;
             }).error(function (data, status, headers, config) {
@@ -277,8 +370,7 @@ contentApp.controller('ProductItemCtrl', ['$scope', '$routeParams', '$http', '$t
 
             $http({
                 method: 'GET',
-                url: $scope.productItemUrl,
-                cache: $templateCache
+                url: $scope.productItemUrl
             }).success(function (data, status, headers, config) {
                 $scope.product = data;
                 $scope.product.poster_image = '/assets/img/posters/' + $scope.product.productId + '.png';
@@ -394,3 +486,4 @@ contentApp.filter('rawHtml', ['$sce', function ($sce) {
         return $sce.trustAsHtml(val);
     };
 }]);
+

@@ -9,7 +9,7 @@ var contentApp = angular.module('contentApp', [
 
 contentApp.config(['$routeProvider',
     function ($routeProvider) {
-        $routeProvider.when('/products', {
+        $routeProvider.when('/', {
             templateUrl: 'assets/partials/home.html',
             controller: 'ProductListCtrl'
         }).when('/products/:productId', {
@@ -19,7 +19,7 @@ contentApp.config(['$routeProvider',
             templateUrl: 'assets/partials/cart.html',
             controller: 'CartCtrl'
         }).otherwise({
-            redirectTo: '/products'
+            redirectTo: '/'
         });
     }]);
 

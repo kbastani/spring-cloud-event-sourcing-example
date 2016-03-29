@@ -8074,3 +8074,7 @@ h3.ng-binding {
 .col-md-2.col-xs-2.cart-item-image {
     padding: 0;
 }
+
+#updateProductAlert {
+    margin: 0.5em;
+}

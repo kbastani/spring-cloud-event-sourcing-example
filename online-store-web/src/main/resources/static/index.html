@@ -65,7 +65,7 @@
                 <li ng-if="user.id != undefined"><span>Welcome, <b>{{ user.firstName }}</b>!</span></li>
                 <li ng-if="user.id != undefined"><a href="/#/cart"><i class="fa fa-shopping-cart"></i></a></li>
                 <li ng-if="user.id == undefined"><a href="/login">Login</a></li>
-                <li ng-if="user.id != undefined"><a href="/login?logout">Logout</a></li>
+                <li ng-if="user.id != undefined"><a ng-click="logout()" href="#">Logout</a></li>
             </ul>
         </div><!--/.nav-collapse -->
     </div>
