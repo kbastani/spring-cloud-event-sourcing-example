@@ -19,4 +19,6 @@ public class CatalogServiceApplication {
     public RestTemplate loadRestTemplate() {
         return new RestTemplate();
     }
+
+
 }

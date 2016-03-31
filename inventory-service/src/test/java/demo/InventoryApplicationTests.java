@@ -115,7 +115,7 @@ public class InventoryApplicationTests {
             assertThat(product1.getName(), is(products.get(0).getName()));
             assertThat(product1.getUnitPrice(), is(products.get(0).getUnitPrice()));
 
-            Catalog catalog = new Catalog("Fall Catalog");
+            Catalog catalog = new Catalog("Fall Catalog", 0L);
 
             catalog.getProducts().addAll(products);
 

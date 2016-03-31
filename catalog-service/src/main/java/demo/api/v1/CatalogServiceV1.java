@@ -26,13 +26,15 @@ public class CatalogServiceV1 {
 
     public Catalog getCatalog() {
         Catalog catalog;
+
         CatalogInfo activeCatalog = catalogInfoRepository.findCatalogByActive(true);
-        catalog = restTemplate.getForObject(String.format("http://inventory-service/catalogs/%s",
+
+        catalog = restTemplate.getForObject(String.format("http://inventory-service/catalogs/search/findCatalogByCatalogNumber?catalogNumber=%s",
                 activeCatalog.getCatalogId()), Catalog.class);
-        catalog.setId(activeCatalog.getCatalogId());
 
         ProductsResource products = restTemplate.getForObject(String.format("http://inventory-service/catalogs/%s/products",
-                activeCatalog.getCatalogId()), ProductsResource.class);
+                catalog.getId()), ProductsResource.class);
+
         catalog.setProducts(products.getContent().stream().collect(Collectors.toSet()));
         return catalog;
     }

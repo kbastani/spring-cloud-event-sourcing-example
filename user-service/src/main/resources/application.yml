@@ -12,14 +12,11 @@ security:
 logging.level.org.springframework.security: DEBUG
 spring:
   profiles: development
-  jpa:
-    show_sql: false
-    database: MYSQL
-    generate-ddl: true
   datasource:
     url: jdbc:mysql://192.168.99.100:3306/dev
     username: root
     password: dbpass
+    initialize: true
 security.ignored: /resources/**
 ---
 server:
@@ -31,14 +28,11 @@ security:
   enable-csrf: false
 spring:
   profiles: docker
-  jpa:
-    show_sql: false
-    database: MYSQL
-    generate-ddl: true
   datasource:
     url: jdbc:mysql://mysql:3306/dev
     username: root
     password: dbpass
+    initialize: true
 security.ignored: /resources/**
 eureka:
   instance:
@@ -57,3 +51,4 @@ spring:
     database: H2
   datasource:
     url: jdbc:h2:mem:testdb;DB_CLOSE_ON_EXIT=FALSE
+    initialize: false

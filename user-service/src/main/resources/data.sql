@@ -1,1 +1,2 @@
-INSERT INTO dev.user VALUES('user', 'Kenny', 'Bastani', 'kb@socialmoon.com');
+DELETE FROM user;
+INSERT INTO user VALUES (0, current_date, current_date, 'john.doe@example.com', 'John', 'Doe', 'user');

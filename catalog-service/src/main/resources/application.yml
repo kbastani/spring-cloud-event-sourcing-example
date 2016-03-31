@@ -5,16 +5,13 @@ spring:
 spring:
   profiles: development
   redis:
-    host: localhost
+    host: 192.168.99.100
     port: 6379
-  jpa:
-    show_sql: false
-    database: MYSQL
-    generate-ddl: true
   datasource:
     url: jdbc:mysql://192.168.99.100:3306/dev?useSSL=false
     username: root
     password: dbpass
+    initialize: false
 eureka:
   instance:
     prefer-ip-address: true
@@ -29,14 +26,11 @@ spring:
   redis:
     host: redis
     port: 6379
-  jpa:
-    show_sql: false
-    database: MYSQL
-    generate-ddl: true
   datasource:
     url: jdbc:mysql://mysql:3306/dev?useSSL=false
     username: root
     password: dbpass
+    initialize: true
 eureka:
   instance:
     prefer-ip-address: true
@@ -53,3 +47,5 @@ spring:
     port: 6379
   jpa:
     database: H2
+  datasource:
+    initialize: false

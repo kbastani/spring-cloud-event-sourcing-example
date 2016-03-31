@@ -14,6 +14,8 @@ public class Catalog {
     @GraphId
     private Long id;
 
+    private Long catalogNumber;
+
     @Relationship(type = "HAS_PRODUCT", direction = "OUTGOING")
     private List<Product> products = new ArrayList<>();
 
@@ -22,8 +24,9 @@ public class Catalog {
     public Catalog() {
     }
 
-    public Catalog(String name) {
+    public Catalog(String name, Long catalogNumber) {
         this.name = name;
+        this.catalogNumber = catalogNumber;
     }
 
     public Long getId() {
@@ -50,10 +53,19 @@ public class Catalog {
         this.name = name;
     }
 
+    public Long getCatalogNumber() {
+        return catalogNumber;
+    }
+
+    public void setCatalogNumber(Long catalogNumber) {
+        this.catalogNumber = catalogNumber;
+    }
+
     @Override
     public String toString() {
         return "Catalog{" +
                 "id=" + id +
+                ", catalogNumber=" + catalogNumber +
                 ", products=" + products +
                 ", name='" + name + '\'' +
                 '}';

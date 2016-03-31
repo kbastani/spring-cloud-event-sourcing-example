@@ -10,6 +10,8 @@ public class Catalog implements Serializable {
 
     private Long id;
 
+    private Long catalogNumber;
+
     private Set<Product> products = new HashSet<>();
 
     private String name;
@@ -45,10 +47,19 @@ public class Catalog implements Serializable {
         this.name = name;
     }
 
+    public Long getCatalogNumber() {
+        return catalogNumber;
+    }
+
+    public void setCatalogNumber(Long catalogNumber) {
+        this.catalogNumber = catalogNumber;
+    }
+
     @Override
     public String toString() {
         return "Catalog{" +
                 "id=" + id +
+                ", catalogNumber=" + catalogNumber +
                 ", products=" + products +
                 ", name='" + name + '\'' +
                 '}';
