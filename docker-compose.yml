@@ -1,3 +1,10 @@
+config-service:
+  image: kbastani/config-service
+  environment:
+   - SPRING_PROFILES_ACTIVE=docker
+   - DOCKER_IP=$DOCKER_IP
+  ports:
+   - 8888:8888
 mysql:
   image: mysql:latest
   ports:
@@ -26,6 +33,7 @@ user-service:
   links:
    - mysql
    - discovery-service
+   - config-service
   environment:
    - SPRING_PROFILES_ACTIVE=docker
    - DOCKER_IP=$DOCKER_IP
@@ -43,6 +51,7 @@ edge-service:
   links:
    - user-service
    - discovery-service
+   - config-service
   environment:
    - SPRING_PROFILES_ACTIVE=docker
    - DOCKER_IP=$DOCKER_IP
@@ -51,6 +60,7 @@ account-service:
   links:
    - user-service
    - discovery-service
+   - config-service
    - mysql
   environment:
    - SPRING_PROFILES_ACTIVE=docker
@@ -60,6 +70,7 @@ inventory-service:
   links:
    - neo4j
    - discovery-service
+   - config-service
   environment:
    - SPRING_PROFILES_ACTIVE=docker
    - DOCKER_IP=$DOCKER_IP
@@ -68,6 +79,7 @@ order-service:
   links:
    - mongo
    - discovery-service
+   - config-service
    - user-service
   environment:
    - SPRING_PROFILES_ACTIVE=docker
@@ -78,6 +90,7 @@ catalog-service:
    - redis
    - mysql
    - discovery-service
+   - config-service
   environment:
    - SPRING_PROFILES_ACTIVE=docker
    - DOCKER_IP=$DOCKER_IP
@@ -86,6 +99,7 @@ shopping-cart-service:
   links:
    - mysql
    - discovery-service
+   - config-service
    - user-service
   environment:
    - SPRING_PROFILES_ACTIVE=docker
@@ -96,6 +110,7 @@ online-store-web:
    - 8787:8787
   links:
    - discovery-service
+   - config-service
    - user-service
    - edge-service
   environment:
