@@ -18,6 +18,9 @@ contentApp.config(['$routeProvider',
         }).when('/cart', {
             templateUrl: 'assets/partials/cart.html',
             controller: 'CartCtrl'
+        }).when('/settings', {
+            templateUrl: 'assets/partials/account.html',
+            controller: 'AccountCtrl'
         }).otherwise({
             redirectTo: '/'
         });

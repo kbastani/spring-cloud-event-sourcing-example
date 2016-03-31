@@ -92,6 +92,26 @@ contentApp.controller('ProductListCtrl', ['$scope', '$http', '$templateCache',
         fetchProducts();
     }]);
 
+
+
+contentApp.controller('AccountCtrl', ['$scope', '$http', '$templateCache',
+    function ($scope, $http) {
+        $scope.url = '/api/account/v1/accounts';
+        $scope.accounts = {};
+
+        var fetchAccounts = function () {
+            $http({
+                method: 'GET',
+                url: $scope.url
+            }).success(function (data) {
+                $scope.accounts = data;
+            }).error(function (data, status, headers, config) {
+            });
+        };
+
+        fetchAccounts();
+    }]);
+
 contentApp.controller('CartCtrl', ['$scope', '$http', '$templateCache',
     function ($scope, $http) {
         $scope.url = '/api/shoppingcart/v1/cart';
@@ -107,9 +127,13 @@ contentApp.controller('CartCtrl', ['$scope', '$http', '$templateCache',
                 url: $scope.url
             }).success(function (data) {
                 $scope.cart = data;
+                $scope.cart.total = 0;
+                $scope.cart.totalItems = 0;
                 for (var i = 0; i < $scope.cart.lineItems.length; i++) {
                     $scope.cart.lineItems[i].posterImage = '/assets/img/posters/' + $scope.cart.lineItems[i].product.productId + '.png';
                     $scope.cart.lineItems[i].originalQuantity = $scope.cart.lineItems[i].quantity;
+                    $scope.cart.total += $scope.cart.lineItems[i].quantity * $scope.cart.lineItems[i].product.unitPrice;
+                    $scope.cart.totalItems += $scope.cart.lineItems[i].quantity;
                 }
             }).error(function (data, status, headers, config) {
             });

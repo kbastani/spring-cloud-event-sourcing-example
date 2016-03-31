@@ -8016,7 +8016,7 @@ h3.ng-binding {
 
 .shopping-cart .qty-text {
     display: block;
-    margin: auto;
+    margin: 0 0 0 auto;
     width: 4em;
 }
 
@@ -8051,7 +8051,7 @@ h3.ng-binding {
 }
 
 .shopping-cart .cart-item-qty {
-    text-align: center;
+    text-align: right;
 }
 
 .shopping-cart label {
@@ -8076,5 +8076,28 @@ h3.ng-binding {
 }
 
 #updateProductAlert {
-    margin: 0.5em;
+    display: block;
+    margin: 0.5em 0 0 auto;
+    max-width: 9.5em;
+    text-align: center;
+}
+
+.checkout-summary .row {
+    text-align: right;
+}
+
+.checkout-summary .row div:first-child, .checkout-summary .row form {
+    margin-bottom: 1em;
+}
+
+.icon-head {
+    margin-right: 0.5em;
+}
+
+.panel-head-list .panel-heading {
+    border-bottom: solid 1px #222;
+}
+
+.panel-head-list .panel-default {
+    border-bottom: 0 none;
 }

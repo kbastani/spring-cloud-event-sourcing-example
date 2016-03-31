@@ -4,6 +4,9 @@
         <div class="panel-heading">Shopping Cart</div>
 
         <ul class="list-group list-group-details shopping-cart">
+            <li class="list-group-item" ng-if="cart.lineItems.length == 0">
+                Your shopping cart is empty
+            </li>
             <li ng-repeat="item in cart.lineItems" class="list-group-item">
                 <div class="row">
                     <div class="col-md-2 col-xs-2 cart-item-image">
@@ -21,7 +24,8 @@
                             <div class="col-md-12"><label>Product:</label>{{item.product.productId}}</div>
                         </div>
                     </div>
-                    <div class="col-md-3 col-xs-3 cart-item-price"><label>Unit Price:</label>{{item.product.unitPrice}}
+                    <div class="col-md-3 col-xs-3 cart-item-price"><label>Unit Price:</label>{{item.product.unitPrice |
+                        currency}}
                     </div>
                     <div class="col-md-3 col-xs-3 cart-item-qty">
                         <form ng-submit="updateCart()" ng-controller="UpdateCartCtrl">
@@ -30,14 +34,35 @@
                                                                class="form-control qty-text"></div>
                                 <input type="hidden" ng-model="item.productId" value="{{item.productId}}"/>
                                 <input type="hidden" ng-model="originalQuantity" value="{{item.quantity}}"/>
-                                <button class="btn btn-primary" id="updateCart-{{item.productId}}" type="submit">Update Cart
+                                <button class="btn btn-primary" id="updateCart-{{item.productId}}" type="submit">
+                                    Update
                                 </button>
-                                <div class="form-group">
-                                    <div id="updateProductAlert" class="{{item.productId}} alert alert-success fade" role="alert">
+                                <div>
+                                    <div id="updateProductAlert" class="{{item.productId}} alert alert-success fade"
+                                         role="alert">
                                         <p>Cart updated!</p>
                                     </div>
                                 </div>
                             </div>
+                        </form>
+                    </div>
+                </div>
+            </li>
+        </ul>
+        <ul class="list-group list-group-details shopping-cart" ng-if="cart.lineItems.length > 0">
+            <li class="list-group-item checkout-summary">
+                <div class="row">
+                    <div class="col-md-12"><label>Items: </label>{{cart.totalItems}}</div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12"><label>Sub-total: </label>{{cart.total | currency}}</div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <form ng-submit="checkout()" ng-controller="CheckoutCtrl">
+                            <button class="btn btn-primary" id="" type="submit">
+                                Checkout
+                            </button>
                         </form>
                     </div>
                 </div>

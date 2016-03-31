@@ -1,0 +1,100 @@
+<div class="container hidden-content" ng-model="accounts">
+    <div ng-repeat="item in accounts" class="row">
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <!-- Default panel contents -->
+                <div class="panel-heading">Account Settings</div>
+                <ul class="list-group list-group-details accounts">
+                    <li class="list-group-item">
+                        <div class="account-username">
+                            <div class="panel-heading">Username: <span
+                                    class="panel-heading ng-binding">{{ item.userId }}</span>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="list-group-item">
+                        <div class="account-number">
+                            <div class="panel-heading">Account number: <span
+                                    class="panel-heading ng-binding">{{ item.accountNumber }}</span>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="list-group-item">
+                        <div class="default-account">
+                            <div class="panel-heading">Default account: <span
+                                    class="panel-heading ng-binding">{{ item.defaultAccount ? 'Yes' : 'No' }}</span>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="col-md-12 panel-head-list">
+            <div class="panel panel-default">
+                <!-- Default panel contents -->
+                <div class="panel-heading"><i class="fa fa-credit-card icon-head"></i>Credit Cards</div>
+                <ul class="list-group list-group-details accounts">
+                    <li ng-repeat="creditCard in item.creditCards" class="list-group-item">
+                        <div class="credit-cart-number">
+                            <div class="panel-heading">Number: <span
+                                    class="panel-heading ng-binding">{{ creditCard.number }}</span>
+                            </div>
+                        </div>
+                        <div class="credit-card-type">
+                            <div class="panel-heading">Type: <span
+                                    class="panel-heading ng-binding">{{ creditCard.type }}</span>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="col-md-12 panel-head-list">
+            <div class="panel panel-default">
+                <!-- Default panel contents -->
+                <div class="panel-heading"><i class="fa fa-home icon-head"></i>Addresses</div>
+                <ul class="list-group list-group-details accounts">
+                    <li ng-repeat="address in item.addresses" class="list-group-item">
+                        <div>
+                            <div class="panel-heading">Type: <span
+                                    class="panel-heading ng-binding">{{ address.addressType }}</span>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="panel-heading">Street 1: <span
+                                    class="panel-heading ng-binding">{{ address.street1 }}</span>
+                            </div>
+                        </div>
+                        <div ng-if="address.street2 != ''">
+                            <div class="panel-heading">Street 2: <span
+                                    class="panel-heading ng-binding">{{ address.street2 }}</span>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="panel-heading">City: <span
+                                    class="panel-heading ng-binding">{{ address.city }}</span>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="panel-heading">State: <span
+                                    class="panel-heading ng-binding">{{ address.state }}</span>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="panel-heading">Zip Code: <span
+                                    class="panel-heading ng-binding">{{ address.zipCode }}</span>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="panel-heading">Country: <span
+                                    class="panel-heading ng-binding">{{ address.country }}</span>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>

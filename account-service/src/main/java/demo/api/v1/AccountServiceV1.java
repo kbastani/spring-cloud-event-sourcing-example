@@ -27,8 +27,17 @@ public class AccountServiceV1 {
         List<Account> account = null;
         User user = oAuth2RestTemplate.getForObject("http://user-service/uaa/v1/me", User.class);
         if (user != null) {
-            account = accountRepository.findAccountsByUserId(user.getId().toString());
+            account = accountRepository.findAccountsByUserId(user.getUsername());
         }
+
+        // Mask credit card numbers
+        if (account != null) {
+            account.forEach(acct -> acct.getCreditCards()
+                    .forEach(card ->
+                            card.setNumber(card.getNumber()
+                                    .replaceAll("([\\d]{4})(?!$)", "****-"))));
+        }
+
         return account;
     }
 }
