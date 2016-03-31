@@ -42,10 +42,6 @@ If you would like to use Docker for integration testing, a `docker-compose.yml` 
 
 If everything has loaded correctly, navigate to the online store at `http://DOCKER_IP:8787/`. Click `Login`. You'll be navigated to the authorization server's gateway at `http://DOCKER_IP:8181/uaa/login`. The username is `user` and the password is `password`. You'll be authenticated and asked to approve token grant to the online web store. After accepting the grant, you'll be redirected to the online store application where you'll be able to access protected resources from the edge service.
 
-## TODO
-
-Test data must be inserted into each of the databases before you can see any data. For now, you can look at the unit and integration tests of the different business applications in the project.
-
 ## License
 
 This project is licensed under Apache License 2.0.
