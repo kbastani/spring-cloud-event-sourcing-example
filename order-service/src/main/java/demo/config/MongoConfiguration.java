@@ -1,8 +1,7 @@
-package demo.configuration;
+package demo.config;
 
 import com.mongodb.Mongo;
 import com.mongodb.MongoClient;
-import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,6 +11,7 @@ import org.springframework.data.mongodb.config.AbstractMongoConfiguration;
 import org.springframework.data.mongodb.core.convert.CustomConversions;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -53,15 +53,15 @@ public class MongoConfiguration extends AbstractMongoConfiguration {
     }
 
     @ReadingConverter
-    static class LongToDateTimeConverter implements Converter<Long, DateTime> {
+    static class LongToDateTimeConverter implements Converter<Long, Date> {
 
         @Override
-        public DateTime convert(Long source) {
+        public Date convert(Long source) {
             if (source == null) {
                 return null;
             }
 
-            return new DateTime(source);
+            return new Date(source);
         }
     }
 }

@@ -1,10 +1,11 @@
 package demo.listeners;
 
 import demo.domain.BaseEntity;
-import org.joda.time.DateTime;
 import org.springframework.data.mongodb.core.mapping.event.AbstractMongoEventListener;
 import org.springframework.data.mongodb.core.mapping.event.BeforeSaveEvent;
 import org.springframework.stereotype.Component;
+
+import java.util.Date;
 
 @Component
 public class BeforeSaveListener extends AbstractMongoEventListener<BaseEntity> {
@@ -12,7 +13,7 @@ public class BeforeSaveListener extends AbstractMongoEventListener<BaseEntity> {
     @Override
     public void onBeforeSave(BeforeSaveEvent<BaseEntity> event) {
 
-        DateTime timestamp = new DateTime();
+        Date timestamp = new Date();
 
         // Add a timestamp to the created date if it does not yet exist
         if (event.getSource().getCreatedAt() == null)

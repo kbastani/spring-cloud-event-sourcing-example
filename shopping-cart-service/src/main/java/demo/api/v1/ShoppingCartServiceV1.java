@@ -91,7 +91,7 @@ public class ShoppingCartServiceV1 {
         Flux<CartEvent> cartEvents =
                 Flux.fromStream(cartEventRepository.findCartEventsByUserId(user.getId()));
 
-        // Aggregate the state of the shipping card
+        // Aggregate the state of the shopping cart
         ShoppingCart shoppingCart = cartEvents
                 .takeWhile(cartEvent -> !ShoppingCart.isTerminal(cartEvent.getCartEventType()))
                 .reduceWith(() -> new ShoppingCart(catalog), ShoppingCart::incorporate)

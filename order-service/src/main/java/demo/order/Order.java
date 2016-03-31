@@ -4,6 +4,7 @@ import demo.address.Address;
 import demo.address.AddressType;
 import demo.domain.BaseEntity;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.ArrayList;
@@ -20,6 +21,7 @@ public class Order extends BaseEntity {
 
     private String orderId;
     private String accountNumber;
+    @Transient
     private OrderStatus orderStatus;
     private List<LineItem> lineItems = new ArrayList<>();
     private Address shippingAddress;
@@ -28,7 +30,7 @@ public class Order extends BaseEntity {
         this.accountNumber = accountNumber;
         this.shippingAddress = shippingAddress;
         this.shippingAddress.setAddressType(AddressType.SHIPPING);
-        this.orderStatus = OrderStatus.PENDING;
+        this.orderStatus = OrderStatus.PURCHASED;
     }
 
     @Id
@@ -74,6 +76,39 @@ public class Order extends BaseEntity {
 
     public void addLineItem(LineItem lineItem) {
         lineItems.add(lineItem);
+    }
+
+    public Order incorporate(OrderEvent orderEvent) {
+
+        switch (orderStatus) {
+            case PURCHASED:
+                if (orderEvent.getType() == OrderEventType.CREATED)
+                    orderStatus = OrderStatus.PENDING;
+                break;
+            case PENDING:
+                if (orderEvent.getType() == OrderEventType.ORDERED) {
+                    orderStatus = OrderStatus.CONFIRMED;
+                } else if (orderEvent.getType() == OrderEventType.CREATED) {
+                    orderStatus = OrderStatus.PURCHASED;
+                }
+                break;
+            case CONFIRMED:
+                if (orderEvent.getType() == OrderEventType.SHIPPED) {
+                    orderStatus = OrderStatus.SHIPPED;
+                } else if (orderEvent.getType() == OrderEventType.RESERVED) {
+                    orderStatus = OrderStatus.PENDING;
+                }
+                break;
+            case SHIPPED:
+                if (orderEvent.getType() == OrderEventType.DELIVERED) {
+                    orderStatus = OrderStatus.DELIVERED;
+                } else if (orderEvent.getType() == OrderEventType.ORDERED) {
+                    orderStatus = OrderStatus.CONFIRMED;
+                }
+                break;
+        }
+
+        return this;
     }
 
     @Override

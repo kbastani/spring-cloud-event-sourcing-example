@@ -2,11 +2,10 @@ package orders;
 
 import demo.OrderApplication;
 import demo.address.Address;
+import demo.api.v1.OrderServiceV1;
 import demo.invoice.Invoice;
 import demo.invoice.InvoiceRepository;
-import demo.order.LineItem;
-import demo.order.Order;
-import demo.order.OrderRepository;
+import demo.order.*;
 import junit.framework.TestCase;
 import org.junit.After;
 import org.junit.Before;
@@ -18,8 +17,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.boot.test.WebIntegrationTest;
 import org.springframework.dao.DataAccessResourceFailureException;
-import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.util.Assert;
 
 import java.util.List;
 
@@ -32,13 +31,13 @@ public class OrderApplicationTest extends TestCase {
     private Boolean mongoConnection = true;
 
     @Autowired
-    MongoTemplate mongoTemplate;
-
-    @Autowired
     OrderRepository orderRepository;
 
     @Autowired
     InvoiceRepository invoiceRepository;
+
+    @Autowired
+    OrderServiceV1 orderServiceV1;
 
     @Before
     public void before() {
@@ -100,6 +99,17 @@ public class OrderApplicationTest extends TestCase {
             List<Order> orders = orderRepository.findByAccountNumber("918273465");
 
             log.info(orders.toString());
+
+            try {
+                orderServiceV1.addOrderEvent(new OrderEvent(OrderEventType.CREATED, order.getOrderId()), false);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            Order orderPending = orderServiceV1.getOrder(order.getOrderId(), false);
+
+            Assert.notNull(orderPending);
+            Assert.isTrue(orderPending.getOrderStatus() == OrderStatus.PENDING);
         }
     }
 
