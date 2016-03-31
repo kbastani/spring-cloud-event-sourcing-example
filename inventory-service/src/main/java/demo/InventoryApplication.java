@@ -15,6 +15,7 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.data.neo4j.repository.config.EnableNeo4jRepositories;
 import org.springframework.data.rest.core.config.RepositoryRestConfiguration;
 import org.springframework.data.rest.webmvc.config.RepositoryRestConfigurerAdapter;
+import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @SpringBootApplication
@@ -43,6 +44,15 @@ public class InventoryApplication {
             // Initialize the database for end to end integration testing
             databaseInitializer.populate();
         };
+    }
+
+    @Component
+    public static class CustomizedRestMvcConfiguration extends RepositoryRestConfigurerAdapter {
+
+        @Override
+        public void configureRepositoryRestConfiguration(RepositoryRestConfiguration config) {
+            config.setBasePath("/api");
+        }
     }
 }
 
