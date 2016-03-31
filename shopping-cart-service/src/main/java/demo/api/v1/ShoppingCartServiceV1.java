@@ -12,6 +12,15 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import reactor.core.publisher.Flux;
 
+/**
+ * The {@link ShoppingCartServiceV1} implements business logic for aggregating the state of
+ * a user's actions represented by a sequence of {@link CartEvent}. The generated aggregate
+ * uses event sourcing to produce a {@link ShoppingCart} containing a collection of
+ * {@link demo.cart.LineItem}.
+ *
+ * @author Ben Hale
+ * @author Kenny Bastani
+ */
 @Service
 public class ShoppingCartServiceV1 {
 
@@ -30,6 +39,7 @@ public class ShoppingCartServiceV1 {
 
     /**
      * Get the authenticated user from the user service
+     *
      * @return the currently authenticated user
      */
     public User getAuthenticatedUser() {

@@ -60,9 +60,9 @@ public class OrderServiceV1 {
         Flux<OrderEvent> orderEvents =
                 Flux.fromStream(orderEventRepository.findOrderEventsByOrderId(order.getOrderId()));
 
-        // Aggregate the state of the shopping cart
+        // Aggregate the state of order
         return orderEvents
-                .takeWhile(cartEvent -> cartEvent.getType() != OrderEventType.DELIVERED)
+                .takeWhile(orderEvent -> orderEvent.getType() != OrderEventType.DELIVERED)
                 .reduceWith(() -> order, Order::incorporate)
                 .get();
     }
