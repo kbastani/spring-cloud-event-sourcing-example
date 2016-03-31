@@ -5,6 +5,13 @@ config-service:
    - DOCKER_IP=$DOCKER_IP
   ports:
    - 8888:8888
+hystrix-dashboard:
+  image: kbastani/hystrix-dashboard
+  environment:
+   - SPRING_PROFILES_ACTIVE=docker
+   - DOCKER_IP=$DOCKER_IP
+  ports:
+   - 6161:6161
 mysql:
   image: mysql:latest
   ports:

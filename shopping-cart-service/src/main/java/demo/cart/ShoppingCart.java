@@ -42,6 +42,7 @@ public class ShoppingCart {
 
     /**
      * Get the line items from the aggregate of add cart events
+     *
      * @return a new list of {@link LineItem} representing the state of the shopping cart
      * @throws Exception if a product in the cart could not be found in the catalog
      */
@@ -55,7 +56,7 @@ public class ShoppingCart {
                 .filter(item -> item.getQuantity() > 0)
                 .collect(Collectors.toList());
 
-        if(lineItems.stream()
+        if (lineItems.stream()
                 .anyMatch(item -> item.getProduct() == null)) {
             throw new Exception("Product not found in catalog");
         }
@@ -67,6 +68,12 @@ public class ShoppingCart {
         this.lineItems = lineItems;
     }
 
+    /**
+     * Incorporates a new {@link CartEvent} and updated the shopping cart
+     *
+     * @param cartEvent is the {@link CartEvent} that will alter the state of the cart
+     * @return the state of the {@link ShoppingCart} after applying the new {@link CartEvent}
+     */
     public ShoppingCart incorporate(CartEvent cartEvent) {
         if (cartEvent.getCartEventType() == CartEventType.ADD_ITEM ||
                 cartEvent.getCartEventType() == CartEventType.REMOVE_ITEM) {
@@ -78,6 +85,13 @@ public class ShoppingCart {
         return this;
     }
 
+    /**
+     * Determines whether or not the {@link CartEvent} is a terminal event, causing the
+     * stream to end while generating an aggregate {@link ShoppingCart}
+     *
+     * @param eventType is the {@link CartEventType} to evaluate
+     * @return a flag indicating whether or not the event is terminal
+     */
     public static Boolean isTerminal(CartEventType eventType) {
         return (eventType == CartEventType.CLEAR_CART || eventType == CartEventType.CHECKOUT);
     }

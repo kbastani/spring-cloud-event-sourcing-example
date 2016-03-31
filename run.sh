@@ -8,6 +8,10 @@ mvn clean install
 # Export the active docker machine IP
 export DOCKER_IP=$(docker-machine ip $(docker-machine active))
 
+# Remove existing containers
+docker-compose stop
+docker-compose rm -f
+
 # Start the config service first and wait for it to become available
 docker-compose up -d config-service
 

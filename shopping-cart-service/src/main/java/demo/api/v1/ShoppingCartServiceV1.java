@@ -20,19 +20,28 @@ public class ShoppingCartServiceV1 {
     private RestTemplate restTemplate;
 
     @Autowired
-    public ShoppingCartServiceV1(
-            @LoadBalanced OAuth2RestTemplate oAuth2RestTemplate,
-            CartEventRepository cartEventRepository,
-            @LoadBalanced RestTemplate normalRestTemplate) {
-        this.oAuth2RestTemplate = oAuth2RestTemplate;
+    public ShoppingCartServiceV1(CartEventRepository cartEventRepository,
+                                 @LoadBalanced OAuth2RestTemplate oAuth2RestTemplate,
+                                 @LoadBalanced RestTemplate normalRestTemplate) {
         this.cartEventRepository = cartEventRepository;
+        this.oAuth2RestTemplate = oAuth2RestTemplate;
         this.restTemplate = normalRestTemplate;
     }
 
+    /**
+     * Get the authenticated user from the user service
+     * @return the currently authenticated user
+     */
     public User getAuthenticatedUser() {
         return oAuth2RestTemplate.getForObject("http://user-service/uaa/v1/me", User.class);
     }
 
+    /**
+     * Adds a shopping cart event for the authenticated user
+     *
+     * @param cartEvent is the event detailing the action performed by the user
+     * @return a flag indicating whether the result was a success
+     */
     public Boolean addCartEvent(CartEvent cartEvent) {
         User user = getAuthenticatedUser();
         if (user != null) {
@@ -54,6 +63,12 @@ public class ShoppingCartServiceV1 {
         return true;
     }
 
+    /**
+     * Get the shopping cart for the currently authenticated user
+     *
+     * @return an aggregate object derived from events performed by the user
+     * @throws Exception
+     */
     public ShoppingCart getShoppingCart() throws Exception {
         User user = oAuth2RestTemplate.getForObject("http://user-service/uaa/v1/me", User.class);
         ShoppingCart shoppingCart = null;
@@ -64,10 +79,19 @@ public class ShoppingCartServiceV1 {
         return shoppingCart;
     }
 
+    /**
+     * Aggregate the cart events of a user and return a {@link ShoppingCart} object
+     *
+     * @param user    is the user to retrieve the shopping cart for
+     * @param catalog is the catalog used to generate the shopping cart
+     * @return a shopping cart representing the aggregate state of the user's cart
+     * @throws Exception
+     */
     public ShoppingCart aggregateCartEvents(User user, Catalog catalog) throws Exception {
         Flux<CartEvent> cartEvents =
                 Flux.fromStream(cartEventRepository.findCartEventsByUserId(user.getId()));
 
+        // Aggregate the state of the shipping card
         ShoppingCart shoppingCart = cartEvents
                 .takeWhile(cartEvent -> !ShoppingCart.isTerminal(cartEvent.getCartEventType()))
                 .reduceWith(() -> new ShoppingCart(catalog), ShoppingCart::incorporate)

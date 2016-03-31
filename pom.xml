@@ -28,6 +28,7 @@
         <module>catalog-service</module>
         <module>edge-service</module>
         <module>shopping-cart-service</module>
+        <module>hystrix-dashboard</module>
     </modules>
 
     <properties>

@@ -1,5 +1,6 @@
 package demo.api.v1;
 
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import demo.account.Account;
 import demo.order.Order;
 import demo.order.OrderRepository;
@@ -25,6 +26,7 @@ public class OrderServiceV1 {
         this.oAuth2RestTemplate = oAuth2RestTemplate;
     }
 
+    @HystrixCommand
     public List<Order> getOrdersForAccount(String accountNumber) throws Exception {
         List<Order> orders;
         Account[] accounts = oAuth2RestTemplate.getForObject("http://account-service/v1/accounts", Account[].class);
