@@ -3,6 +3,16 @@ spring:
     active: development
 ---
 spring:
+  profiles: cloud
+security:
+  oauth2:
+    resource:
+      userInfoUri: ${vcap.services.user-service.credentials.uri:http://localhost:8181}/uaa/user
+    client:
+      client-id: acme
+  enable-csrf: false
+---
+spring:
   profiles: development
   jpa:
     show_sql: false

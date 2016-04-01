@@ -51,7 +51,7 @@ CREATE TABLE customer
   account_id    BIGINT(20),
   CONSTRAINT FK_jwt2qo9oj3wd7ribjkymryp8s FOREIGN KEY (account_id) REFERENCES account (id)
 );
-CREATE INDEX FK_jwt2qo9oj3wd7ribjkymryp8s ON customer (account_id);
+CREATE INDEX UK_jwt2qo9oj3wd7ribjkymryp8s ON customer (account_id);
 
 CREATE TABLE account_addresses
 (

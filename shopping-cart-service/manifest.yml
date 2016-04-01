@@ -1,10 +1,10 @@
 ---
 applications:
-- name: order-service
-  memory: 1024MB
+- name: shopping-cart-service
+  memory: 1024M
   instances: 1
-  host: order-service-${random-word}
-  path: target/order-service-0.0.1-SNAPSHOT.jar
+  host: shopping-cart-service-${random-word}
+  path: target/shopping-cart-service-0.0.1-SNAPSHOT.jar
   env:
     SPRING_PROFILES_ACTIVE: cloud
     DEBUG: "true"
@@ -13,5 +13,4 @@ applications:
    - discovery-service
    - config-service
    - user-service
-   - order-db
-
+   - shopping-cart-db

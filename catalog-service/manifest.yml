@@ -1,10 +1,10 @@
 ---
 applications:
-- name: order-service
+- name: catalog-service
   memory: 1024MB
   instances: 1
-  host: order-service-${random-word}
-  path: target/order-service-0.0.1-SNAPSHOT.jar
+  host: catalog-service-${random-word}
+  path: target/catalog-service-0.0.1-SNAPSHOT.jar
   env:
     SPRING_PROFILES_ACTIVE: cloud
     DEBUG: "true"
@@ -12,6 +12,6 @@ applications:
   services:
    - discovery-service
    - config-service
+   - catalog-db
+   - catalog-redis
    - user-service
-   - order-db
-

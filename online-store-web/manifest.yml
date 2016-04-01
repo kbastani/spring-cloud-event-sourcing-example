@@ -1,10 +1,10 @@
 ---
 applications:
-- name: order-service
+- name: online-store-web
   memory: 1024MB
   instances: 1
-  host: order-service-${random-word}
-  path: target/order-service-0.0.1-SNAPSHOT.jar
+  host: online-store-web
+  path: target/online-store-web-0.0.1-SNAPSHOT.jar
   env:
     SPRING_PROFILES_ACTIVE: cloud
     DEBUG: "true"
@@ -13,5 +13,4 @@ applications:
    - discovery-service
    - config-service
    - user-service
-   - order-db
-
+   - edge-service
