@@ -2,6 +2,7 @@ package demo.product;
 
 import org.neo4j.ogm.annotation.GraphId;
 import org.neo4j.ogm.annotation.NodeEntity;
+import org.neo4j.ogm.annotation.Transient;
 
 /**
  * A simple domain class for the {@link Product} concept in the order context.
@@ -16,6 +17,9 @@ public class Product {
     private Long id;
     private String name, productId, description;
     private Double unitPrice;
+
+    @Transient
+    private Boolean inStock;
 
     public Product() {
     }
@@ -73,6 +77,14 @@ public class Product {
         this.unitPrice = unitPrice;
     }
 
+    public Boolean getInStock() {
+        return inStock;
+    }
+
+    public void setInStock(Boolean inStock) {
+        this.inStock = inStock;
+    }
+
     @Override
     public String toString() {
         return "Product{" +
@@ -81,6 +93,7 @@ public class Product {
                 ", productId='" + productId + '\'' +
                 ", description='" + description + '\'' +
                 ", unitPrice=" + unitPrice +
+                ", inStock=" + inStock +
                 '}';
     }
 }

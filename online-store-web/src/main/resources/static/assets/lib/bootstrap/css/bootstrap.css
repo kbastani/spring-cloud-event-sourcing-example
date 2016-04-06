@@ -8101,3 +8101,7 @@ h3.ng-binding {
 .panel-head-list .panel-default {
     border-bottom: 0 none;
 }
+
+.out-of-stock {
+    color: red;
+}

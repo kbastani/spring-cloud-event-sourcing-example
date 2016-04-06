@@ -7,6 +7,7 @@ public class Product implements Serializable {
     private Long id;
     private String name, productId, description;
     private Double unitPrice;
+    private Boolean inStock;
 
     public Product() {
     }
@@ -57,6 +58,14 @@ public class Product implements Serializable {
         this.unitPrice = unitPrice;
     }
 
+    public Boolean getInStock() {
+        return inStock;
+    }
+
+    public void setInStock(Boolean inStock) {
+        this.inStock = inStock;
+    }
+
     @Override
     public String toString() {
         return "Product{" +
@@ -65,6 +74,7 @@ public class Product implements Serializable {
                 ", productId='" + productId + '\'' +
                 ", description='" + description + '\'' +
                 ", unitPrice=" + unitPrice +
+                ", inStock=" + inStock +
                 '}';
     }
 }

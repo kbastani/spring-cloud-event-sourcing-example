@@ -42,8 +42,8 @@ public class CatalogServiceV1 {
     }
 
     @HystrixCommand
-    public Product getProduct(Long productId) {
-        return restTemplate.getForObject(String.format("http://inventory-service/api/products/%s",
+    public Product getProduct(String productId) {
+        return restTemplate.getForObject(String.format("http://inventory-service/v1/products/%s",
                 productId), Product.class);
     }
 }

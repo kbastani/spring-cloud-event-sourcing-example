@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 @Service
-@Profile({"docker", "cloud"})
+@Profile({"docker", "cloud", "development"})
 public class DatabaseInitializer {
 
     private ProductRepository productRepository;
@@ -114,6 +114,15 @@ public class DatabaseInitializer {
                 .collect(Collectors.toSet());
 
         inventoryRepository.save(inventories);
+
+        // Generate 10 extra inventory for each product
+        for (int i = 0; i < 10; i++) {
+            inventoryRepository.save(products.stream()
+                    .map(a -> new Inventory(IntStream.range(0, 9)
+                            .mapToObj(x -> Integer.toString(new Random().nextInt(9)))
+                            .collect(Collectors.joining("")), a, finalWarehouse, InventoryStatus.IN_STOCK))
+                    .collect(Collectors.toSet()));
+        }
 
         Shipment shipment = new Shipment(inventories, shipToAddress,
                 warehouse, ShipmentStatus.SHIPPED);

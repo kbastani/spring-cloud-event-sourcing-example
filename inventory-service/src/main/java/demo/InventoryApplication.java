@@ -38,7 +38,7 @@ public class InventoryApplication {
     }
 
     @Bean
-    @Profile({"docker", "cloud"})
+    @Profile({"docker", "cloud", "development"})
     CommandLineRunner commandLineRunner(DatabaseInitializer databaseInitializer) {
         return args -> {
             // Initialize the database for end to end integration testing

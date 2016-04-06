@@ -40,9 +40,9 @@ contentApp.directive('carousel', function () {
                         var productTitleLink = '/assets/img/posters/' + products[i].productId + '.png';
                         html += '<div class="item">' +
                             '<div class="thumbnail carousel-products">' +
-                            '<a href="index.html#/products/' + products[i].id + '"><img alt="100%x180" src="' + productTitleLink + '"></a>' +
+                            '<a href="index.html#/products/' + products[i].productId + '"><img alt="100%x180" src="' + productTitleLink + '"></a>' +
                             '</div>' +
-                            '<span><a href="index.html#/products/' + products[i].id + '">' + products[i].name + '</a></span>' +
+                            '<span><a href="index.html#/products/' + products[i].productId + '">' + products[i].name + '</a></span>' +
                             '</div>';
                     }
 

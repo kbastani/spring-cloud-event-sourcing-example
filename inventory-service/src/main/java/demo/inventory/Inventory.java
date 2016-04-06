@@ -25,6 +25,11 @@ public class Inventory {
     public Inventory() {
     }
 
+    public Inventory(String inventoryNumber, Product product) {
+        this.inventoryNumber = inventoryNumber;
+        this.product = product;
+    }
+
     public Inventory(String inventoryNumber, Product product, Warehouse warehouse, InventoryStatus status) {
         this.inventoryNumber = inventoryNumber;
         this.product = product;
