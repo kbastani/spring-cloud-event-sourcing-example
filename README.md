@@ -13,7 +13,7 @@ This reference application is a Spring Cloud example of using event sourcing in 
 
 ## Architecture Diagram
 
-![Online Store Architecture Diagram](http://i.imgur.com/z1RBX9m.png)
+![Online Store Architecture Diagram](http://i.imgur.com/PBCVt90.png)
 
 ## Online Store Domain
 
