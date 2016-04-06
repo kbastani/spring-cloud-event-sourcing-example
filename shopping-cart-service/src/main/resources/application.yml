@@ -14,14 +14,11 @@ security:
 ---
 spring:
   profiles: development
-  jpa:
-    show_sql: false
-    database: MYSQL
-    generate-ddl: true
   datasource:
     url: jdbc:mysql://192.168.99.100:3306/dev
     username: root
     password: dbpass
+    platform: mysql
 security:
   oauth2:
     resource:

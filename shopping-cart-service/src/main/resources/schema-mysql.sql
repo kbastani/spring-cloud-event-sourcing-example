@@ -11,4 +11,4 @@ CREATE TABLE cart_event
 );
 CREATE INDEX IDX_CART_EVENT_USER ON cart_event (id, user_id);
 ALTER TABLE cart_event AUTO_INCREMENT 0;
-CREATE UNIQUE INDEX cart_event_id_uindex ON cart_event (id)
+CREATE UNIQUE INDEX cart_event_id_uindex ON cart_event (id);
