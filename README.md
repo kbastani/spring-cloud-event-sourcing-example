@@ -11,6 +11,10 @@ This reference application is a Spring Cloud example of using event sourcing in 
 * Event-driven Messaging
   * Event sourcing
 
+## Architecture Diagram
+
+![Online Store Architecture Diagram](http://i.imgur.com/z1RBX9m.png)
+
 ## Online Store Domain
 
 This reference application is based on common design patterns for building an ecommerce application. The application includes the following microservices.
