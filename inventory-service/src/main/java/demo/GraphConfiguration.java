@@ -45,8 +45,8 @@ class GraphConfiguration extends Neo4jConfiguration {
                 ShipmentRepository.class,
                 WarehouseRepository.class,
                 AddressRepository.class,
-                InventoryRepository.class,
-                CatalogRepository.class
+                CatalogRepository.class,
+                InventoryRepository.class
         };
         String[] packageNames =
                 Arrays.asList(packageClasses)

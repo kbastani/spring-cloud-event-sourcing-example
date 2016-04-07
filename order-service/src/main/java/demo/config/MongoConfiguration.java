@@ -49,6 +49,7 @@ public class MongoConfiguration extends AbstractMongoConfiguration {
     public CustomConversions customConversions() {
         List<Converter<?, ?>> converterList = new ArrayList<>();
         converterList.add(new LongToDateTimeConverter());
+        converterList.add(new StringToDateTimeConverter());
         return new CustomConversions(converterList);
     }
 
@@ -57,6 +58,19 @@ public class MongoConfiguration extends AbstractMongoConfiguration {
 
         @Override
         public Date convert(Long source) {
+            if (source == null) {
+                return null;
+            }
+
+            return new Date(source);
+        }
+    }
+
+    @ReadingConverter
+    static class StringToDateTimeConverter implements Converter<String, Date> {
+
+        @Override
+        public Date convert(String source) {
             if (source == null) {
                 return null;
             }

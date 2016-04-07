@@ -62,8 +62,15 @@
         </div>
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
-                <li ng-if="user.id != undefined"><span>Welcome, <b><a href="/#/settings">{{ user.firstName }}</a></b>!</span></li>
-                <li ng-if="user.id != undefined"><a href="/#/cart"><i class="fa fa-shopping-cart"></i></a></li>
+                <li ng-if="user.id != undefined">
+                    <span class="ng-binding welcome-tag">
+                        <span>Welcome,</span>
+                        <span>{{ user.firstName }} {{ user.lastName }}!</span>
+                    </span>
+                </li>
+                <li ng-if="user.id != undefined"><a href="/#/orders">Orders</a></li>
+                <li ng-if="user.id != undefined"><a href="/#/settings">Settings</a></li>
+                <li ng-if="user.id != undefined"><a href="/#/cart"><i class="fa fa-shopping-cart"></i><span class="cart-icon">Cart</span></a></li>
                 <li ng-if="user.id == undefined"><a href="/login">Login</a></li>
                 <li ng-if="user.id != undefined"><a ng-click="logout()" href="#">Logout</a></li>
             </ul>

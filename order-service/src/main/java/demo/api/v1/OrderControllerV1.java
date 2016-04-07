@@ -1,5 +1,6 @@
 package demo.api.v1;
 
+import demo.order.LineItem;
 import demo.order.Order;
 import demo.order.OrderEvent;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,5 +47,14 @@ public class OrderControllerV1 {
         return Optional.ofNullable(orderService.getOrder(orderId, true))
                 .map(a -> new ResponseEntity<Order>(a, HttpStatus.OK))
                 .orElseThrow(() -> new Exception("Could not retrieve order"));
+    }
+
+    @RequestMapping(path = "/orders", method = RequestMethod.POST)
+    public ResponseEntity createOrder(@RequestBody List<LineItem> lineItems) throws Exception {
+        assert lineItems != null;
+        assert lineItems.size() > 0;
+        return Optional.ofNullable(orderService.createOrder(lineItems))
+                .map(a -> new ResponseEntity<>(a, HttpStatus.OK))
+                .orElseThrow(() -> new Exception("Could not create the order"));
     }
 }

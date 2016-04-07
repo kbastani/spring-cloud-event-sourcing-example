@@ -1,13 +1,11 @@
 package demo.order;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import demo.address.Address;
 import demo.address.AddressType;
 import demo.domain.BaseEntity;
-import org.bson.types.ObjectId;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.annotation.Transient;
-import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,13 +15,11 @@ import java.util.List;
  * @author Kenny Bastani
  * @author Josh Long
  */
-@Document
-public class Order extends BaseEntity {
+public class Order extends BaseEntity implements Serializable {
 
-    @Id
-    private ObjectId orderId;
+    @JsonProperty(value = "orderId")
+    private String orderId;
     private String accountNumber;
-    @Transient
     private OrderStatus orderStatus;
     private List<LineItem> lineItems = new ArrayList<>();
     private Address shippingAddress;
@@ -39,10 +35,10 @@ public class Order extends BaseEntity {
     }
 
     public String getOrderId() {
-        return orderId != null ? orderId.toHexString() : null;
+        return orderId;
     }
 
-    public void setOrderId(String id) {
+    public void setOrderId(String orderId) {
         this.orderId = orderId;
     }
 
@@ -80,43 +76,6 @@ public class Order extends BaseEntity {
 
     public void addLineItem(LineItem lineItem) {
         lineItems.add(lineItem);
-    }
-
-    public Order incorporate(OrderEvent orderEvent) {
-
-        if(orderStatus == null) {
-            orderStatus = OrderStatus.PURCHASED;
-        }
-
-        switch (orderStatus) {
-            case PURCHASED:
-                if (orderEvent.getType() == OrderEventType.CREATED)
-                    orderStatus = OrderStatus.PENDING;
-                break;
-            case PENDING:
-                if (orderEvent.getType() == OrderEventType.ORDERED) {
-                    orderStatus = OrderStatus.CONFIRMED;
-                } else if (orderEvent.getType() == OrderEventType.CREATED) {
-                    orderStatus = OrderStatus.PURCHASED;
-                }
-                break;
-            case CONFIRMED:
-                if (orderEvent.getType() == OrderEventType.SHIPPED) {
-                    orderStatus = OrderStatus.SHIPPED;
-                } else if (orderEvent.getType() == OrderEventType.RESERVED) {
-                    orderStatus = OrderStatus.PENDING;
-                }
-                break;
-            case SHIPPED:
-                if (orderEvent.getType() == OrderEventType.DELIVERED) {
-                    orderStatus = OrderStatus.DELIVERED;
-                } else if (orderEvent.getType() == OrderEventType.ORDERED) {
-                    orderStatus = OrderStatus.CONFIRMED;
-                }
-                break;
-        }
-
-        return this;
     }
 
     @Override

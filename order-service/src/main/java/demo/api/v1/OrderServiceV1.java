@@ -1,6 +1,7 @@
 package demo.api.v1;
 
 import demo.account.Account;
+import demo.address.AddressType;
 import demo.order.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
@@ -29,11 +30,34 @@ public class OrderServiceV1 {
         this.oAuth2RestTemplate = oAuth2RestTemplate;
     }
 
+    public Order createOrder(List<LineItem> lineItems) {
+        Account[] accounts = oAuth2RestTemplate.getForObject("http://account-service/v1/accounts", Account[].class);
+
+        Account defaultAccount = Arrays.asList(accounts).stream()
+                .filter(Account::getDefaultAccount)
+                .findFirst().orElse(null);
+
+        if (defaultAccount == null) {
+            return null;
+        }
+
+        Order newOrder = new Order(defaultAccount.getAccountNumber(), defaultAccount.getAddresses().stream()
+                .filter(address -> address.getAddressType() == AddressType.SHIPPING)
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("Default account does not have a shipping address")));
+
+        newOrder.setLineItems(lineItems);
+
+        newOrder = orderRepository.save(newOrder);
+
+        return newOrder;
+    }
+
     public Boolean addOrderEvent(OrderEvent orderEvent, Boolean validate) throws Exception {
         // Get the order for the event
         Order order = orderRepository.findOne(orderEvent.getOrderId());
 
-        if(validate) {
+        if (validate) {
             // Validate the account number of the event's order belongs to the user
             validateAccountNumber(order.getAccountNumber());
         }
@@ -48,7 +72,7 @@ public class OrderServiceV1 {
         // Get the order for the event
         Order order = orderRepository.findOne(orderId);
 
-        if(validate) {
+        if (validate) {
             try {
                 // Validate the account number of the event's order belongs to the user
                 validateAccountNumber(order.getAccountNumber());

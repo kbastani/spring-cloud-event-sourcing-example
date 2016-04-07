@@ -1,5 +1,6 @@
 package demo;
 
+import demo.order.Order;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
@@ -7,6 +8,7 @@ import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.cloud.netflix.hystrix.EnableHystrix;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.data.rest.core.config.RepositoryRestConfiguration;
 import org.springframework.data.rest.webmvc.config.RepositoryRestConfigurerAdapter;
 import org.springframework.security.oauth2.client.OAuth2ClientContext;
@@ -25,6 +27,7 @@ import org.springframework.web.client.RestTemplate;
  * @author Josh Long
  */
 @SpringBootApplication
+@EnableJpaRepositories
 @EnableJpaAuditing
 @EnableEurekaClient
 @EnableResourceServer
@@ -53,6 +56,7 @@ public class ShoppingCartApplication {
 
         @Override
         public void configureRepositoryRestConfiguration(RepositoryRestConfiguration config) {
+            config.exposeIdsFor(Order.class);
             config.setBasePath("/api");
         }
     }

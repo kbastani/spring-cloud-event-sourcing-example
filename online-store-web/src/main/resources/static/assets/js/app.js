@@ -21,6 +21,12 @@ contentApp.config(['$routeProvider',
         }).when('/settings', {
             templateUrl: 'assets/partials/account.html',
             controller: 'AccountCtrl'
+        }).when('/orders', {
+            templateUrl: 'assets/partials/orders.html',
+            controller: 'OrderListCtrl'
+        }).when('/orders/:orderId', {
+            templateUrl: 'assets/partials/order.html',
+            controller: 'OrderCtrl'
         }).otherwise({
             redirectTo: '/'
         });

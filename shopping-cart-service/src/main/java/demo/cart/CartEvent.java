@@ -18,6 +18,11 @@ public class CartEvent extends BaseEntity {
     public CartEvent() {
     }
 
+    public CartEvent(CartEventType cartEventType, Long userId) {
+        this.cartEventType = cartEventType;
+        this.userId = userId;
+    }
+
     public CartEvent(CartEventType cartEventType, Long userId, String productId, Integer quantity) {
         this.cartEventType = cartEventType;
         this.userId = userId;

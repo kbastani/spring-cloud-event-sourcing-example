@@ -1744,12 +1744,13 @@ th {
     padding: 8px;
     line-height: 1.428571429;
     vertical-align: top;
-    border-top: 1px solid #dddddd;
+    border-top: 1px solid #333;
+    text-align: left;
 }
 
 .table > thead > tr > th {
     vertical-align: bottom;
-    border-bottom: 2px solid #dddddd;
+    border-bottom: 1px solid #333;
 }
 
 .table > caption + thead > tr:first-child > th,
@@ -4198,7 +4199,7 @@ textarea.input-group-sm > .input-group-btn > .btn {
 .nav > li > a {
     position: relative;
     display: block;
-    padding: 10px 15px;
+    padding: 10px .5em;
 }
 
 .nav > li > a:hover,
@@ -4599,6 +4600,7 @@ textarea.input-group-sm > .input-group-btn > .btn {
     padding: 15px 15px;
     font-size: 18px;
     line-height: 20px;
+    padding-left: 9px;
 }
 
 .navbar-brand:hover,
@@ -7976,7 +7978,8 @@ h3.ng-binding {
 .logo-well i {
     font-size: 2.5em;
     line-height: 1.4em;
-    text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.6);
+    text-shadow: 0px 0px 30px rgba(229, 252, 194,.5);
+    color: whitesmoke;
 }
 
 .nav.navbar-nav span {
@@ -8006,6 +8009,7 @@ h3.ng-binding {
     -o-transition: opacity 1s linear;
     transition: opacity 1s linear;
 }
+
 .fade.in {
     opacity: 1;
 }
@@ -8104,4 +8108,70 @@ h3.ng-binding {
 
 .out-of-stock {
     color: red;
+}
+
+.list-group-details .list-group-item div span {
+    border-bottom: 0;
+}
+
+.shopping-cart {
+    border-bottom: solid 1px;
+    border-color: #222;
+}
+
+/*.table-striped > tbody > tr:nth-of-type(odd) {*/
+    /*background-color: #444;*/
+/*}*/
+
+/*.table-striped > tbody > tr:nth-of-type(even) {*/
+    /*background-color: #555;*/
+/*}*/
+
+.table-striped > tbody > tr:nth-child(odd) > td, .table-striped > tbody > tr:nth-child(odd) > th {
+    background-color: inherit;
+}
+
+.welcome-tag span {
+    padding: 0 .25em !important;
+    display: inline !important;
+}
+
+.welcome-tag {
+    padding: 15px .5em !important;
+    display: block !important;
+}
+
+span.cart-icon {
+    margin-left: 1px;
+    display: inline-block !important;
+    padding: 0 .25em !important;
+    line-height: 0 !important;
+}
+
+.order-view .panel {
+    border: 1px solid #222 !important;
+}
+
+.order-view .table {
+    margin-bottom: .5em;
+}
+
+.fa-shopping-cart {
+    font-size: 15px;
+}
+
+a, a:focus, a:hover {
+    color: rgb(229, 252, 194) !important;
+}
+
+.navbar-default .navbar-brand {
+    color: white !important;
+}
+
+.owl-slider .item a {
+    color: white !important;
+}
+
+.owl-item .item span a {
+    color: #fff !important;
 }

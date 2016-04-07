@@ -1,0 +1,41 @@
+<div class="container order-view hidden-content" ng-model="orders">
+    <div class="row">
+        <div class="col-md-12 panel-head-list">
+            <div class="panel panel-default">
+                <!-- Default panel contents -->
+                <div class="panel-heading"><i class="fa fa-home icon-head"></i>Order History</div>
+                <ul class="list-group list-group-details shopping-cart" ng-if="orders.length == 0">
+                    <li class="list-group-item">
+                        Your order history will display here after your first checkout
+                    </li>
+                </ul>
+                <table class="table table-striped" ng-if="orders.length > 0">
+                    <thead>
+                    <tr>
+                        <th>Order</th>
+                        <th>Status</th>
+                        <th>Date</th>
+                        <th>Total</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="order in orders">
+                        <td class="tdst-group-item">
+                            <a href="/#/orders/{{ order.orderId }}">{{ order.orderId }}</a>
+                        </td>
+                        <td class="tdst-group-item">
+                            {{ order.orderStatus }}
+                        </td>
+                        <td class="tdst-group-item">
+                            {{ order.createdAt | date:"MM/dd/yyyy" }}
+                        </td>
+                        <td class="tdst-group-item">
+                            {{ order.total | currency }}
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
