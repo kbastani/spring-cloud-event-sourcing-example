@@ -1896,7 +1896,7 @@ table th[class*="col-"] {
         width: 100%;
         margin-bottom: 15px;
         overflow-y: hidden;
-        overflow-x: scroll;
+        overflow-x: auto;
         -ms-overflow-style: -ms-autohiding-scrollbar;
         border: 1px solid #dddddd;
         -webkit-overflow-scrolling: touch;
@@ -8175,3 +8175,4 @@ a, a:focus, a:hover {
 .owl-item .item span a {
     color: #fff !important;
 }
+

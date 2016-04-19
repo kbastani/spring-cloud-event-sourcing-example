@@ -15,6 +15,10 @@ public class OrderEvent extends BaseEntity implements Serializable {
     public OrderEvent() {
     }
 
+    public OrderEvent(OrderEventType type) {
+        this.type = type;
+    }
+
     public OrderEvent(OrderEventType type, String orderId) {
         this.type = type;
         this.orderId = orderId;

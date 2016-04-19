@@ -115,7 +115,7 @@ public class ShoppingCartServiceV1 {
      */
     public ShoppingCart aggregateCartEvents(User user, Catalog catalog) throws Exception {
         Flux<CartEvent> cartEvents =
-                Flux.fromStream(cartEventRepository.findCartEventsByUserIdOrderByCreatedAtDesc(user.getId()));
+                Flux.fromStream(cartEventRepository.getCartEventStreamByUser(user.getId()));
 
         // Aggregate the state of the shopping cart
         ShoppingCart shoppingCart = cartEvents
@@ -135,7 +135,6 @@ public class ShoppingCartServiceV1 {
      */
     public CheckoutResult checkout() throws Exception {
         CheckoutResult checkoutResult = new CheckoutResult();
-        Order newOrder = null;
 
         // Check available inventory
         ShoppingCart currentCart = null;

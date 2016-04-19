@@ -15,7 +15,6 @@ import java.util.List;
  * A simple domain class for the {@link Order} concept in the order context.
  *
  * @author Kenny Bastani
- * @author Josh Long
  */
 @Document
 public class Order extends BaseEntity {
@@ -29,13 +28,15 @@ public class Order extends BaseEntity {
     private Address shippingAddress;
 
     public Order() {
+        this.orderStatus = OrderStatus.PURCHASED;
     }
 
     public Order(String accountNumber, Address shippingAddress) {
+        this();
         this.accountNumber = accountNumber;
         this.shippingAddress = shippingAddress;
-        this.shippingAddress.setAddressType(AddressType.SHIPPING);
-        this.orderStatus = OrderStatus.PURCHASED;
+        if (shippingAddress.getAddressType() == null)
+            this.shippingAddress.setAddressType(AddressType.SHIPPING);
     }
 
     public String getOrderId() {
@@ -82,11 +83,27 @@ public class Order extends BaseEntity {
         lineItems.add(lineItem);
     }
 
+    /**
+     * The incorporate method uses a simple state machine for an order's status to generate
+     * the current state of an order using event sourcing and aggregation.
+     * <p>
+     * The event diagram below represents how events are incorporated into generating the
+     * order status. The event log for the order status can be used to rollback the state
+     * of the order in the case of a failed distributed transaction.
+     * <p>
+     * Events:   +<--PURCHASED+  +<--CREATED+  +<---ORDERED+  +<----SHIPPED+
+     * *         |            |  |          |  |           |  |            |
+     * Status    +PURCHASED---+PENDING------+CONFIRMED-----+SHIPPED--------+DELIVERED
+     * *         |            |  |          |  |           |  |            |
+     * Events:   +CREATED---->+  +ORDERED-->+  +SHIPPED--->+  +DELIVERED-->+
+     *
+     * @param orderEvent is the event to incorporate into the state machine
+     * @return the aggregate {@link Order} with the aggregated order status
+     */
     public Order incorporate(OrderEvent orderEvent) {
 
-        if(orderStatus == null) {
+        if (orderStatus == null)
             orderStatus = OrderStatus.PURCHASED;
-        }
 
         switch (orderStatus) {
             case PURCHASED:
@@ -96,14 +113,14 @@ public class Order extends BaseEntity {
             case PENDING:
                 if (orderEvent.getType() == OrderEventType.ORDERED) {
                     orderStatus = OrderStatus.CONFIRMED;
-                } else if (orderEvent.getType() == OrderEventType.CREATED) {
+                } else if (orderEvent.getType() == OrderEventType.PURCHASED) {
                     orderStatus = OrderStatus.PURCHASED;
                 }
                 break;
             case CONFIRMED:
                 if (orderEvent.getType() == OrderEventType.SHIPPED) {
                     orderStatus = OrderStatus.SHIPPED;
-                } else if (orderEvent.getType() == OrderEventType.RESERVED) {
+                } else if (orderEvent.getType() == OrderEventType.CREATED) {
                     orderStatus = OrderStatus.PENDING;
                 }
                 break;
@@ -113,6 +130,13 @@ public class Order extends BaseEntity {
                 } else if (orderEvent.getType() == OrderEventType.ORDERED) {
                     orderStatus = OrderStatus.CONFIRMED;
                 }
+                break;
+            case DELIVERED:
+                if (orderEvent.getType() == OrderEventType.SHIPPED)
+                    orderStatus = OrderStatus.SHIPPED;
+                break;
+            default:
+                // Invalid event type with regards to the order status
                 break;
         }
 

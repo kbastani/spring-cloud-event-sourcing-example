@@ -3,9 +3,12 @@ package demo.cart;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import demo.catalog.Catalog;
+import org.apache.log4j.Logger;
+import reactor.core.publisher.Flux;
 
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * The {@link ShoppingCart} object represents an aggregate of {@link CartEvent} that
@@ -14,6 +17,7 @@ import java.util.stream.Collectors;
  */
 public class ShoppingCart {
 
+    private Logger log = Logger.getLogger(ShoppingCart.class);
     private Map<String, Integer> productMap = new HashMap<>();
     private List<LineItem> lineItems = new ArrayList<>();
     private Catalog catalog;
@@ -75,13 +79,22 @@ public class ShoppingCart {
      * @return the state of the {@link ShoppingCart} after applying the new {@link CartEvent}
      */
     public ShoppingCart incorporate(CartEvent cartEvent) {
-        if (cartEvent.getCartEventType() == CartEventType.ADD_ITEM ||
-                cartEvent.getCartEventType() == CartEventType.REMOVE_ITEM) {
+        // Remember that thing about safety properties in microservices?
+        Flux<CartEventType> validCartEventTypes =
+                Flux.fromStream(Stream.of(CartEventType.ADD_ITEM,
+                        CartEventType.REMOVE_ITEM));
+
+        // The CartEvent's type must be either ADD_ITEM or REMOVE_ITEM
+        if (validCartEventTypes.exists(cartEventType ->
+                cartEvent.getCartEventType().equals(cartEventType)).get()) {
+            // Update the aggregate view of each line item's quantity from the event type
             productMap.put(cartEvent.getProductId(),
                     productMap.getOrDefault(cartEvent.getProductId(), 0) +
-                            (cartEvent.getQuantity() * (cartEvent.getCartEventType() == CartEventType.ADD_ITEM ? 1 : -1)));
+                            (cartEvent.getQuantity() * (cartEvent.getCartEventType()
+                                    .equals(CartEventType.ADD_ITEM) ? 1 : -1)));
         }
 
+        // Return the updated state of the aggregate to the reactive stream's reduce method
         return this;
     }
 

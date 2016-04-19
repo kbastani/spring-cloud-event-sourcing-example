@@ -4,7 +4,6 @@ package demo.order;
  * A simple domain class for the {@link LineItem} concept in the order context.
  *
  * @author Kenny Bastani
- * @author Josh Long
  */
 public class LineItem {
 
