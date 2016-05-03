@@ -20,7 +20,7 @@ docker-compose up -d config-service
 
 while [ -z ${CONFIG_SERVICE_READY} ]; do
   echo "Waiting for config service..."
-  if [ "$(nc $DOCKER_IP -z -w 4 8888; echo $?)" = 0 ]; then
+  if [ "$(curl --silent $DOCKER_IP:8888/health 2>&1 | grep -q '\"status\":\"UP\"'; echo $?)" = 0 ]; then
       CONFIG_SERVICE_READY=true;
   fi
   sleep 2
@@ -31,7 +31,7 @@ docker-compose up -d discovery-service
 
 while [ -z ${DISCOVERY_SERVICE_READY} ]; do
   echo "Waiting for discovery service..."
-  if [ "$(nc $DOCKER_IP -z -w 4 8761; echo $?)" = 0 ]; then
+  if [ "$(curl --silent $DOCKER_IP:8761/health 2>&1 | grep -q '\"status\":\"UP\"'; echo $?)" = 0 ]; then
       DISCOVERY_SERVICE_READY=true;
   fi
   sleep 2
