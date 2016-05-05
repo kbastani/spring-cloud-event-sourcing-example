@@ -2,6 +2,8 @@
 
 This reference application is a Spring Cloud example of using event sourcing in microservices. The project is intended to demonstrate end-to-end best practices for building a _Netflix-like_ microservice architecture using Spring Cloud.
 
+Tutorial provided here: http://www.kennybastani.com/2016/04/event-sourcing-microservices-spring-cloud.html
+
 * Spring Cloud OAuth2
   * Authorization Server
   * Resource Server
@@ -13,7 +15,7 @@ This reference application is a Spring Cloud example of using event sourcing in 
 
 ## Architecture Diagram
 
-![Online Store Architecture Diagram](http://i.imgur.com/PBCVt90.png)
+![Online Store Architecture Diagram](http://i.imgur.com/zqzmAzi.png)
 
 ## Online Store Domain
 
