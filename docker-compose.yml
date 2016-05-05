@@ -13,24 +13,24 @@ hystrix-dashboard:
   ports:
    - 6161:6161
 mysql:
-  image: mysql:latest
+  image: mysql:5.7
   ports:
    - 3306:3306
   environment:
    - MYSQL_ROOT_PASSWORD=dbpass
    - MYSQL_DATABASE=dev
 neo4j:
-  image: neo4j:latest
+  image: neo4j:2.3
   ports:
    - 7474:7474
   environment:
    - NEO4J_AUTH=none
 mongo:
-  image: mongo:latest
+  image: mongo:3.3
   ports:
    - 27017:27017
 redis:
-  image: redis:latest
+  image: redis:3.0
   ports:
    - 6379:6379
 user-service:
