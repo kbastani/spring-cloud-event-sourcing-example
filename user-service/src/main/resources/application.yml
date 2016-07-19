@@ -33,6 +33,8 @@ spring:
     username: root
     password: dbpass
     initialize: true
+  zipkin:
+    base-url: http://zipkin:9411/
 security.ignored: /resources/**
 eureka:
   instance:
@@ -51,4 +53,4 @@ spring:
     database: H2
   datasource:
     url: jdbc:h2:mem:testdb;DB_CLOSE_ON_EXIT=FALSE
-    initialize: false
+    initialize: true

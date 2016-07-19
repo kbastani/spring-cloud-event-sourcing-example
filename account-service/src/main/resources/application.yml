@@ -8,14 +8,14 @@ spring:
     url: jdbc:mysql://192.168.99.100:3306/dev
     username: root
     password: dbpass
-    initialize: false
+    initialize: true
 security:
   oauth2:
     resource:
-      userInfoUri: http://192.168.99.100:8181/uaa/user
+      userInfoUri: http://localhost:8181/uaa/user
     client:
       client-id: acme
-      access-token-uri: http://192.168.99.100:8787
+      access-token-uri: http://localhost:8787
 eureka:
   instance:
     prefer-ip-address: true
@@ -23,7 +23,7 @@ eureka:
     registerWithEureka: true
     fetchRegistry: true
     serviceUrl:
-      defaultZone: http://192.168.99.100:8761/eureka/
+      defaultZone: http://localhost:8761/eureka/
 ---
 spring:
   profiles: docker
@@ -32,6 +32,8 @@ spring:
     username: root
     password: dbpass
     initialize: true
+  zipkin:
+      base-url: http://zipkin:9411/
 security:
   oauth2:
     resource:

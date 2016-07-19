@@ -5,6 +5,7 @@ applications:
   instances: 1
   host: inventory-service-${random-word}
   path: target/inventory-service-0.0.1-SNAPSHOT.jar
+  timeout: 180
   env:
     SPRING_PROFILES_ACTIVE: cloud
     DEBUG: "true"
@@ -13,3 +14,4 @@ applications:
    - discovery-service
    - config-service
    - user-service
+   - inventory-db

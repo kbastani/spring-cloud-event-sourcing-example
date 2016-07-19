@@ -12,13 +12,15 @@ eureka:
     registerWithEureka: true
     fetchRegistry: true
     serviceUrl:
-      defaultZone: http://192.168.99.100:8761/eureka/
+      defaultZone: http://localhost:8761/eureka/
 ---
 spring:
   profiles: docker
   neo4j:
     host: ${SPRING_NEO4J_HOST:neo4j}
     port: ${SPRING_NEO4J_PORT:7474}
+  zipkin:
+      base-url: http://zipkin:9411/
 eureka:
   instance:
     prefer-ip-address: true

@@ -22,6 +22,7 @@ public class AccountControllerV1 {
     }
 
     @RequestMapping(path = "/accounts")
+
     public ResponseEntity getUserAccount() throws Exception {
         return Optional.ofNullable(accountService.getUserAccounts())
                 .map(a -> new ResponseEntity<List<Account>>(a, HttpStatus.OK))

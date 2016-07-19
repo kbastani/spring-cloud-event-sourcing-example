@@ -4,7 +4,7 @@ spring:
   profiles: development
   data:
     mongodb:
-      host: 192.168.99.100
+      host: 192.168.99.101
       port: 27017
   jackson:
     date-format: "YYYY-MM-dd"
@@ -13,7 +13,7 @@ spring:
 security:
   oauth2:
     resource:
-      userInfoUri: http://192.168.99.100:8181/uaa/user
+      userInfoUri: http://localhost:8181/uaa/user
     client:
       client-id: acme
   ignored: /api/**
@@ -24,7 +24,7 @@ eureka:
     registerWithEureka: true
     fetchRegistry: true
     serviceUrl:
-      defaultZone: http://192.168.99.100:8761/eureka/
+      defaultZone: http://localhost:8761/eureka/
 ---
 spring:
   profiles: docker
@@ -32,6 +32,8 @@ spring:
     mongodb:
       host: mongo
       port: 27017
+  zipkin:
+      base-url: http://zipkin:9411/
   mvc:
     date-format: "YYYY-MM-dd"
   jackson:

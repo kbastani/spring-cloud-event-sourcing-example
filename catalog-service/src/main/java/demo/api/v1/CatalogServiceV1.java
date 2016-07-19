@@ -25,13 +25,19 @@ public class CatalogServiceV1 {
         this.restTemplate = restTemplate;
     }
 
-    @HystrixCommand
+    private Catalog fallbackGetCatalog() {
+        //
+        return new Catalog();
+    }
+
+    @HystrixCommand(fallbackMethod = "fallbackGetCatalog")
     public Catalog getCatalog() {
         Catalog catalog;
 
         CatalogInfo activeCatalog = catalogInfoRepository.findCatalogByActive(true);
 
-        catalog = restTemplate.getForObject(String.format("http://inventory-service/api/catalogs/search/findCatalogByCatalogNumber?catalogNumber=%s",
+        catalog = restTemplate.getForObject(
+                String.format("http://inventory-service/api/catalogs/search/findCatalogByCatalogNumber?catalogNumber=%s",
                 activeCatalog.getCatalogId()), Catalog.class);
 
         ProductsResource products = restTemplate.getForObject(String.format("http://inventory-service/api/catalogs/%s/products",

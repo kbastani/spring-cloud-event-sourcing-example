@@ -21,7 +21,7 @@ public class ShoppingCartControllerV1 {
     public ShoppingCartControllerV1(ShoppingCartServiceV1 shoppingCartService) {
         this.shoppingCartService = shoppingCartService;
     }
-
+    
     @RequestMapping(path = "/events", method = RequestMethod.POST)
     public ResponseEntity addCartEvent(@RequestBody CartEvent cartEvent) throws Exception {
         return Optional.ofNullable(shoppingCartService.addCartEvent(cartEvent))
