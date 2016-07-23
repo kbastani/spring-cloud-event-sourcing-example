@@ -16,10 +16,12 @@ import demo.warehouse.Warehouse;
 import demo.warehouse.WarehouseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
-import org.springframework.data.neo4j.config.Neo4jConfiguration;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Random;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -33,27 +35,27 @@ public class DatabaseInitializer {
     private AddressRepository addressRepository;
     private CatalogRepository catalogRepository;
     private InventoryRepository inventoryRepository;
-    private Neo4jConfiguration neo4jConfiguration;
 
     @Autowired
     public DatabaseInitializer(ProductRepository productRepository, ShipmentRepository shipmentRepository,
                                WarehouseRepository warehouseRepository, AddressRepository addressRepository,
-                               CatalogRepository catalogRepository, InventoryRepository inventoryRepository,
-                               Neo4jConfiguration neo4jConfiguration) {
+                               CatalogRepository catalogRepository, InventoryRepository inventoryRepository) {
         this.productRepository = productRepository;
         this.shipmentRepository = shipmentRepository;
         this.warehouseRepository = warehouseRepository;
         this.addressRepository = addressRepository;
         this.catalogRepository = catalogRepository;
         this.inventoryRepository = inventoryRepository;
-        this.neo4jConfiguration = neo4jConfiguration;
     }
 
     public void populate() throws Exception {
 
-        neo4jConfiguration.getSession().query(
-                "MATCH (n) OPTIONAL MATCH (n)-[r]-() DELETE n, r;", new HashMap<>())
-                .queryResults();
+        productRepository.deleteAll();
+        shipmentRepository.deleteAll();
+        warehouseRepository.deleteAll();
+        addressRepository.deleteAll();
+        catalogRepository.deleteAll();
+        inventoryRepository.deleteAll();
 
         Warehouse warehouse = new Warehouse("Pivotal SF");
 

@@ -1,7 +1,9 @@
 package demo.address;
 
-import org.neo4j.ogm.annotation.GraphId;
-import org.neo4j.ogm.annotation.NodeEntity;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
 /**
  * A simple {@link Address} entity for an order or invoice.
@@ -9,10 +11,11 @@ import org.neo4j.ogm.annotation.NodeEntity;
  * @author Kenny Bastani
  * @author Josh Long
  */
-@NodeEntity
+@Entity
 public class Address {
 
-    @GraphId
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     private String street1, street2, state, city, country;

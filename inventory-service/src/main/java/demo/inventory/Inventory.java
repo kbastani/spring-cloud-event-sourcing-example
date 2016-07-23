@@ -2,24 +2,25 @@ package demo.inventory;
 
 import demo.product.Product;
 import demo.warehouse.Warehouse;
-import org.neo4j.ogm.annotation.GraphId;
-import org.neo4j.ogm.annotation.NodeEntity;
-import org.neo4j.ogm.annotation.Relationship;
 
-@NodeEntity
+import javax.persistence.*;
+
+@Entity
 public class Inventory {
 
-    @GraphId
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     private String inventoryNumber;
 
-    @Relationship(type = "PRODUCT_TYPE", direction = "OUTGOING")
+    @OneToOne(cascade = CascadeType.MERGE)
     private Product product;
 
-    @Relationship(type = "STOCKED_IN", direction = "OUTGOING")
+    @OneToOne(cascade = CascadeType.MERGE)
     private Warehouse warehouse;
 
+    @Enumerated(EnumType.STRING)
     private InventoryStatus status;
 
     public Inventory() {

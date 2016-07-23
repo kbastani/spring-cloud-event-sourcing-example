@@ -1,9 +1,8 @@
 package demo.warehouse;
 
 import demo.address.Address;
-import org.neo4j.ogm.annotation.GraphId;
-import org.neo4j.ogm.annotation.NodeEntity;
-import org.neo4j.ogm.annotation.Relationship;
+
+import javax.persistence.*;
 
 /**
  * A simple domain class for the {@link Warehouse}
@@ -11,15 +10,16 @@ import org.neo4j.ogm.annotation.Relationship;
  * @author Kenny Bastani
  * @author Josh Long
  */
-@NodeEntity
+@Entity
 public class Warehouse {
 
-    @GraphId
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     private String name;
 
-    @Relationship(type="HAS_ADDRESS")
+    @OneToOne(cascade = CascadeType.ALL)
     private Address address;
 
     public Warehouse() {

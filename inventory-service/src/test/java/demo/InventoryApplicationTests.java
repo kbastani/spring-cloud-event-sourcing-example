@@ -21,11 +21,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
-import org.springframework.data.neo4j.config.Neo4jConfiguration;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Random;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -59,15 +61,15 @@ public class InventoryApplicationTests {
     @Autowired
     private InventoryRepository inventoryRepository;
 
-    @Autowired
-    private Neo4jConfiguration neo4jConfiguration;
-
     @Before
     public void setup() {
         try {
-            neo4jConfiguration.getSession().query(
-                    "MATCH (n) OPTIONAL MATCH (n)-[r]-() DELETE n, r;", new HashMap<>())
-                    .queryResults();
+            productRepository.deleteAll();
+            shipmentRepository.deleteAll();
+            warehouseRepository.deleteAll();
+            addressRepository.deleteAll();
+            catalogRepository.deleteAll();
+            inventoryRepository.deleteAll();
         } catch (Exception e) {
             neo4jConnection = false;
         }
@@ -75,7 +77,7 @@ public class InventoryApplicationTests {
 
     @Test
     public void inventoryTest() {
-        if(neo4jConnection) {
+        if (neo4jConnection) {
             Warehouse warehouse = new Warehouse("Pivotal SF");
 
             List<Product> products = Arrays.asList(
@@ -107,7 +109,7 @@ public class InventoryApplicationTests {
                     .stream()
                     .collect(Collectors.toList());
 
-            productRepository.save(products);
+            products = productRepository.save(products);
 
             Product product1 = productRepository.findOne(products.get(0).getId());
 
@@ -116,6 +118,8 @@ public class InventoryApplicationTests {
             assertThat(product1.getUnitPrice(), is(products.get(0).getUnitPrice()));
 
             Catalog catalog = new Catalog("Fall Catalog", 0L);
+
+            catalogRepository.save(catalog);
 
             catalog.getProducts().addAll(products);
 
@@ -133,7 +137,8 @@ public class InventoryApplicationTests {
                     "CA", "Mountain View", "United States", 94043);
 
             // Save the addresses
-            addressRepository.save(Arrays.asList(warehouseAddress, shipToAddress));
+            warehouseAddress = addressRepository.save(warehouseAddress);
+            shipToAddress = addressRepository.save(shipToAddress);
 
             Address address1 = addressRepository.findOne(shipToAddress.getId());
 
@@ -148,6 +153,7 @@ public class InventoryApplicationTests {
             log.info(warehouseAddress.toString());
             log.info(shipToAddress.toString());
 
+            warehouse = warehouseRepository.save(warehouse);
             warehouse.setAddress(warehouseAddress);
             warehouse = warehouseRepository.save(warehouse);
 
@@ -177,7 +183,26 @@ public class InventoryApplicationTests {
             Shipment shipment1 = shipmentRepository.findOne(shipment.getId());
 
             assertThat(shipment1, is(notNullValue()));
-            assertThat(shipment1.toString(), is(shipment.toString()));
+
+            // Compare fields
+            assertThat(shipment1.getDeliveryAddress().toString(),
+                    is(shipment.getDeliveryAddress().toString()));
+            assertThat(shipment1.getFromWarehouse().toString(),
+                    is(shipment.getFromWarehouse().toString()));
+            assertThat(shipment1.getShipmentStatus().toString(),
+                    is(shipment.getShipmentStatus().toString()));
+
+            // Compare inventory list
+            assertThat(shipment1.getInventories()
+                            .stream()
+                            .map(Inventory::getInventoryNumber)
+                            .sorted()
+                            .collect(Collectors.toList()),
+                    is(shipment.getInventories()
+                            .stream()
+                            .map(Inventory::getInventoryNumber)
+                            .sorted()
+                            .collect(Collectors.toList())));
         }
     }
 }

@@ -1,29 +1,22 @@
 package demo.inventory;
 
-import org.springframework.data.neo4j.annotation.Query;
-import org.springframework.data.neo4j.repository.GraphRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
-public interface InventoryRepository extends GraphRepository<Inventory> {
-    @Query("MATCH (product:Product),\n" +
-            "\t(product)<-[:PRODUCT_TYPE]-(inventory:Inventory)\n" +
-            "WHERE product.productId = {productId} AND NOT (inventory)<-[:CONTAINS_PRODUCT]-()\n" +
-            "RETURN inventory")
+public interface InventoryRepository extends JpaRepository<Inventory, Long> {
+    @Query("select inv from Inventory inv\n" +
+            "where inv.product.productId = :productId")
     List<Inventory> getAvailableInventoryForProduct(@Param("productId") String productId);
 
-    @Query("MATCH (product:Product),\n" +
-            "\t(product)<-[:PRODUCT_TYPE]-(inventory:Inventory),\n" +
-            "    (inventory)-[:STOCKED_IN]->(:Warehouse { name: \"{warehouseName}\" })\n" +
-            "WHERE product.productId = {productId} AND NOT (inventory)<-[:CONTAINS_PRODUCT]-()\n" +
-            "RETURN inventory")
-    List<Inventory> getAvailableInventoryForProductAndWarehouse(@Param("productId") String productId,
-                                                                @Param("warehouseName") String warehouseName);
+    // SELECT * FROM product prd
+    // JOIN inventory inv ON inv.productId = prd.productId
+    // WHERE prd.productId = {productId}
+    // AND
 
-    @Query("MATCH (product:Product),\n" +
-            "\t(product)<-[:PRODUCT_TYPE]-(inventory:Inventory)\n" +
-            "WHERE product.productId in {productIds} AND NOT (inventory)<-[:CONTAINS_PRODUCT]-()\n" +
-            "RETURN inventory")
+    @Query("select inv from Inventory inv\n" +
+            "where inv.product.productId in :productIds")
     List<Inventory> getAvailableInventoryForProductList(@Param("productIds") String[] productIds);
 }

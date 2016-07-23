@@ -1,8 +1,6 @@
 package demo.product;
 
-import org.neo4j.ogm.annotation.GraphId;
-import org.neo4j.ogm.annotation.NodeEntity;
-import org.neo4j.ogm.annotation.Transient;
+import javax.persistence.*;
 
 /**
  * A simple domain class for the {@link Product} concept in the order context.
@@ -10,12 +8,17 @@ import org.neo4j.ogm.annotation.Transient;
  * @author Kenny Bastani
  * @author Josh Long
  */
-@NodeEntity
+@Entity
 public class Product {
 
-    @GraphId
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    private String name, productId, description;
+    private String name, productId;
+
+    @Lob
+    @Column
+    private String description;
     private Double unitPrice;
 
     @Transient

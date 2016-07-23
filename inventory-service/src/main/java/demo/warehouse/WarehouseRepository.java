@@ -1,6 +1,6 @@
 package demo.warehouse;
 
-import org.springframework.data.neo4j.repository.GraphRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface WarehouseRepository extends GraphRepository<Warehouse> {
+public interface WarehouseRepository extends JpaRepository<Warehouse, Long> {
 }

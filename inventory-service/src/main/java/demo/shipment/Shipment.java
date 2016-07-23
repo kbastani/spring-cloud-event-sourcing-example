@@ -3,10 +3,8 @@ package demo.shipment;
 import demo.address.Address;
 import demo.inventory.Inventory;
 import demo.warehouse.Warehouse;
-import org.neo4j.ogm.annotation.GraphId;
-import org.neo4j.ogm.annotation.NodeEntity;
-import org.neo4j.ogm.annotation.Relationship;
 
+import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -16,21 +14,23 @@ import java.util.Set;
  * @author Kenny Bastani
  * @author Josh Long
  */
-@NodeEntity
+@Entity
 public class Shipment {
 
-    @GraphId
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Relationship(type = "CONTAINS_PRODUCT")
+    @OneToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
     private Set<Inventory> inventories = new HashSet<>();
 
-    @Relationship(type = "SHIP_TO")
+    @OneToOne(cascade = CascadeType.MERGE)
     private Address deliveryAddress;
 
-    @Relationship(type = "SHIP_FROM")
+    @OneToOne(cascade = CascadeType.MERGE)
     private Warehouse fromWarehouse;
 
+    @Enumerated(EnumType.STRING)
     private ShipmentStatus shipmentStatus;
 
     public Shipment() {

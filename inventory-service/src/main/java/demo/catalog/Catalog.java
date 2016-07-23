@@ -1,22 +1,21 @@
 package demo.catalog;
 
 import demo.product.Product;
-import org.neo4j.ogm.annotation.GraphId;
-import org.neo4j.ogm.annotation.NodeEntity;
-import org.neo4j.ogm.annotation.Relationship;
 
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
-@NodeEntity
+@Entity
 public class Catalog {
 
-    @GraphId
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     private Long catalogNumber;
 
-    @Relationship(type = "HAS_PRODUCT", direction = "OUTGOING")
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Product> products = new ArrayList<>();
 
     private String name;

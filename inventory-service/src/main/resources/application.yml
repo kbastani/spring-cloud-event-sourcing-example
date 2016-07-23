@@ -2,9 +2,22 @@ spring.profiles.active: development
 ---
 spring:
   profiles: development
-  neo4j:
-    host: ${SPRING_NEO4J_HOST:192.168.99.100}
-    port: ${SPRING_NEO4J_PORT:7474}
+  datasource:
+    url: jdbc:mysql://192.168.99.100:3306/dev
+    username: root
+    password: dbpass
+    initialize: true
+  jackson:
+    date-format: "YYYY-MM-dd"
+    serialization:
+      write_dates_as_timestamps: true
+security:
+  oauth2:
+    resource:
+      userInfoUri: http://localhost:8181/uaa/user
+    client:
+      client-id: acme
+  ignored: /api/**
 eureka:
   instance:
     prefer-ip-address: true
@@ -16,11 +29,25 @@ eureka:
 ---
 spring:
   profiles: docker
-  neo4j:
-    host: ${SPRING_NEO4J_HOST:neo4j}
-    port: ${SPRING_NEO4J_PORT:7474}
+  datasource:
+    url: jdbc:mysql://mysql:3306/dev
+    username: root
+    password: dbpass
+    initialize: true
   zipkin:
       base-url: http://zipkin:9411/
+  mvc:
+    date-format: "YYYY-MM-dd"
+  jackson:
+    date-format: "YYYY-MM-dd"
+    serialization:
+      write_dates_as_timestamps: true
+security:
+  oauth2:
+    resource:
+      userInfoUri: http://${DOCKER_IP:192.168.99.100}:8181/uaa/user
+    client:
+      client-id: acme
 eureka:
   instance:
     prefer-ip-address: true
@@ -32,9 +59,16 @@ eureka:
 ---
 spring:
   profiles: test
-  neo4j:
-    host: ${SPRING_NEO4J_HOST:192.168.99.101}
-    port: ${SPRING_NEO4J_PORT:7474}
-eureka:
-  client:
-    enabled: false
+  jpa:
+    show_sql: false
+    database: H2
+  datasource:
+    url: jdbc:h2:mem:testdb;DB_CLOSE_ON_EXIT=FALSE
+    initialize: false
+security:
+  oauth2:
+    resource:
+      userInfoUri: http://localhost:8181/uaa/user
+    client:
+      client-id: acme
+      access-token-uri: http://localhost:8787
