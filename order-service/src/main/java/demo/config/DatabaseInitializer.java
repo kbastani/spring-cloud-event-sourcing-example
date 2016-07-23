@@ -7,11 +7,9 @@ import demo.order.LineItem;
 import demo.order.Order;
 import demo.order.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
 @Service
-@Profile("docker")
 public class DatabaseInitializer {
 
     private OrderRepository orderRepository;

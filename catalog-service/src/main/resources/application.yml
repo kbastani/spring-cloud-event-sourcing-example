@@ -8,7 +8,7 @@ spring:
     host: 192.168.99.100
     port: 6379
   datasource:
-    url: jdbc:mysql://192.168.99.100:3306/dev?useSSL=false
+    url: jdbc:mysql://192.168.99.101:3306/dev?useSSL=false
     username: root
     password: dbpass
     initialize: true

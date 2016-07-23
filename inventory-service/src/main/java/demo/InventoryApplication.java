@@ -9,6 +9,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.cloud.netflix.hystrix.EnableHystrix;
+import org.springframework.cloud.sleuth.sampler.AlwaysSampler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
@@ -51,6 +52,11 @@ public class InventoryApplication {
         public void configureRepositoryRestConfiguration(RepositoryRestConfiguration config) {
             config.setBasePath("/api");
         }
+    }
+
+    @Bean
+    AlwaysSampler alwaysSampler() {
+        return new AlwaysSampler();
     }
 }
 

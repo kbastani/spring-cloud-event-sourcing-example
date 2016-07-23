@@ -19,7 +19,7 @@ public class Warehouse {
 
     private String name;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.MERGE)
     private Address address;
 
     public Warehouse() {

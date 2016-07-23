@@ -3,7 +3,7 @@ spring.profiles.active: development
 spring:
   profiles: development
   datasource:
-    url: jdbc:mysql://192.168.99.100:3306/dev
+    url: jdbc:mysql://192.168.99.101:3306/dev?useSSL=false
     username: root
     password: dbpass
     initialize: true
@@ -11,13 +11,6 @@ spring:
     date-format: "YYYY-MM-dd"
     serialization:
       write_dates_as_timestamps: true
-security:
-  oauth2:
-    resource:
-      userInfoUri: http://localhost:8181/uaa/user
-    client:
-      client-id: acme
-  ignored: /api/**
 eureka:
   instance:
     prefer-ip-address: true

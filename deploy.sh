@@ -62,14 +62,14 @@ do
     if [ -z "${app}" ]
     then
         echo "Creating new app '${D}'..."
-        cf push -m 700M
+        cf push
     else
         # Be sure to use the already existing route
         echo "Getting existing route for '${D}'..."
         route=$(cf curl /v2/apps/$(cf app ${D} --guid)/routes | jq -r '.resources[0].entity.host')
         echo "Found route '${route}'\n"
         echo "Pushing ${D}..."
-        cf push -n $route -m 700M
+        cf push -n $route
     fi
 
     # Retrieve full url for backing service
@@ -101,13 +101,13 @@ do
     if [ -z "${app}" ]
     then
         echo "Creating new app '${D}'..."
-        cf push -m 700M
+        cf push
     else
         # Be sure to use the already existing route
         echo "Getting existing route for '${D}'..."
         route=$(cf curl /v2/apps/$(cf app ${D} --guid)/routes | jq -r '.resources[0].entity.host')
         echo "Found route '${route}'\n"
         echo "Pushing ${D}..."
-        cf push -n $route -m 700M
+        cf push -n $route
     fi
 done

@@ -15,7 +15,7 @@ public class Catalog {
 
     private Long catalogNumber;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
     private List<Product> products = new ArrayList<>();
 
     private String name;

@@ -15,7 +15,7 @@ security:
 spring:
   profiles: development
   datasource:
-    url: jdbc:mysql://192.168.99.100:3306/dev
+    url: jdbc:mysql://192.168.99.101:3306/dev
     username: root
     password: dbpass
     platform: mysql
