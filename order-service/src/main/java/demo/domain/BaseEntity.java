@@ -1,11 +1,11 @@
 package demo.domain;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.io.Serializable;
-import java.util.Date;
+import javax.persistence.EntityListeners;
+import javax.persistence.MappedSuperclass;
 
 /**
  * An abstract base class that is inherited by other domain classes
@@ -14,36 +14,40 @@ import java.util.Date;
  * @author Kenny Bastani
  * @author Josh Long
  */
-public class BaseEntity implements Serializable {
+@MappedSuperclass
+@EntityListeners(AuditingEntityListener.class)
+public class BaseEntity {
+
+    @CreatedDate
+    private Long createdAt;
 
     @LastModifiedDate
-    private Date lastModified;
-    @CreatedDate
-    private Date createdAt;
+    private Long lastModified;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSZ")
-    public Date getLastModified() {
-        return lastModified;
+    public BaseEntity() {
     }
 
-    public void setLastModified(Date lastModified) {
-        this.lastModified = lastModified;
-    }
-
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSZ")
-    public Date getCreatedAt() {
+    public Long getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(Date createdAt) {
+    public void setCreatedAt(Long createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public Long getLastModified() {
+        return lastModified;
+    }
+
+    public void setLastModified(Long lastModified) {
+        this.lastModified = lastModified;
     }
 
     @Override
     public String toString() {
         return "BaseEntity{" +
-                "lastModified=" + lastModified +
-                ", createdAt=" + createdAt +
+                "createdAt=" + createdAt +
+                ", lastModified=" + lastModified +
                 '}';
     }
 }

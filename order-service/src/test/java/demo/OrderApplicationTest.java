@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.boot.test.WebIntegrationTest;
 import org.springframework.dao.DataAccessResourceFailureException;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.util.Assert;
 
@@ -23,6 +24,7 @@ import java.util.List;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = OrderApplication.class)
+@ActiveProfiles(profiles = "test")
 @WebIntegrationTest
 public class OrderApplicationTest extends TestCase {
 
@@ -41,8 +43,8 @@ public class OrderApplicationTest extends TestCase {
     @Before
     public void before() {
         try {
-            orderRepository.deleteAll();
-            invoiceRepository.deleteAll();
+            orderRepository.findAll();
+            invoiceRepository.findAll();
         } catch (DataAccessResourceFailureException ex) {
             mongoConnection = false;
         }
@@ -115,8 +117,8 @@ public class OrderApplicationTest extends TestCase {
     @After
     public void tearDown() {
         if (mongoConnection) {
-            orderRepository.deleteAll();
             invoiceRepository.deleteAll();
+            orderRepository.deleteAll();
         }
     }
 }

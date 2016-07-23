@@ -4,11 +4,11 @@ import demo.address.Address;
 import demo.address.AddressType;
 import demo.domain.BaseEntity;
 import demo.order.Order;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.util.ArrayList;
-import java.util.List;
+import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.UUID;
 
 /**
  * A simple domain class for the {@link Invoice} concept of the order context.
@@ -16,22 +16,34 @@ import java.util.List;
  * @author Kenny Bastani
  * @author Josh Long
  */
-@Document
+@Entity
 public class Invoice extends BaseEntity {
 
-    private String invoiceId, customerId;
-    private List<Order> orders = new ArrayList<Order>();
+    @Id
+    private String invoiceId;
+    private String customerId;
+
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private Set<Order> orders = new HashSet<>();
+
+    @OneToOne(cascade = CascadeType.ALL)
     private Address billingAddress;
+
+    @Enumerated(EnumType.STRING)
     private InvoiceStatus invoiceStatus;
 
+    public Invoice() {
+        this.invoiceId = UUID.randomUUID().toString();
+    }
+
     public Invoice(String customerId, Address billingAddress) {
+        this();
         this.customerId = customerId;
         this.billingAddress = billingAddress;
         this.billingAddress.setAddressType(AddressType.BILLING);
         this.invoiceStatus = InvoiceStatus.CREATED;
     }
 
-    @Id
     public String getInvoiceId() {
         return invoiceId;
     }
@@ -40,11 +52,11 @@ public class Invoice extends BaseEntity {
         this.invoiceId = invoiceId;
     }
 
-    public List<Order> getOrders() {
+    public Set<Order> getOrders() {
         return orders;
     }
 
-    public void setOrders(List<Order> orders) {
+    public void setOrders(Set<Order> orders) {
         this.orders = orders;
     }
 

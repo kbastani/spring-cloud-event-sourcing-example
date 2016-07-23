@@ -1,11 +1,21 @@
 package demo.order;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+
 /**
  * A simple domain class for the {@link LineItem} concept in the order context.
  *
  * @author Kenny Bastani
  */
+@Entity
 public class LineItem {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
 
     private String name, productId;
     private Integer quantity;
@@ -21,6 +31,14 @@ public class LineItem {
         this.quantity = quantity;
         this.price = price;
         this.tax = tax;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getName() {

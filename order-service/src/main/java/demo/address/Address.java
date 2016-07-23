@@ -1,11 +1,19 @@
 package demo.address;
 
+import javax.persistence.*;
 import java.io.Serializable;
 
+@Entity
 public class Address implements Serializable {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
 
     private String street1, street2, state, city, country;
     private Integer zipCode;
+
+    @Enumerated(EnumType.STRING)
     private AddressType addressType;
 
     public Address() {

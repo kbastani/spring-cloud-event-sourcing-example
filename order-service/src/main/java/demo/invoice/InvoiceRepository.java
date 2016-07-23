@@ -1,6 +1,6 @@
 package demo.invoice;
 
-import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface InvoiceRepository extends PagingAndSortingRepository<Invoice, String> {
+public interface InvoiceRepository extends JpaRepository<Invoice, String> {
 }

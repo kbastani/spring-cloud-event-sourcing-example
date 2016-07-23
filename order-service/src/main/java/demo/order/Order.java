@@ -3,31 +3,33 @@ package demo.order;
 import demo.address.Address;
 import demo.address.AddressType;
 import demo.domain.BaseEntity;
-import org.bson.types.ObjectId;
-import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Transient;
-import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.util.ArrayList;
-import java.util.List;
+import javax.persistence.*;
+import java.util.*;
 
 /**
  * A simple domain class for the {@link Order} concept in the order context.
  *
  * @author Kenny Bastani
  */
-@Document
+@Entity(name = "orders")
 public class Order extends BaseEntity {
 
     @Id
-    private ObjectId orderId;
+    private String orderId;
     private String accountNumber;
     @Transient
     private OrderStatus orderStatus;
-    private List<LineItem> lineItems = new ArrayList<>();
+
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private Set<LineItem> lineItems = new HashSet<>();
+
+    @OneToOne(cascade = CascadeType.ALL)
     private Address shippingAddress;
 
     public Order() {
+        this.orderId = UUID.randomUUID().toString();
         this.orderStatus = OrderStatus.PURCHASED;
     }
 
@@ -40,7 +42,7 @@ public class Order extends BaseEntity {
     }
 
     public String getOrderId() {
-        return orderId != null ? orderId.toHexString() : null;
+        return orderId;
     }
 
     public void setOrderId(String id) {
@@ -63,11 +65,11 @@ public class Order extends BaseEntity {
         this.orderStatus = orderStatus;
     }
 
-    public List<LineItem> getLineItems() {
+    public Set<LineItem> getLineItems() {
         return lineItems;
     }
 
-    public void setLineItems(List<LineItem> lineItems) {
+    public void setLineItems(Set<LineItem> lineItems) {
         this.lineItems = lineItems;
     }
 

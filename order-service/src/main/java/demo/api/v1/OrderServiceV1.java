@@ -46,7 +46,7 @@ public class OrderServiceV1 {
                 .findFirst()
                 .orElseThrow(() -> new RuntimeException("Default account does not have a shipping address")));
 
-        newOrder.setLineItems(lineItems);
+        newOrder.setLineItems(lineItems.stream().collect(Collectors.toSet()));
 
         newOrder = orderRepository.save(newOrder);
 

@@ -1,14 +1,18 @@
 package demo.order;
 
 import demo.domain.BaseEntity;
-import org.springframework.data.mongodb.core.mapping.Document;
 
+import javax.persistence.*;
 import java.io.Serializable;
 
-@Document
+@Entity
 public class OrderEvent extends BaseEntity implements Serializable {
 
-    private String id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
+    
+    @Enumerated(EnumType.STRING)
     private OrderEventType type;
     private String orderId;
 
@@ -16,6 +20,7 @@ public class OrderEvent extends BaseEntity implements Serializable {
     }
 
     public OrderEvent(OrderEventType type) {
+        this();
         this.type = type;
     }
 
@@ -24,11 +29,11 @@ public class OrderEvent extends BaseEntity implements Serializable {
         this.orderId = orderId;
     }
 
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
