@@ -1,9 +1,21 @@
 spring:
   profiles:
     active: development
+
+
 ---
 spring:
   profiles: cloud
+  rabbitmq:
+    host: ${vcap.services.rabbitmq.credentials.uri:192.168.11.1}
+    username: ${vcap.services.rabbitmq.credentials.username:user}
+    password: ${vcap.services.rabbitmq.credentials.password:pass}
+  datasource:
+    initialize: false
+  sleuth:
+    sampler:
+      percentage: 1
+
 security:
   oauth2:
     resource:

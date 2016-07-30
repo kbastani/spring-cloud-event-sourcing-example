@@ -1,0 +1,25 @@
+logging:
+  level.org.springframework.cloud: DEBUG
+
+server:
+  port: 9411
+
+spring:
+  application:
+    name: zipkin-server
+  rabbitmq:
+    host: "192.168.11.1"
+    password: "pass"
+    username: "user"
+  sleuth:
+    enabled: true
+    sampler:
+      percentage: 1
+
+
+
+zipkin:
+  store:
+    type: mem
+
+logging.file: build/zipkin-server.log

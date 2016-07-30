@@ -4,6 +4,7 @@ applications:
   memory: 850mb
   instances: 1
   host: online-store-web
+  buildpack: java_buildpack
   path: target/online-store-web-0.0.1-SNAPSHOT.jar
   env:
     SPRING_PROFILES_ACTIVE: cloud
@@ -12,3 +13,5 @@ applications:
    - config-service
    - user-service
    - edge-service
+   - rabbitmq
+   - zipkin-server

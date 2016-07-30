@@ -4,7 +4,8 @@ applications:
   memory: 850mb
   timeout: 180
   instances: 1
-  host: catalog-service-${random-word}
+  buildpack: java_buildpack
+  host: catalog-service
   path: target/catalog-service-0.0.1-SNAPSHOT.jar
   env:
     SPRING_PROFILES_ACTIVE: cloud
@@ -14,3 +15,5 @@ applications:
    - catalog-db
    - catalog-redis
    - user-service
+   - rabbitmq
+   - zipkin-server

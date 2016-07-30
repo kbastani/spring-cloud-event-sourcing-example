@@ -3,7 +3,8 @@ applications:
 - name: discovery-service
   memory: 512M
   instances: 1
-  host: discovery-service-${random-word}
+  buildpack: java_buildpack
+  host: discovery-service
   path: target/discovery-service-0.0.1-SNAPSHOT.jar
   env:
     SPRING_PROFILES_ACTIVE: cloud

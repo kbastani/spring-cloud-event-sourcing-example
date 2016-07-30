@@ -7,4 +7,5 @@ spring:
     config:
       server:
         git:
-          uri: https://github.com/kbastani/spring-cloud-event-sourcing-cf-config.git
+#          uri: https://github.com/kbastani/spring-cloud-event-sourcing-cf-config.git
+           uri: file:///Users/kimm5/_dev/spring-cloud-event-sourcing-cf-config

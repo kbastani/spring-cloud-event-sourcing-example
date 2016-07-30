@@ -3,7 +3,8 @@ applications:
 - name: inventory-service
   memory: 850mb
   instances: 1
-  host: inventory-service-${random-word}
+  buildpack: java_buildpack
+  host: inventory-service
   path: target/inventory-service-0.0.1-SNAPSHOT.jar
   timeout: 180
   env:
@@ -13,3 +14,5 @@ applications:
    - config-service
    - user-service
    - inventory-db
+   - rabbitmq
+   - zipkin-server

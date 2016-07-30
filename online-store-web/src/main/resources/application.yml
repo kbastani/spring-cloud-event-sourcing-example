@@ -70,3 +70,38 @@ eureka:
     fetchRegistry: true
     serviceUrl:
       defaultZone: http://discovery-service:8761/eureka/
+
+---
+spring:
+  profiles: cloud
+  application:
+    name: online-store-web
+  zipkin:
+      base-url: ${vcap.services.rabbitmq.credentials.uri:http://192.168.11.1:9411}
+  rabbitmq:
+    host: ${vcap.services.rabbitmq.credentials.uri:192.168.11.1}
+    username: ${vcap.services.rabbitmq.credentials.username:user}
+    password: ${vcap.services.rabbitmq.credentials.password:pass}
+
+zuul:
+  ignored-services: '*'
+  routes:
+    edge-service:
+      path: /api/**
+      url: ${vcap.services.edge-service.credentials.uri:http://localhost:9999}
+    auth-service:
+      path: /user/**
+      url: ${vcap.services.user-service.credentials.uri:http://localhost:8181}/uaa/user
+    user-service:
+      path: /users/**
+security:
+  enable-csrf: false
+  oauth2:
+    resource:
+      userInfoUri: ${vcap.services.user-service.credentials.uri:http://localhost:8181}/uaa/user
+    client:
+      accessTokenUri: ${vcap.services.user-service.credentials.uri:http://localhost:8181}/uaa/oauth/token
+      userAuthorizationUri: ${vcap.services.user-service.credentials.uri:http://localhost:8181}/uaa/oauth/authorize
+      clientId: acme
+      clientSecret: acmesecret
+  ignored: /assets/**

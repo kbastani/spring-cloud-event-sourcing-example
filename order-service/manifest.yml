@@ -4,7 +4,8 @@ applications:
   memory: 850mb
   timeout: 180
   instances: 1
-  host: order-service-${random-word}
+  buildpack: java_buildpack
+  host: order-service
   path: target/order-service-0.0.1-SNAPSHOT.jar
   env:
     SPRING_PROFILES_ACTIVE: cloud
@@ -13,4 +14,6 @@ applications:
    - config-service
    - user-service
    - order-db
+   - rabbitmq
+   - zipkin-server
 

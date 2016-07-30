@@ -4,7 +4,8 @@ applications:
   memory: 1024M
   instances: 1
   timeout: 180
-  host: user-service-${random-word}
+  buildpack: java_buildpack
+  host: user-service
   path: target/user-service-0.0.1-SNAPSHOT.jar
   env:
     SPRING_PROFILES_ACTIVE: cloud
@@ -12,3 +13,5 @@ applications:
    - discovery-service
    - config-service
    - user-db
+   - rabbitmq
+   - zipkin-server

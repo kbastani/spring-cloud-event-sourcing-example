@@ -1,0 +1,16 @@
+#logging:
+#  level.org.springframework.cloud: DEBUG
+
+turbine:
+  stream:
+    port:8989
+
+spring:
+  application:
+    name: turbine-server
+  zipkin:
+      base-url: http://192.168.11.1:9411/
+  rabbitmq:
+    host: "192.168.11.1"
+    password: "pass"
+    username: "user"
