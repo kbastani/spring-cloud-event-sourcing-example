@@ -1,19 +1,26 @@
 spring:
   application:
     name: user-service
----
-spring:
-  profiles: docker
-  cloud:
-    config:
-      uri: http://config-service:8888
+  profiles:
+    active: development
+
+server:
+  port: 0
+
 ---
 spring:
   profiles: default
   cloud:
     config:
       uri: http://localhost:8888
-spring.profiles.active: development
+
+---
+spring:
+  profiles: docker
+  cloud:
+    config:
+      uri: http://config-service:8888
+
 ---
 spring:
   profiles: cloud

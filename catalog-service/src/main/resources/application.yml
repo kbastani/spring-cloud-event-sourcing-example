@@ -1,6 +1,13 @@
 spring:
   profiles:
     active: development
+
+
+---
+spring:
+  profiles: cloud
+
+
 ---
 spring:
   profiles: development
@@ -51,31 +58,4 @@ spring:
     database: H2
   datasource:
     initialize: false
-
-
----
-spring:
-  profiles: cloud
-  zipkin:
-      base-url: ${vcap.services.rabbitmq.credentials.uri:http://192.168.11.1:9411}
-  rabbitmq:
-    host: ${vcap.services.rabbitmq.credentials.uri:192.168.11.1}
-    username: ${vcap.services.rabbitmq.credentials.username:user}
-    password: ${vcap.services.rabbitmq.credentials.password:pass}
-  redis:
-      host: ${vcap.services.catalog-redis.credentials.hostname:localhost}
-      port: ${vcap.services.catalog-redis.credentials.port:6379}
-
-eureka:
-  instance:
-    hostname: ${vcap.application.uris[0]:localhost}
-    nonSecurePort: 80
-    metadataMap:
-      instanceId: ${vcap.application.instance_id:${spring.application.name}:${spring.application.instance_id:${server.port}}}
-    leaseRenewalIntervalInSeconds: 5
-  client:
-    region: default
-    registryFetchIntervalSeconds: 5
-    serviceUrl:
-      defaultZone: ${vcap.services.discovery-service.credentials.uri:http://localhost:8761}/eureka/
 

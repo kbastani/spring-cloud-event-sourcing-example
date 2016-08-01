@@ -1,6 +1,13 @@
 spring:
   profiles:
     active: development
+
+
+---
+spring:
+  profiles: cloud
+
+
 ---
 server:
   port: 8181
@@ -19,16 +26,6 @@ spring:
     initialize: true
 security.ignored: /resources/**
 
-
----
-spring:
-  profiles: cloud
-  zipkin:
-      base-url: ${vcap.services.rabbitmq.credentials.uri:http://192.168.11.1:9411}
-  rabbitmq:
-    host: ${vcap.services.rabbitmq.credentials.uri:192.168.11.1}
-    username: ${vcap.services.rabbitmq.credentials.username:user}
-    password: ${vcap.services.rabbitmq.credentials.password:pass}
 
 ---
 server:

@@ -34,6 +34,7 @@ cf cs p-mysql 512mb order-db
 cf cs p-mysql 512mb shopping-cart-db
 cf cs p-mysql 512mb user-db
 cf cs p-redis shared-vm catalog-redis
+cf cs p-rabbitmq standard rabbitmq
 
 
 

@@ -2,6 +2,32 @@ spring:
   profiles:
     active: development
 
+
+---
+spring:
+  profiles: cloud
+zuul:
+  ignored-services: '*'
+  ignoredPatterns: /**/api/**
+  routes:
+    account-service: /account/**
+    payment-service: /payment/**
+    inventory-service: /inventory/**
+    order-service: /order/**
+    user-service: /user/**
+    catalog-service: /catalog/**
+    shopping-cart-service: /shoppingcart/**
+security:
+  oauth2:
+    resource:
+      userInfoUri: ${vcap.services.user-service.credentials.uri:http://localhost:8181}/uaa/user
+  ignored: /catalog/**
+hystrix.command.default.execution.isolation.thread.timeoutInMilliseconds: 60000
+ribbon:
+  ConnectTimeout: 3000
+  ReadTimeout: 60000
+
+
 ---
 spring:
   profiles: development
@@ -76,50 +102,3 @@ hystrix.command.default.execution.isolation.thread.timeoutInMilliseconds: 60000
 ribbon:
   ConnectTimeout: 3000
   ReadTimeout: 60000
-
----
-spring:
-  profiles: cloud
-  rabbitmq:
-    host: ${vcap.services.rabbitmq.credentials.uri:192.168.11.1}
-    username: ${vcap.services.rabbitmq.credentials.username:user}
-    password: ${vcap.services.rabbitmq.credentials.password:pass}
-  datasource:
-    initialize: false
-  sleuth:
-    sampler:
-      percentage: 1
-
-zuul:
-  ignored-services: '*'
-  ignoredPatterns: /**/api/**
-  routes:
-    account-service: /account/**
-    payment-service: /payment/**
-    inventory-service: /inventory/**
-    order-service: /order/**
-    user-service: /user/**
-    catalog-service: /catalog/**
-    shopping-cart-service: /shoppingcart/**
-security:
-  oauth2:
-    resource:
-      userInfoUri: ${vcap.services.user-service.credentials.uri:http://localhost:8181}/uaa/user
-  ignored: /catalog/**
-hystrix.command.default.execution.isolation.thread.timeoutInMilliseconds: 60000
-ribbon:
-  ConnectTimeout: 3000
-  ReadTimeout: 60000
-eureka:
-  instance:
-    hostname: ${vcap.application.uris[0]:localhost}
-    nonSecurePort: 80
-    metadataMap:
-      instanceId: ${vcap.application.instance_id:${spring.application.name}:${spring.application.instance_id:${server.port}}}
-    leaseRenewalIntervalInSeconds: 5
-  client:
-    region: default
-    registryFetchIntervalSeconds: 5
-    serviceUrl:
-      defaultZone: ${vcap.services.discovery-service.credentials.uri:http://localhost:8761}/eureka/
-

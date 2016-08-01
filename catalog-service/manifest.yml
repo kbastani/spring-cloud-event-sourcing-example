@@ -4,7 +4,7 @@ applications:
   memory: 850mb
   timeout: 180
   instances: 1
-  buildpack: java_buildpack
+  buildpack: java_buildpack_offline
   host: catalog-service
   path: target/catalog-service-0.0.1-SNAPSHOT.jar
   env:

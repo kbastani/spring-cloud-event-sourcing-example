@@ -3,8 +3,8 @@ applications:
 - name: online-store-web
   memory: 850mb
   instances: 1
-  host: online-store-web
-  buildpack: java_buildpack
+  host: online-store-web2
+  buildpack: java_buildpack_offline
   path: target/online-store-web-0.0.1-SNAPSHOT.jar
   env:
     SPRING_PROFILES_ACTIVE: cloud
