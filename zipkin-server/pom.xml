@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>com.example</groupId>
-	<artifactId>zipkin-server2</artifactId>
+	<artifactId>zipkin-server</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
@@ -28,6 +28,10 @@
 
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-config</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-sleuth</artifactId>
 		</dependency>
 
@@ -47,17 +51,55 @@
 			<scope>runtime</scope>
 		</dependency>
 		<!--<dependency>-->
-			<!--<groupId>io.zipkin.java</groupId>-->
-			<!--<artifactId>zipkin-autoconfigure-ui</artifactId>-->
-			<!--<version>1.0.0</version>-->
-			<!--<scope>runtime</scope>-->
+		<!--<groupId>io.zipkin.java</groupId>-->
+		<!--<artifactId>zipkin-autoconfigure-ui</artifactId>-->
+		<!--<version>1.0.0</version>-->
+		<!--<scope>runtime</scope>-->
+		<!--</dependency>-->
+
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-jdbc</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-jdbc</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-sleuth-stream</artifactId>
+			<version>1.0.0.RELEASE</version>
+		</dependency>
+
+
+
+		<!--<dependency>-->
+			<!--<groupId>org.springframework.cloud</groupId>-->
+			<!--<artifactId>spring-cloud-stream-binder-rabbit</artifactId>-->
 		<!--</dependency>-->
 
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
-			<artifactId>spring-cloud-stream-binder-rabbit</artifactId>
-			<version>1.0.2.RELEASE</version>
+			<artifactId>spring-cloud-starter-stream-rabbit</artifactId>
+			<!--<exclusions>-->
+				<!--<exclusion>  &lt;!&ndash; declare the exclusion here &ndash;&gt;-->
+					<!--<groupId>ch.qos.logback</groupId>-->
+					<!--<artifactId>logback-core</artifactId>-->
+				<!--</exclusion>-->
+			<!--</exclusions>-->
 		</dependency>
+
 	</dependencies>
 
 	<dependencyManagement>

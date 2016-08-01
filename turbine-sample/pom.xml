@@ -4,11 +4,11 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>com.example</groupId>
-	<artifactId>turbine-server</artifactId>
+	<artifactId>turbine-sample</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
-	<name>hystrix</name>
+	<name>service1-min</name>
 	<description>Demo project for Spring Boot</description>
 
 	<parent>
@@ -25,46 +25,21 @@
 	</properties>
 
 	<dependencies>
-		<dependency>
-			<groupId>org.springframework.cloud</groupId>
-			<artifactId>spring-cloud-starter-hystrix</artifactId>
-		</dependency>
 		<!--<dependency>-->
 			<!--<groupId>org.springframework.cloud</groupId>-->
-			<!--<artifactId>spring-cloud-starter-hystrix-dashboard</artifactId>-->
+			<!--<artifactId>spring-cloud-starter-zipkin</artifactId>-->
 		<!--</dependency>-->
-		<!--<dependency>-->
-			<!--<groupId>org.springframework.cloud</groupId>-->
-			<!--<artifactId>spring-cloud-starter-turbine</artifactId>-->
-		<!--</dependency>-->
-
-		<dependency>
-			<groupId>org.springframework.cloud</groupId>
-			<artifactId>spring-cloud-netflix-turbine-stream</artifactId>
-			<version>1.1.0.RELEASE</version>
-			<exclusions>
-				<exclusion>
-					<groupId>org.springframework.boot</groupId>
-					<artifactId>spring-boot-starter-web</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.springframework.boot</groupId>
-					<artifactId>spring-boot-starter-actuator</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-		<!--<dependency>-->
-			<!--<groupId>org.springframework.cloud</groupId>-->
-			<!--<artifactId>spring-cloud-starter-stream-rabbit</artifactId>-->
-			<!--<version>1.0.0.RELEASE</version>-->
-		<!--</dependency>-->
-		<dependency>
-		<groupId>org.springframework.cloud</groupId>
-		<artifactId>spring-cloud-stream-binder-rabbit</artifactId>
-		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-actuator</artifactId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-config</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-eureka</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -72,15 +47,26 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>javax.validation</groupId>
-			<artifactId>validation-api</artifactId>
-			<version>1.0.0.GA</version>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-hystrix</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-validator</artifactId>
-			<version>4.0.2.GA</version>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-netflix-hystrix-stream</artifactId>
 		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-stream-rabbit</artifactId>
+			<exclusions>
+				<exclusion>  <!-- declare the exclusion here -->
+					<groupId>ch.qos.logback</groupId>
+					<artifactId>logback-core</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+
+
 	</dependencies>
 
 	<dependencyManagement>
@@ -88,7 +74,7 @@
 			<dependency>
 				<groupId>org.springframework.cloud</groupId>
 				<artifactId>spring-cloud-dependencies</artifactId>
-				<version>Brixton.SR4</version>
+				<version>Brixton.RELEASE</version>
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>

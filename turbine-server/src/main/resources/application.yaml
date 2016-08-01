@@ -1,16 +1,22 @@
 #logging:
 #  level.org.springframework.cloud: DEBUG
 
-turbine:
-  stream:
-    port:8989
-
 spring:
   application:
     name: turbine-server
-  zipkin:
-      base-url: http://192.168.11.1:9411/
+---
+spring:
+  profiles: development
   rabbitmq:
-    host: "192.168.11.1"
-    password: "pass"
-    username: "user"
+    host: ${vcap.services.rabbitmq.credentials.hostname:192.168.11.1}
+    username: ${vcap.services.rabbitmq.credentials.username:user}
+    password: ${vcap.services.rabbitmq.credentials.password:pass}
+
+
+---
+spring:
+  profiles: cloud
+  rabbitmq:
+    host: ${vcap.services.rabbitmq.credentials.hostname}
+    username: ${vcap.services.rabbitmq.credentials.username}
+    password: ${vcap.services.rabbitmq.credentials.password}

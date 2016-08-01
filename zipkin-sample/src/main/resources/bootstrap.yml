@@ -1,0 +1,29 @@
+spring:
+  application:
+    name: zipkin-sample
+  profiles:
+    active: development
+
+
+---
+spring:
+  profiles: development
+  cloud:
+    config:
+      uri: http://localhost:8888
+server:
+  port: 10000
+
+---
+spring:
+  profiles: docker
+  cloud:
+    config:
+      uri: http://config-service:8888
+
+---
+spring:
+  profiles: cloud
+  cloud:
+    config:
+      uri: ${vcap.services.config-service.credentials.uri:http://localhost:8888}

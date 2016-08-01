@@ -1,25 +1,43 @@
-logging:
-  level.org.springframework.cloud: DEBUG
-
-server:
-  port: 9411
-
 spring:
   application:
     name: zipkin-server
+
+---
+spring:
+  profiles: development
   rabbitmq:
-    host: "192.168.11.1"
-    password: "pass"
-    username: "user"
-  sleuth:
-    enabled: true
-    sampler:
-      percentage: 1
-
-
-
+       host: localhost
+       username: user
+       password: pass
 zipkin:
   store:
     type: mem
+logging:
+  file: build/zipkin-server.log
+  level:
+    org.springframework.cloud: DEBUG
+---
+spring:
+  profiles: cloud
+  datasource:
+  #http://cloud.spring.io/spring-cloud-sleuth/spring-cloud-sleuth.html
+  # https://github.com/openzipkin/zipkin/blob/master/zipkin-storage/mysql/src/main/resources/mysql.sql
+     schema: classpath:/mysql.sql
+     # Switch this on to create the schema on startup:
+     initialize: false
+     continueOnError: true
+     #url: jdbc:mysql://${MYSQL_HOST:localhost}/test
+     url: ${vcap.services.zipkin-db.credentials.jdbcUrl}
+     username: ${vcap.services.zipkin-db.credentials.username}
+     password: ${vcap.services.zipkin-db.credentials.password}
+  rabbitmq:
+     host: ${vcap.services.rabbitmq.credentials.hostname}
+     username: ${vcap.services.rabbitmq.credentials.username}
+     password: ${vcap.services.rabbitmq.credentials.password}
+#  sleuth:
+#      enabled: false
+zipkin:
+  store:
+     type: mysql
 
-logging.file: build/zipkin-server.log
+

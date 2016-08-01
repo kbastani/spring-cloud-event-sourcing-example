@@ -1,0 +1,41 @@
+spring:
+  application:
+    name: turbine-service
+  profiles:
+    active: development
+
+---
+spring:
+  profiles: default
+  cloud:
+    config:
+      uri: http://localhost:8888
+
+server:
+  port: 8990
+management:
+  port: -1
+
+---
+spring:
+  profiles: docker
+  cloud:
+    config:
+      uri: http://config-service:8888
+
+---
+spring:
+  profiles: cloud
+#  cloud:
+#    config:
+#      uri: ${vcap.services.config-service.credentials.uri:http://localhost:8888}
+
+# shutoff tomcat port so that netty uses 8080
+##donot specify server.port: java.net.BindException: Address already in use
+#turbine:
+#  stream:
+#    port: 8080
+server:
+  port:8080
+management:
+  port: 8989

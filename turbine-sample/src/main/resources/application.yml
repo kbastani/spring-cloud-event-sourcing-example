@@ -1,0 +1,43 @@
+
+logging.level.org.springframework.cloud.sleuth: DEBUG
+spring:
+  application:
+    name: turbine-sample
+---
+spring:
+  profiles: cloud
+
+  rabbitmq:
+     host: ${vcap.services.rabbitmq.credentials.hostname}
+     username: ${vcap.services.rabbitmq.credentials.username}
+     password: ${vcap.services.rabbitmq.credentials.password}
+
+  sleuth:
+    sampler:
+      percentage: 1
+
+---
+server.port: 8081
+spring:
+  profiles: development
+  rabbitmq:
+    host: ${vcap.services.rabbitmq.credentials.uri:192.168.11.1}
+    username: ${vcap.services.rabbitmq.credentials.username:user}
+    password: ${vcap.services.rabbitmq.credentials.password:pass}
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
+  instance:
+    leaseRenewalIntervalInSecond: 3
+#    metadataMap:
+#      instanceId: ${vcap.application.instance_id:${spring.application.name}:${spring.application.instance_id:${server.port}}}
+
+endpoints:
+  restart:
+    enabled: true
+  shutdown:
+    enabled: true
+  health:
+    sensitive: false
