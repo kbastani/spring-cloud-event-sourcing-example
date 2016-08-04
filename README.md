@@ -3,7 +3,7 @@ original source code is here https://github.com/kbastani/spring-cloud-event-sour
 
 this project added following features to the original project:
 * hystrix using stream(rabbitmq)
-* zipkin tracing using HTTP
+* sleuth, zipkin tracing using HTTP 
 * can deploy to pcfdev, a lightweight Pivotal Cloud Foundry (PCF) for desktop (https://network.pivotal.io/products/pcfdev)
 
 ### this demo uses backend services from PaaS(pcfdev): 
@@ -23,7 +23,6 @@ you don't need to install seperately!
 ### IP setting for networking
 your pc will gat NAT gateway 192.168.11.1
 your pcfdev(virtualbox VM) will get 192.168.11.11
-
 
 ### screen shot
 ![hystrix dashboard](hystrix.png)
@@ -218,4 +217,7 @@ ssh vcap@local.pcfdev.io  password: vcap
 
   bump down spring-boot version to 1.3.6.RELEASE in this case.
   
-  
+ # reference
+  hystrix: http://cloud.spring.io/spring-cloud-netflix/spring-cloud-netflix.html
+  sleuth, zipkin: http://cloud.spring.io/spring-cloud-sleuth/spring-cloud-sleuth.html
+ 
