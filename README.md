@@ -185,11 +185,15 @@ your pcfdev(virtualbox VM) will get 192.168.11.11
   go to online-store web http://online-store-web2.local.pcfdev.io/
   login with user/password
 1. see if hystrix-dashboard is working
+
+  to collect hystrix info, you have to access and navigate online shopping mall several times.
  
   ```
   http://192.168.11.1:6161/hystrix/monitor?stream=http%3A%2F%2Fturbine-server.local.pcfdev.io%2F
   ```
 1. see if zipkin-server is working
+
+  you have to access and navigate online shopping mall several times.
   
   ```
   http://zipkin-server.local.pcfdev.io/
