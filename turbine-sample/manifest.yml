@@ -3,7 +3,7 @@ applications:
 - name: turbine-sample
   memory: 512mb
   instances: 1
-  buildpack: java_buildpack_offline
+#  buildpack: java_buildpack_offline
   host: turbine-sample
   path: target/turbine-sample-0.0.1-SNAPSHOT.jar
   timeout: 180

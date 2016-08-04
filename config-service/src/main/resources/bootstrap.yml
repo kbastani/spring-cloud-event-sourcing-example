@@ -8,5 +8,5 @@ spring:
       server:
         git:
 #          uri: https://github.com/kbastani/spring-cloud-event-sourcing-cf-config.git
-#           uri: file:///Users/kimm5/_dev/spring-cloud-event-sourcing-example/spring-cloud-event-sourceing-pcf-config
-           uri: https://github.com/myminseok/spring-cloud-event-sourceing-pcf-config.git
+           uri: file:///Users/kimm5/_dev/spring-cloud-event-sourcing-example/spring-cloud-event-sourceing-pcf-config
+#           uri: https://github.com/myminseok/spring-cloud-event-sourceing-pcf-config
