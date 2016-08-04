@@ -5,7 +5,7 @@ applications:
   timeout: 180
   instances: 1
 #  buildpack: java_buildpack_offline
-  host: catalog-service
+  host: catalog-service-${random-word}
   path: target/catalog-service-0.0.1-SNAPSHOT.jar
   env:
     SPRING_PROFILES_ACTIVE: cloud

@@ -12,7 +12,6 @@ applications:
   services:
    - discovery-service
 #   - config-service
-#   - rabbitmq
    - zipkin-server
 
 
