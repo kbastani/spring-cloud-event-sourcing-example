@@ -14,11 +14,16 @@ you don't need to install seperately!
 
 ### H/W requirement
 * requires 9GB+ memory for pcfdev
-* 1G memory for config-server, discovery-server, hystrix-dashboard at local host machine.
+* 2GB memory for config-server, discovery-server, hystrix-dashboard at local host machine.
 
 ### internet connection is mandatory for:
-* pcfdev DNS lookup: local.pcfdev.io -> 192.168.11.11
+* DNS lookup for pcfdev: local.pcfdev.io -> 192.168.11.11
 * demo app looks up some javascript from internet.
+
+### IP setting for networking
+your pc will gat NAT gateway 192.168.11.1
+your pcfdev(virtualbox VM) will get 192.168.11.11
+
 
 ### screen shot
 ![hystrix dashboard](hystrix.png)
@@ -78,10 +83,13 @@ you don't need to install seperately!
   * check rabbitmq management dashboard
     apps manager (https://console.local.pcfdev.io/2) > pcfdev-space (left memu)> services tab> rabbitmq > manage click
     https://rabbitmq-management.local.pcfdev.io
-  * altenatevely, you can use rabbitmq outside of PCF;
-   setup rabbitmq( brew install rabbitmq)
-   cf cups rabbitmq -p '{"uri":"amqp://user:pass@192.168.11.1:5672", "host":"192.168.11.1", "username":"user", "password":"pass"}'
-   
+  ```
+  
+  if you want to use your own rabbitmq(outside of pcfdev), then do as follow;
+  
+  ```
+   cf cups rabbitmq -p '{"uri":"amqp://YOUR_USER:YOUR_PASSWORD@RABBITMQ_HOST:RABBITMQ_PORT", "host":"RABBITMQ_HOST", "username":"YOUR_USER", "password":"YOUR_PASSWORD"}' 
+   ex) cf cups rabbitmq -p '{"uri":"amqp://user:pass@192.168.11.1:5672", "host":"192.168.11.1", "username":"YOUR_USER", "password":"YOUR_PASSWORD"}' 
   ```
   
 1. turbine-server (pcfdev)
@@ -158,14 +166,20 @@ you don't need to install seperately!
   ```
 1. deploy other apps
   
+  each app should be registered to discovery service(http://192.168.11.1:8761/). it takes heartbeat interval( normally 30sec)
+  if you experience insufficient memory, then you don't have to push 'order-service' which will be used only when your order.
+  
   ```
-  account service
-  catalog service
-  inventory service
-  order service
-  shopping-cart service
-  online-store-web
+  account service > cf push
+  catalog service > cf push
+  inventory service > cf push
+  shopping-cart service > cf push
+  online-store-web > cf push
+  
+  order service > cf push
+  
   ```
+ 
 1. final check
   
   check if all app is registered to discovery-service: http://192.168.11.1:8761/
@@ -185,6 +199,11 @@ you don't need to install seperately!
 
 # trouble shooting
 
+1. "Insufficient Resource" error
+    you need to setup pcfdev with 9GB+ memory.
+    alternatively, use another computer to deploy rest of microservices. 
+    microservices should be registered to their dependency services.
+
 1. ssh into pcfdev
   
   ```
@@ -198,3 +217,5 @@ ssh vcap@local.pcfdev.io  password: vcap
 1. spring boot 1.4 might not work in PCF with initalization error.
 
   bump down spring-boot version to 1.3.6.RELEASE in this case.
+  
+  
