@@ -35,7 +35,7 @@ public class Application {
 
     @Autowired
     FallbackTest fallbackTest;
-    @RequestMapping("/call")
+    @RequestMapping("/")
     public String method2() throws InterruptedException {
          return fallbackTest.service1_OK_method();
     }

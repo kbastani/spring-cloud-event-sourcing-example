@@ -2,7 +2,7 @@
 logging.level.org.springframework.cloud.sleuth: DEBUG
 spring:
   application:
-    name: turbine-sample
+    name: zipkin-sample
 ---
 spring:
   profiles: cloud
@@ -16,6 +16,18 @@ spring:
   sleuth:
     sampler:
       percentage: 1
+eureka:
+  instance:
+    hostname: ${vcap.application.uris[0]:localhost}
+    nonSecurePort: 80
+    metadataMap:
+      instanceId: ${vcap.application.instance_id:${spring.application.name}:${spring.application.instance_id:${server.port}}}
+    leaseRenewalIntervalInSeconds: 5
+  client:
+    region: default
+    registryFetchIntervalSeconds: 5
+    serviceUrl:
+      defaultZone: ${vcap.services.discovery-service.credentials.uri:http://localhost:8761}/eureka/
 
 ---
 server.port: 8081

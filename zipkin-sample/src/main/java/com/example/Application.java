@@ -5,11 +5,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.cloud.client.circuitbreaker.EnableCircuitBreaker;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.annotation.Bean;
-import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
@@ -17,7 +15,6 @@ import org.springframework.web.client.RestTemplate;
 @SpringBootApplication
 @EnableDiscoveryClient
 @RestController
-@EnableCircuitBreaker
 public class Application {
 
 	public static void main(String[] args) {
@@ -33,33 +30,21 @@ public class Application {
 	@Autowired
 	RestTemplate restTemplate;
 
-	@RequestMapping("/call")
+	@RequestMapping("/")
 	public String method1() throws InterruptedException {
-		log.info(" from service1, calling service2");
-		String response = restTemplate.getForObject("http://service2/call",String.class);
-		Thread.sleep(100);
-		log.info("Got response from service2 [{}]", response);
-		return response;
+		return "OK";
 	}
 
+	@RequestMapping("/call")
+	public String call() throws InterruptedException {
+		return restTemplate.getForObject("http://service2/call",String.class);
+	}
 
 	@RequestMapping("/call-timeout")
 	public String callTimeout() throws InterruptedException {
-		log.info(" from service1, calling service2");
-		String response = restTemplate.getForObject("http://service2/call-timeout",String.class);
-		Thread.sleep(100);
-		log.info("Got response from service2 [{}]", response);
-		return response;
+		Thread.sleep(1000);
+		return "timeout";
 	}
-
-
-    @Autowired
-    FallbackTest fallbackTest;
-    @RequestMapping("/fallback")
-    public String method2() throws InterruptedException {
-         return fallbackTest.service1OKMethod();
-    }
-
 
 }
 

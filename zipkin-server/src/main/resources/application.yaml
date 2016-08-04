@@ -5,10 +5,10 @@ spring:
 ---
 spring:
   profiles: development
-  rabbitmq:
-       host: localhost
-       username: user
-       password: pass
+#  rabbitmq:
+#       host: localhost
+#       username: user
+#       password: pass
 zipkin:
   store:
     type: mem

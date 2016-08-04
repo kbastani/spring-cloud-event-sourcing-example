@@ -11,8 +11,8 @@ applications:
     SPRING_PROFILES_ACTIVE: cloud
   services:
    - discovery-service
-   - config-service
-   - rabbitmq
+#   - config-service
+#   - rabbitmq
    - zipkin-server
 
 
