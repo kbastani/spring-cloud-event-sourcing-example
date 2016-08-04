@@ -12,7 +12,8 @@ spring:
       uri: http://localhost:8888
 
 server:
-  port: 8990
+  port: 6160
+
 management:
   port: -1
 
@@ -30,12 +31,15 @@ spring:
 #    config:
 #      uri: ${vcap.services.config-service.credentials.uri:http://localhost:8888}
 
-# shutoff tomcat port so that netty uses 8080
-##donot specify server.port: java.net.BindException: Address already in use
+# there is a bug when you deploy turbine-server to CF.
+## java.net.BindException: Address already in use
+# you cann't control tomcat port 8080 which turbine don't need.
+# just remove maven dependency(pom.xml) for spring-boot-starter-web, spring-boot-starter-actuator, so that netty can use 8080
 #turbine:
 #  stream:
 #    port: 8080
 server:
   port:8080
+
 management:
-  port: 8989
+  port: -1
