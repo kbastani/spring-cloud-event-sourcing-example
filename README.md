@@ -21,8 +21,8 @@ you don't need to install seperately!
 * demo app looks up some javascript from internet.
 
 ### IP setting for networking
-your pc will gat NAT gateway 192.168.11.1
-your pcfdev(virtualbox VM) will get 192.168.11.11
+* your pc will gat NAT gateway 192.168.11.1
+* your pcfdev(virtualbox VM) will get 192.168.11.11
 
 ### screen shot
 ![demoapp](demoapp.png)
@@ -224,7 +224,7 @@ ssh vcap@local.pcfdev.io  password: vcap
 
   bump down spring-boot version to 1.3.6.RELEASE in this case.
   
- # reference
-  hystrix: http://cloud.spring.io/spring-cloud-netflix/spring-cloud-netflix.html
-  sleuth, zipkin: http://cloud.spring.io/spring-cloud-sleuth/spring-cloud-sleuth.html
+# reference
+*   hystrix: http://cloud.spring.io/spring-cloud-netflix/spring-cloud-netflix.html
+*   sleuth, zipkin: http://cloud.spring.io/spring-cloud-sleuth/spring-cloud-sleuth.html
  
