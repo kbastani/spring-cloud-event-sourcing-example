@@ -25,6 +25,8 @@ your pc will gat NAT gateway 192.168.11.1
 your pcfdev(virtualbox VM) will get 192.168.11.11
 
 ### screen shot
+![demoapp](demoapp.png)
+![apps manager](appsmanager.png)
 ![hystrix dashboard](hystrix.png)
 ![zipkin dashboard](zipkin.png)
 ![eureka dashboard](eureka.png)
