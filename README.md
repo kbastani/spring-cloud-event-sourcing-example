@@ -18,8 +18,8 @@ you don't need to install seperately!
 
 ### internet connection is mandatory for:
 * DNS lookup for pcfdev: 
-** local.pcfdev.io -> 192.168.11.11
-** host.pcfdev.io  => 192.168.11.1
+  * local.pcfdev.io -> 192.168.11.11
+  * host.pcfdev.io  => 192.168.11.1
 * demo app looks up some javascript from internet.
 
 ### IP setting for networking
