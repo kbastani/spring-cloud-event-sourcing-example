@@ -199,9 +199,10 @@ your pcfdev(virtualbox VM) will get 192.168.11.11
 # trouble shooting
 
 1. "Insufficient Resource" error
+
     you need to setup pcfdev with 9GB+ memory.
     alternatively, use another computer to deploy rest of microservices. 
-    microservices should be registered to their dependency services.
+    microservices should communicate to their dependency services.
 
 1. ssh into pcfdev
   
