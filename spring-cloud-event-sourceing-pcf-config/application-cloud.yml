@@ -14,7 +14,7 @@ eureka:
 spring:
   profiles: cloud
   zipkin:
-      base-url: ${vcap.services.zipkin-server.credentials.uri:http://192.168.11.1:9411}
+      base-url: ${vcap.services.zipkin-server.credentials.uri:http://host.pcfdev.io:9411}
   rabbitmq:
      host: ${vcap.services.rabbitmq.credentials.hostname}
      username: ${vcap.services.rabbitmq.credentials.username}

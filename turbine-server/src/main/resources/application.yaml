@@ -8,7 +8,7 @@ spring:
 spring:
   profiles: development
   rabbitmq:
-    host: ${vcap.services.rabbitmq.credentials.hostname:192.168.11.1}
+    host: ${vcap.services.rabbitmq.credentials.hostname:host.pcfdev.io}
     username: ${vcap.services.rabbitmq.credentials.username:user}
     password: ${vcap.services.rabbitmq.credentials.password:pass}
 

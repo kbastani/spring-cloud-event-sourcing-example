@@ -17,12 +17,14 @@ you don't need to install seperately!
 * 2GB memory for config-server, discovery-server, hystrix-dashboard at local host machine.
 
 ### internet connection is mandatory for:
-* DNS lookup for pcfdev: local.pcfdev.io -> 192.168.11.11
+* DNS lookup for pcfdev: 
+** local.pcfdev.io -> 192.168.11.11
+** host.pcfdev.io  => 192.168.11.1
 * demo app looks up some javascript from internet.
 
 ### IP setting for networking
-* your pc will gat NAT gateway 192.168.11.1
-* your pcfdev(virtualbox VM) will get 192.168.11.11
+* your pc will be NAT gateway (192.168.11.1) to virtualbox.
+* your pcfdev(virtualbox VM) will have 192.168.11.11
 
 ### screen shot
 ![demoapp](demoapp.png)
@@ -64,18 +66,18 @@ you don't need to install seperately!
   ```
   $ config-service > mvn spring-boot:run -DCONFIG_REPO_PATH=/path/to/spring-cloud-event-sourceing-pcf-config
 
-  * check http://192.168.11.1:8888/application/cloud
+  * check http://host.pcfdev.io:8888/application/cloud
     should show something "application.yml, application-cloud.yml#cloud" in the response.
   
-  $  cf cups config-service -p '{"uri":"http://192.168.11.1:8888/"}'
+  $  cf cups config-service -p '{"uri":"http://host.pcfdev.io:8888/"}'
   ```
 1. discovery service (localhost)
 
   ```
   $  discovery-service > mvn spring-boot:run
 
-  * check http://192.168.11.1:8761/
-  $  cf cups discovery-service -p '{"uri":"http://192.168.11.1:8761/"}'
+  * check http://host.pcfdev.io:8761/
+  $  cf cups discovery-service -p '{"uri":"http://host.pcfdev.io:8761/"}'
   ```
 1. create service (pcfdev)
 
@@ -90,7 +92,7 @@ you don't need to install seperately!
   
   ```
    cf cups rabbitmq -p '{"uri":"amqp://YOUR_USER:YOUR_PASSWORD@RABBITMQ_HOST:RABBITMQ_PORT", "host":"RABBITMQ_HOST", "username":"YOUR_USER", "password":"YOUR_PASSWORD"}' 
-   ex) cf cups rabbitmq -p '{"uri":"amqp://user:pass@192.168.11.1:5672", "host":"192.168.11.1", "username":"YOUR_USER", "password":"YOUR_PASSWORD"}' 
+   ex) cf cups rabbitmq -p '{"uri":"amqp://user:pass@host.pcfdev.io:5672", "host":"host.pcfdev.io", "username":"YOUR_USER", "password":"YOUR_PASSWORD"}' 
   ```
   
 1. turbine-server (pcfdev)
@@ -112,7 +114,7 @@ you don't need to install seperately!
  
   ```
   hystrix-dashboard> mvn spring-boot:run
-  # goto hystrix webpage:  http://192.168.11.1:6161/hystrix
+  # goto hystrix webpage:  http://host.pcfdev.io:6161/hystrix
   # put turbine-server url: http://turbine-server.local.pcfdev.io/ then, monitor => turbine-sample should be monitored.
   ```
 1. remove turbine-sample
@@ -127,7 +129,7 @@ you don't need to install seperately!
   zipkin-server> cf push
   # check http://zipkin-server.local.pcfdev.io/
   cf cups zipkin-server -p '{"uri":"http://zipkin-server.local.pcfdev.io/"}'
-  # cf cups zipkin-server -p '{"uri":"http://192.168.11.1:9411"}'
+  # cf cups zipkin-server -p '{"uri":"http://host.pcfdev.io:9411"}'
   ```
 1. zipkin sample
  
@@ -167,7 +169,7 @@ you don't need to install seperately!
   ```
 1. deploy other apps
   
-  each app should be registered to discovery service(http://192.168.11.1:8761/). it takes heartbeat interval( normally 30sec)
+  each app should be registered to discovery service(http://host.pcfdev.io:8761/). it takes heartbeat interval( normally 30sec)
   if you experience insufficient memory, then you don't have to push 'order-service' which will be used only when your order.
   
   ```
@@ -183,7 +185,7 @@ you don't need to install seperately!
  
 1. final check
   
-  check if all app is registered to discovery-service: http://192.168.11.1:8761/
+  check if all app is registered to discovery-service: http://host.pcfdev.io:8761/
   go to online-store web http://online-store-web2.local.pcfdev.io/
   login with user/password
 1. see if hystrix-dashboard is working
@@ -191,7 +193,7 @@ you don't need to install seperately!
   to collect hystrix info, you have to access and navigate online shopping mall several times.
  
   ```
-  http://192.168.11.1:6161/hystrix/monitor?stream=http%3A%2F%2Fturbine-server.local.pcfdev.io%2F
+  http://host.pcfdev.io:6161/hystrix/monitor?stream=http%3A%2F%2Fturbine-server.local.pcfdev.io%2F
   ```
 1. see if zipkin-server is working
 
