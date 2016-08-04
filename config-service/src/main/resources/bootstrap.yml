@@ -1,12 +1,27 @@
-server:
-  port: 8888
+
 spring:
   application:
     name: config-service
+  profiles:
+    active: development
+
+server:
+  port: 8888
+
+---
+spring:
+  profiles: default
   cloud:
     config:
       server:
         git:
+           uri: file://${CONFIG_REPO_PATH:/Users/kimm5/_dev/spring-cloud-event-sourcing-example/spring-cloud-event-sourceing-pcf-config}
+
+
+---
+spring:
+  profiles: cloud
+  cloud:
+    config:
 #          uri: https://github.com/kbastani/spring-cloud-event-sourcing-cf-config.git
-           uri: file:///Users/kimm5/_dev/spring-cloud-event-sourcing-example/spring-cloud-event-sourceing-pcf-config
-#           uri: https://github.com/myminseok/spring-cloud-event-sourceing-pcf-config
+       uri: https://github.com/myminseok/spring-cloud-event-sourceing-pcf-config

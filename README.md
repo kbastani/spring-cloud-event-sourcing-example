@@ -24,6 +24,7 @@ you don't need to install seperately!
 ![hystrix dashboard](hystrix.png)
 ![zipkin dashboard](zipkin.png)
 ![eureka dashboard](eureka.png)
+![rabbitmq dashboard](rabbitmq.png)
 
 
 # step by step installation guide
@@ -35,14 +36,35 @@ you don't need to install seperately!
   cf dev start -m 9000
   https://console.local.pcfdev.io/2  admin/admin
   ```
-1. run config service (localhost)
+1. git clone and compile
+  
   ```
-  $ config-service > mvn spring-boot:run
+  git clone https://github.com/myminseok/spring-cloud-event-sourcing-example
+  cd spring-cloud-event-sourcing-example
+  git checkout pcfdev
+  mvn clean package -DskipTests
+  
+  ```
+  
+  checkout config repo
+  ```
+  git clone https://github.com/myminseok/spring-cloud-event-sourceing-pcf-config
+  
+  ```
+  
+1. run config service (localhost)
+  
+  specify you just cloned 'spring-cloud-event-sourceing-pcf-config''folder's absolute path to 'CONFIG_REPO_PATH' env variable.
+  ```
+  $ config-service > mvn spring-boot:run -DCONFIG_REPO_PATH=/path/to/spring-cloud-event-sourceing-pcf-config
 
-  * check http://192.168.11.1:8888/
+  * check http://192.168.11.1:8888/application/cloud
+    should show something "application.yml, application-cloud.yml#cloud" in the response.
+  
   $  cf cups config-service -p '{"uri":"http://192.168.11.1:8888/"}'
   ```
 1. discovery service (localhost)
+
   ```
   $  discovery-service > mvn spring-boot:run
 
@@ -50,12 +72,18 @@ you don't need to install seperately!
   $  cf cups discovery-service -p '{"uri":"http://192.168.11.1:8761/"}'
   ```
 1. create service (pcfdev)
+
   ```
   cf cs p-rabbitmq standard rabbitmq
-
-  * optionally use rabbitmq outside of PCF;
-  * cf cups rabbitmq -p '{"uri":"amqp://user:pass@192.168.11.1:5672", "host":"192.168.11.1", "username":"user", "password":"pass"}'
+  * check rabbitmq management dashboard
+    apps manager (https://console.local.pcfdev.io/2) > pcfdev-space (left memu)> services tab> rabbitmq > manage click
+    https://rabbitmq-management.local.pcfdev.io
+  * altenatevely, you can use rabbitmq outside of PCF;
+   setup rabbitmq( brew install rabbitmq)
+   cf cups rabbitmq -p '{"uri":"amqp://user:pass@192.168.11.1:5672", "host":"192.168.11.1", "username":"user", "password":"pass"}'
+   
   ```
+  
 1. turbine-server (pcfdev)
  
   ``` 
@@ -162,8 +190,11 @@ you don't need to install seperately!
   ```
 ssh vcap@local.pcfdev.io  password: vcap
   ```
-1. pcf apps manager
-  
+1. login to pcfdev apps manager
+ 
   ```
   https://console.local.pcfdev.io/2  admin/admin
   ```
+1. spring boot 1.4 might not work in PCF with initalization error.
+
+  bump down spring-boot version to 1.3.6.RELEASE in this case.
