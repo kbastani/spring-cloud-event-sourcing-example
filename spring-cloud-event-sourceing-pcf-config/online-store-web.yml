@@ -1,0 +1,100 @@
+spring:
+  profiles:
+    active: development
+---
+spring:
+  profiles: cloud
+  application:
+    name: online-store-web
+zuul:
+  ignored-services: '*'
+  routes:
+    edge-service:
+      path: /api/**
+      url: ${vcap.services.edge-service.credentials.uri:http://localhost:9999}
+    auth-service:
+      path: /user/**
+      url: ${vcap.services.user-service.credentials.uri:http://localhost:8181}/uaa/user
+    user-service:
+      path: /users/**
+security:
+  enable-csrf: false
+  oauth2:
+    resource:
+      userInfoUri: ${vcap.services.user-service.credentials.uri:http://localhost:8181}/uaa/user
+    client:
+      accessTokenUri: ${vcap.services.user-service.credentials.uri:http://localhost:8181}/uaa/oauth/token
+      userAuthorizationUri: ${vcap.services.user-service.credentials.uri:http://localhost:8181}/uaa/oauth/authorize
+      clientId: acme
+      clientSecret: acmesecret
+  ignored: /assets/**
+---
+spring:
+  profiles: development
+  application:
+    name: online-store-web
+zuul:
+  ignored-services: '*'
+  routes:
+    edge-service:
+      path: /api/**
+      url: http://localhost:9999
+    auth-service:
+      path: /user/**
+      url: http://localhost:8181/uaa/user
+    user-service:
+      path: /users/**
+security:
+  enable-csrf: false
+  oauth2:
+    resource:
+      userInfoUri: http://localhost:8181/uaa/user
+    client:
+      accessTokenUri: http://localhost:8181/uaa/oauth/token
+      userAuthorizationUri: http://localhost:8181/uaa/oauth/authorize
+      clientId: acme
+      clientSecret: acmesecret
+eureka:
+  instance:
+    non-secure-port: 8787
+    prefer-ip-address: true
+  client:
+    registerWithEureka: true
+    fetchRegistry: true
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
+---
+spring:
+  profiles: docker
+  application:
+    name: online-store-web
+zuul:
+  ignored-services: '*'
+  routes:
+    edge-service:
+      path: /api/**
+      url: http://${DOCKER_IP:192.168.99.100}:9999
+    auth-service:
+      path: /user/**
+      url: http://${DOCKER_IP:192.168.99.100}:8181/uaa/user
+    user-service:
+      path: /users/**
+security:
+  enable-csrf: false
+  oauth2:
+    resource:
+      userInfoUri: http://${DOCKER_IP:192.168.99.100}:8181/uaa/user
+    client:
+      accessTokenUri: http://${DOCKER_IP:192.168.99.100}:8181/uaa/oauth/token
+      userAuthorizationUri: http://${DOCKER_IP:192.168.99.100}:8181/uaa/oauth/authorize
+      clientId: acme
+      clientSecret: acmesecret
+eureka:
+  instance:
+    non-secure-port: 8787
+    prefer-ip-address: true
+  client:
+    registerWithEureka: true
+    fetchRegistry: true
+    serviceUrl:
+      defaultZone: http://discovery-service:8761/eureka/
