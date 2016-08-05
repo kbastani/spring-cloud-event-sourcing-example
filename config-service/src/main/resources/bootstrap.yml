@@ -15,7 +15,7 @@ spring:
     config:
       server:
         git:
-           uri: file://${CONFIG_REPO_PATH:/Users/kimm5/_dev/spring-cloud-event-sourcing-example/spring-cloud-event-sourceing-pcf-config}
+           uri: file://${CONFIG_REPO_PATH:/Users/kimm5/_dev/spring-cloud-event-sourceing-pcf-config}
 
 
 ---

@@ -42,7 +42,11 @@ you don't need to install seperately!
   you need to setup virtualbox vm with 9GB+ memory, otherwise you might get "Insufficient Resource" error
   ```
   cf dev start -m 9000
-  https://console.local.pcfdev.io/2  admin/admin
+  # goto webpage: https://console.local.pcfdev.io/2  admin/admin
+  
+  # login to pcfdev via cli.
+  cf login -a https://api.local.pcfdev.io --skip-ssl-validation
+  # Admin user => Email: admin / Password: admin  
   ```
 1. git clone and compile
   
@@ -51,7 +55,6 @@ you don't need to install seperately!
   cd spring-cloud-event-sourcing-example
   git checkout pcfdev
   mvn clean package -DskipTests
-  
   ```
   
   checkout config repo
@@ -64,49 +67,62 @@ you don't need to install seperately!
   
   specify you just cloned 'spring-cloud-event-sourceing-pcf-config''folder's absolute path to 'CONFIG_REPO_PATH' env variable.
   ```
-  $ config-service > mvn spring-boot:run -DCONFIG_REPO_PATH=/path/to/spring-cloud-event-sourceing-pcf-config
+  config-service > mvn spring-boot:run -DCONFIG_REPO_PATH=/path/to/spring-cloud-event-sourceing-pcf-config
 
-  * check http://host.pcfdev.io:8888/application/cloud
-    should show something "application.yml, application-cloud.yml#cloud" in the response.
+  # goto webpage: http://host.pcfdev.io:8888/application/cloud
+  # should show something "application.yml, application-cloud.yml#cloud" in the response.
   
-  $  cf cups config-service -p '{"uri":"http://host.pcfdev.io:8888/"}'
+  cf cups config-service -p '{"uri":"http://host.pcfdev.io:8888/"}'
+  
+  cf services
+  
+    Getting services in org pcfdev-org / space pcfdev-space as admin...
+    OK
+    name                service         plan        bound apps                      last operation   
+    config-service      user-provided 
+  
   ```
 1. discovery service (localhost)
 
   ```
-  $  discovery-service > mvn spring-boot:run
-
-  * check http://host.pcfdev.io:8761/
-  $  cf cups discovery-service -p '{"uri":"http://host.pcfdev.io:8761/"}'
+  discovery-service > mvn spring-boot:run
+  
+  # goto webpage: http://host.pcfdev.io:8761/
+  
+  cf cups discovery-service -p '{"uri":"http://host.pcfdev.io:8761/"}'
   ```
 1. create service (pcfdev)
 
   ```
   cf cs p-rabbitmq standard rabbitmq
-  * check rabbitmq management dashboard
+  
+  # check rabbitmq management dashboard
     apps manager (https://console.local.pcfdev.io/2) > pcfdev-space (left memu)> services tab> rabbitmq > manage click
     https://rabbitmq-management.local.pcfdev.io
   ```
   
-  if you want to use your own rabbitmq(outside of pcfdev), then do as follow;
+  alternatively, if you want to use your own rabbitmq installation (outside of pcfdev), then do as follow;
   
   ```
-   cf cups rabbitmq -p '{"uri":"amqp://YOUR_USER:YOUR_PASSWORD@RABBITMQ_HOST:RABBITMQ_PORT", "host":"RABBITMQ_HOST", "username":"YOUR_USER", "password":"YOUR_PASSWORD"}' 
-   ex) cf cups rabbitmq -p '{"uri":"amqp://user:pass@host.pcfdev.io:5672", "host":"host.pcfdev.io", "username":"YOUR_USER", "password":"YOUR_PASSWORD"}' 
+  # $ cf cups rabbitmq -p '{"uri":"amqp://YOUR_USER:YOUR_PASSWORD@RABBITMQ_HOST:RABBITMQ_PORT", "host":"RABBITMQ_HOST", "username":"YOUR_USER", "password":"YOUR_PASSWORD"}' 
+  # ex) cf cups rabbitmq -p '{"uri":"amqp://user:pass@host.pcfdev.io:5672", "host":"host.pcfdev.io", "username":"YOUR_USER", "password":"YOUR_PASSWORD"}' 
   ```
   
 1. turbine-server (pcfdev)
  
   ``` 
   turbine-server> cf push
-  # check http://turbine-server.local.pcfdev.io/
+  
+  # goto webpage: http://turbine-server.local.pcfdev.io/
   ```
 1. turbine-sample (pcfdev)
  
   ```
   turbine-sample> cf push
+  
   curl http://turbine-sample.local.pcfdev.io/
     => response "ok"
+    
   # go to turbine-server http://turbine-server.local.pcfdev.io/  webpage and data should be displayed (via rabbitmq)
    =>  data: {"rollingCountFallbackFailure":0,"...
   ```
@@ -114,30 +130,40 @@ you don't need to install seperately!
  
   ```
   hystrix-dashboard> mvn spring-boot:run
-  # goto hystrix webpage:  http://host.pcfdev.io:6161/hystrix
+  
+  # goto webpage:  http://host.pcfdev.io:6161/hystrix
   # put turbine-server url: http://turbine-server.local.pcfdev.io/ then, monitor => turbine-sample should be monitored.
   ```
 1. remove turbine-sample
  
   ```
   cf d turbine-sample
+    Really delete the app turbine-sample?> y
+    Deleting app turbine-sample in org pcfdev-org / space pcfdev-space as admin...
+    OK
   ```
 1. zipkin server
  
   ```
   cf cs p-mysql 512mb  zipkin-db
+  
   zipkin-server> cf push
-  # check http://zipkin-server.local.pcfdev.io/
+  
+  # goto webpage: http://zipkin-server.local.pcfdev.io/
+  
   cf cups zipkin-server -p '{"uri":"http://zipkin-server.local.pcfdev.io/"}'
-  # cf cups zipkin-server -p '{"uri":"http://host.pcfdev.io:9411"}'
   ```
 1. zipkin sample
  
   ```
-  zipkin-server> cf push
+  zipkin-sample > cf push
+  
   curl http://zipkin-sample.local.pcfdev.io/
-  curl http://zipkin-sample.local.pcfdev.io/call
-  # check zipkin server http://zipkin-server.local.pcfdev.io/ to see if 'zipkin-sample' listed.
+  curl http://zipkin-sample.local.pcfdev.io/call  
+  
+  # goto webpage: http://zipkin-server.local.pcfdev.io/ to see if 'zipkin-sample' listed
+  # click 'find a traces' butten, then someting break down charts are listed.
+  # goto "dependencies" menu, then click 'analyze dependencies', then 'turbine-sample' box should be shown.
   ```
 1. remove zipkin-sample app
   
@@ -154,17 +180,34 @@ you don't need to install seperately!
   cf cs p-mysql 512mb order-db
   cf cs p-mysql 512mb shopping-cart-db
   cf cs p-mysql 512mb user-db
-  ```
-1. user-service
   
-  ```
+  
+  $ cf s
+  Getting services in org pcfdev-org / space pcfdev-space as admin...
+  OK
+  
+  name                service         plan        bound apps                      last operation   
+  discovery-service   user-provided                                                  
+  rabbitmq            p-rabbitmq      standard    turbine-server, zipkin-server   create succeeded   
+  zipkin-db           p-mysql         512mb       zipkin-server                   create succeeded   
+  zipkin-server       user-provided                                                  
+  catalog-redis       p-redis         shared-vm                                   create succeeded   
+  account-db          p-mysql         512mb                                       create succeeded   
+  catalog-db          p-mysql         512mb                                       create succeeded   
+  inventory-db        p-mysql         512mb                                       create succeeded   
+  order-db            p-mysql         512mb                                       create succeeded   
+  shopping-cart-db    p-mysql         512mb                                       create succeeded   
+  user-db             p-mysql         512mb                                       create succeeded   
+  
   user-service> cf push
+  
   cf cups user-service -p '{"uri":"http://user-service.local.pcfdev.io/"}'
   ```
 1. edge-service
   
   ```
   edge-service> cf push
+  
   cf cups edge-service -p '{"uri":"http://edge-service.local.pcfdev.io/"}'
   ```
 1. deploy other apps
