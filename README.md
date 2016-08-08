@@ -52,7 +52,7 @@ If everything has loaded correctly, navigate to the online store at `http://DOCK
 ### Deploy to Pivotal Cloud Foundry
 
 1. pcf resource requirements
-  * more than 11GB app memory.
+  * more than 11GB memory available in PCF space.
 
 1. make sure backend service installed on PCF marketplace.
   * p-mysql
