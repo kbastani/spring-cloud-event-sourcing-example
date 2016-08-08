@@ -15,4 +15,3 @@ applications:
    - order-db
    - rabbitmq
    - zipkin-server
-

@@ -18,5 +18,7 @@ spring:
   profiles: cloud
   cloud:
     config:
+       server:
+         git:
 #          uri: https://github.com/kbastani/spring-cloud-event-sourcing-cf-config.git
-       uri: https://github.com/myminseok/spring-cloud-event-sourceing-pcf-config
+           uri: https://github.com/myminseok/spring-cloud-event-sourceing-pcf-config

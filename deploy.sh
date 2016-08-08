@@ -31,17 +31,61 @@ include_arr() {
     done | grep $1))
 }
 
+
+
 # Get manifest files for app deployments and services
 declare -a dirs
 i=1
 for d in `find */* -name manifest.yml -type f`
 do
-    dirs[i++]=$(echo "${d%/}" | sed -e "s/\/manifest.yml//g")
+    tmp=$(echo "${d%/}" | sed -e "s/\/manifest.yml//g")
+    # filter out zipkin-sample, turbine-sample
+    if [[ "${tmp}" != *sample ]]
+    then
+      dirs[i++]=$(echo "${d%/}" | sed -e "s/\/manifest.yml//g")
+    fi
 done
 
+# delete all app.
+for app in ${dirs[@]}
+do
+  echo "deleting app $app"
+  cf d $app -f
+done
+
+echo "deleting all backend service instances"
+cf ds rabbitmq -f
+cf ds catalog-redis -f
+cf ds account-db -f
+cf ds catalog-db -f
+cf ds inventory-db -f
+cf ds order-db -f
+cf ds shopping-cart-db -f
+cf ds user-db -f
+cf ds zipkin-db -f
+
+cf ds user-service -f
+cf ds edge-service -f
+cf ds inventory-service -f
+cf ds zipkin-server -f
+cf ds discovery-service -f
+cf ds config-service -f
+
+echo "creating backend service instances... "
+cf cs p-rabbitmq standard rabbitmq
+cf cs p-redis shared-vm catalog-redis
+cf cs p-mysql 100mb-dev account-db
+cf cs p-mysql 100mb-dev catalog-db
+cf cs p-mysql 100mb-dev inventory-db
+cf cs p-mysql 100mb-dev order-db
+cf cs p-mysql 100mb-dev shopping-cart-db
+cf cs p-mysql 100mb-dev user-db
+cf cs p-mysql 100mb-dev zipkin-db
+
+
 # This is the list of backing services for the online store
-backing_services='discovery-service\|config-service\|user-service\|edge-service'
-service_instances=(discovery-service config-service user-service edge-service)
+backing_services='turbine-server\|zipkin-server\|discovery-service\|config-service\|user-service\|edge-service'
+service_instances=(turbine-server zipkin-server discovery-service config-service user-service edge-service)
 
 # Filter out microservices
 include_arr $backing_services ${dirs[@]}

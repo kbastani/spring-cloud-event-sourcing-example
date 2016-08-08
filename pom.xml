@@ -28,6 +28,8 @@
         <module>edge-service</module>
         <module>shopping-cart-service</module>
         <module>hystrix-dashboard</module>
+        <module>turbine-server</module>
+        <module>zipkin-server</module>
         <module>zipkin-tracing</module>
     </modules>
 
