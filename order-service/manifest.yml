@@ -4,8 +4,7 @@ applications:
   memory: 850mb
   timeout: 180
   instances: 1
-#  buildpack: java_buildpack_offline
-  host: order-service
+  host: order-service-${random-word}
   path: target/order-service-0.0.1-SNAPSHOT.jar
   env:
     SPRING_PROFILES_ACTIVE: cloud

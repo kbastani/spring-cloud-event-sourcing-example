@@ -4,8 +4,7 @@ applications:
   memory: 1024M
   instances: 1
   timeout: 180
-#  buildpack: java_buildpack_offline
-  host: shopping-cart-service
+  host: shopping-cart-service-${random-word}
   path: target/shopping-cart-service-0.0.1-SNAPSHOT.jar
   env:
     SPRING_PROFILES_ACTIVE: cloud
