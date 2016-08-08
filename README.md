@@ -6,25 +6,76 @@ this project added following features to the original project:
 * sleuth, zipkin tracing using HTTP 
 * can deploy to pcfdev, a lightweight Pivotal Cloud Foundry (PCF) for desktop (https://network.pivotal.io/products/pcfdev)
 
-### this demo uses backend services from PaaS(pcfdev): 
-you don't need to install seperately!
+* Spring Cloud OAuth2
+  * Authorization Server
+  * Resource Server
+* Edge Service
+  * API gateway with OAuth2 protected resources
+  * OAuth2 SSO
+* Event-driven Messaging
+  * Event sourcing
+
+## Architecture Diagram
+
+![Online Store Architecture Diagram](http://i.imgur.com/PBCVt90.png)
+
+## Online Store Domain
+
+This reference application is based on common design patterns for building an ecommerce application. The application includes the following microservices.
+
+* Discovery Service
+* Edge Service
+* User Service
+* Catalog Service
+* Account Service
+* Order Service
+* Inventory Service
+* Online Store Web
+* Shopping Cart Service
+
+## Usage
+
+Microservice architectures commonly use multiple databases. The resources of the business domain are distributed across the microservice architecture, with each service having its own exclusive database. Each type of database for a microservice is commonly chosen by a development team based on its advantages when solving a specific problem.
+
+This reference application uses the following mixture of databases.
+
 * MySQL - RDBMS
 * Redis - Key/value Store
 * RabbitMQ- messaging
 
-### H/W requirement
-* requires 9GB+ memory for pcfdev
-* 2GB memory for config-server, discovery-server, hystrix-dashboard at local host machine.
+### Integration Testing
 
-### internet connection is mandatory for:
-* DNS lookup for pcfdev: 
-  * local.pcfdev.io -> 192.168.11.11
-  * host.pcfdev.io  => 192.168.11.1
-* demo app looks up some javascript from internet.
+If you would like to use Docker for integration testing, a `docker-compose.yml` file has been provided in the root directory. To build all the images, first make sure that you have Docker installed and available in your command line tool. With Docker and Docker Compose installed, execute the provided `run.sh` script. This script will build each container and start each of the services and database dependencies. When all the services have started up. Verify that the services are registered with Eureka at `http://$DOCKER_IP:8761`.
 
-### IP setting for networking
-* your pc will be NAT gateway (192.168.11.1) to virtualbox.
-* your pcfdev(virtualbox VM) will have 192.168.11.11
+If everything has loaded correctly, navigate to the online store at `http://DOCKER_IP:8787/`. Click `Login`. You'll be navigated to the authorization server's gateway at `http://DOCKER_IP:8181/uaa/login`. The username is `user` and the password is `password`. You'll be authenticated and asked to approve token grant to the online web store. After accepting the grant, you'll be redirected to the online store application where you'll be able to access protected resources from the edge service.
+
+### Deploy to Pivotal Cloud Foundry
+
+1. pcf resource requirements
+
+* more than 11GB app memory.
+
+1. make sure backend service installed on PCF marketplace.
+* p-mysql
+* p-rabbitmq
+* p-redis
+
+1. target to PCF
+```
+cf login -a api.your.pcf.deployment
+```
+
+1. install all apps to PCF
+
+```
+deploy.sh
+```
+
+1. navigate apps.
+
+check if all app is registered to discovery-service. then go to online-store web http://online-store-web2.YOUR.PCF.DOMAIN
+login with user/password
+
 
 ### screen shot
 ![demoapp](demoapp.png)
@@ -34,242 +85,6 @@ you don't need to install seperately!
 ![eureka dashboard](eureka.png)
 ![rabbitmq dashboard](rabbitmq.png)
 
+## License
 
-# step by step installation guide
-
-1. setup pcfdev
-
-  you need to setup virtualbox vm with 9GB+ memory, otherwise you might get "Insufficient Resource" error
-  ```
-  cf dev start -m 9000
-  # goto webpage: https://console.local.pcfdev.io/2  admin/admin
-  
-  # login to pcfdev via cli.
-  cf login -a https://api.local.pcfdev.io --skip-ssl-validation
-  # Admin user => Email: admin / Password: admin  
-  ```
-1. git clone and compile
-  
-  ```
-  git clone https://github.com/myminseok/spring-cloud-event-sourcing-example
-  cd spring-cloud-event-sourcing-example
-  git checkout pcfdev
-  mvn clean package -DskipTests
-  ```
-  
-  checkout config repo
-  ```
-  git clone https://github.com/myminseok/spring-cloud-event-sourceing-pcf-config
-  
-  ```
-  
-1. run config service (localhost)
-  
-  specify you just cloned 'spring-cloud-event-sourceing-pcf-config''folder's absolute path to 'CONFIG_REPO_PATH' env variable.
-  ```
-  config-service > mvn spring-boot:run -DCONFIG_REPO_PATH=/path/to/spring-cloud-event-sourceing-pcf-config
-
-  # goto webpage: http://host.pcfdev.io:8888/application/cloud
-  # should show something "application.yml, application-cloud.yml#cloud" in the response.
-  
-  cf cups config-service -p '{"uri":"http://host.pcfdev.io:8888/"}'
-  
-  cf services
-  
-    Getting services in org pcfdev-org / space pcfdev-space as admin...
-    OK
-    name                service         plan        bound apps                      last operation   
-    config-service      user-provided 
-  
-  ```
-1. discovery service (localhost)
-
-  ```
-  discovery-service > mvn spring-boot:run
-  
-  # goto webpage: http://host.pcfdev.io:8761/
-  
-  cf cups discovery-service -p '{"uri":"http://host.pcfdev.io:8761/"}'
-  ```
-1. create service (pcfdev)
-
-  ```
-  cf cs p-rabbitmq standard rabbitmq
-  
-  # check rabbitmq management dashboard
-    apps manager (https://console.local.pcfdev.io/2) > pcfdev-space (left memu)> services tab> rabbitmq > manage click
-    https://rabbitmq-management.local.pcfdev.io
-  ```
-  
-  alternatively, if you want to use your own rabbitmq installation (outside of pcfdev), then do as follow;
-  
-  ```
-  # $ cf cups rabbitmq -p '{"uri":"amqp://YOUR_USER:YOUR_PASSWORD@RABBITMQ_HOST:RABBITMQ_PORT", "host":"RABBITMQ_HOST", "username":"YOUR_USER", "password":"YOUR_PASSWORD"}' 
-  # ex) cf cups rabbitmq -p '{"uri":"amqp://user:pass@host.pcfdev.io:5672", "host":"host.pcfdev.io", "username":"YOUR_USER", "password":"YOUR_PASSWORD"}' 
-  ```
-  
-1. turbine-server (pcfdev)
- 
-  ``` 
-  turbine-server> cf push
-  
-  # goto webpage: http://turbine-server.local.pcfdev.io/
-  ```
-1. turbine-sample (pcfdev)
- 
-  ```
-  turbine-sample> cf push
-  
-  curl http://turbine-sample.local.pcfdev.io/
-    => response "ok"
-    
-  # go to turbine-server http://turbine-server.local.pcfdev.io/  webpage and data should be displayed (via rabbitmq)
-   =>  data: {"rollingCountFallbackFailure":0,"...
-  ```
-1. hystrix-dashboard (localhost)
- 
-  ```
-  hystrix-dashboard> mvn spring-boot:run
-  
-  # goto webpage:  http://host.pcfdev.io:6161/hystrix
-  # put turbine-server url: http://turbine-server.local.pcfdev.io/ then, monitor => turbine-sample should be monitored.
-  ```
-1. remove turbine-sample
- 
-  ```
-  cf d turbine-sample
-    Really delete the app turbine-sample?> y
-    Deleting app turbine-sample in org pcfdev-org / space pcfdev-space as admin...
-    OK
-  ```
-1. zipkin server
- 
-  ```
-  cf cs p-mysql 512mb  zipkin-db
-  
-  zipkin-server> cf push
-  
-  # goto webpage: http://zipkin-server.local.pcfdev.io/
-  
-  cf cups zipkin-server -p '{"uri":"http://zipkin-server.local.pcfdev.io/"}'
-  ```
-1. zipkin sample
- 
-  ```
-  zipkin-sample > cf push
-  
-  curl http://zipkin-sample.local.pcfdev.io/
-  curl http://zipkin-sample.local.pcfdev.io/call  
-  
-  # goto webpage: http://zipkin-server.local.pcfdev.io/ to see if 'zipkin-sample' listed
-  # click 'find a traces' butten, then someting break down charts are listed.
-  # goto "dependencies" menu, then click 'analyze dependencies', then 'turbine-sample' box should be shown.
-  ```
-1. remove zipkin-sample app
-  
-  ```
-  cf d zipkin-sample
-  ```
-1. create backend services (pcfdev)
-  
-  ```
-  cf cs p-redis shared-vm catalog-redis
-  cf cs p-mysql 512mb account-db
-  cf cs p-mysql 512mb catalog-db
-  cf cs p-mysql 512mb inventory-db
-  cf cs p-mysql 512mb order-db
-  cf cs p-mysql 512mb shopping-cart-db
-  cf cs p-mysql 512mb user-db
-  
-  
-  $ cf s
-  Getting services in org pcfdev-org / space pcfdev-space as admin...
-  OK
-  
-  name                service         plan        bound apps                      last operation   
-  discovery-service   user-provided                                                  
-  rabbitmq            p-rabbitmq      standard    turbine-server, zipkin-server   create succeeded   
-  zipkin-db           p-mysql         512mb       zipkin-server                   create succeeded   
-  zipkin-server       user-provided                                                  
-  catalog-redis       p-redis         shared-vm                                   create succeeded   
-  account-db          p-mysql         512mb                                       create succeeded   
-  catalog-db          p-mysql         512mb                                       create succeeded   
-  inventory-db        p-mysql         512mb                                       create succeeded   
-  order-db            p-mysql         512mb                                       create succeeded   
-  shopping-cart-db    p-mysql         512mb                                       create succeeded   
-  user-db             p-mysql         512mb                                       create succeeded   
-  
-  user-service> cf push
-  
-  cf cups user-service -p '{"uri":"http://user-service.local.pcfdev.io/"}'
-  ```
-1. edge-service
-  
-  ```
-  edge-service> cf push
-  
-  cf cups edge-service -p '{"uri":"http://edge-service.local.pcfdev.io/"}'
-  ```
-1. deploy other apps
-  
-  each app should be registered to discovery service(http://host.pcfdev.io:8761/). it takes heartbeat interval( normally 30sec)
-  if you experience insufficient memory, then you don't have to push 'order-service' which will be used only when your order.
-  
-  ```
-  account service > cf push
-  catalog service > cf push
-  inventory service > cf push
-  shopping-cart service > cf push
-  online-store-web > cf push
-  
-  order service > cf push
-  
-  ```
- 
-1. final check
-  
-  check if all app is registered to discovery-service: http://host.pcfdev.io:8761/
-  go to online-store web http://online-store-web2.local.pcfdev.io/
-  login with user/password
-1. see if hystrix-dashboard is working
-
-  to collect hystrix info, you have to access and navigate online shopping mall several times.
- 
-  ```
-  http://host.pcfdev.io:6161/hystrix/monitor?stream=http%3A%2F%2Fturbine-server.local.pcfdev.io%2F
-  ```
-1. see if zipkin-server is working
-
-  you have to access and navigate online shopping mall several times.
-  
-  ```
-  http://zipkin-server.local.pcfdev.io/
-  ```
-
-
-# trouble shooting
-
-1. "Insufficient Resource" error
-
-    you need to setup pcfdev with 9GB+ memory.
-    alternatively, use another computer to deploy rest of microservices. 
-    microservices should communicate to their dependency services.
-
-1. ssh into pcfdev
-  
-  ```
-ssh vcap@local.pcfdev.io  password: vcap
-  ```
-1. login to pcfdev apps manager
- 
-  ```
-  https://console.local.pcfdev.io/2  admin/admin
-  ```
-1. spring boot 1.4 might not work in PCF with initalization error.
-
-  bump down spring-boot version to 1.3.6.RELEASE in this case.
-  
-# reference
-*   hystrix: http://cloud.spring.io/spring-cloud-netflix/spring-cloud-netflix.html
-*   sleuth, zipkin: http://cloud.spring.io/spring-cloud-sleuth/spring-cloud-sleuth.html
- 
+This project is licensed under Apache License 2.0.
