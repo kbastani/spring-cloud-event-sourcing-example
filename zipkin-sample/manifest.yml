@@ -4,7 +4,7 @@ applications:
   memory: 512mb
   instances: 1
 #  buildpack: java_buildpack_offline
-  host: zipkin-sample
+  host: zipkin-sample-${random-word}
   path: target/zipkin-sample-0.0.1-SNAPSHOT.jar
   timeout: 180
   env:

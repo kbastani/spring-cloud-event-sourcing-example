@@ -1,13 +1,6 @@
 spring:
   profiles:
     active: development
-
-
----
-spring:
-  profiles: cloud
-
-
 ---
 server:
   port: 8181
@@ -25,8 +18,6 @@ spring:
     password: dbpass
     initialize: true
 security.ignored: /resources/**
-
-
 ---
 server:
   port: 8181

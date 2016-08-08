@@ -1,38 +1,6 @@
 spring:
   profiles:
     active: development
-
-
-
----
-spring:
-  profiles: cloud
-  application:
-    name: online-store-web
-
-zuul:
-  ignored-services: '*'
-  routes:
-    edge-service:
-      path: /api/**
-      url: ${vcap.services.edge-service.credentials.uri:http://localhost:9999}
-    auth-service:
-      path: /user/**
-      url: ${vcap.services.user-service.credentials.uri:http://localhost:8181}/uaa/user
-    user-service:
-      path: /users/**
-security:
-  enable-csrf: false
-  oauth2:
-    resource:
-      userInfoUri: ${vcap.services.user-service.credentials.uri:http://localhost:8181}/uaa/user
-    client:
-      accessTokenUri: ${vcap.services.user-service.credentials.uri:http://localhost:8181}/uaa/oauth/token
-      userAuthorizationUri: ${vcap.services.user-service.credentials.uri:http://localhost:8181}/uaa/oauth/authorize
-      clientId: acme
-      clientSecret: acmesecret
-  ignored: /assets/**
-
 ---
 spring:
   profiles: development
@@ -102,3 +70,33 @@ eureka:
     fetchRegistry: true
     serviceUrl:
       defaultZone: http://discovery-service:8761/eureka/
+
+# for self running without config-server on cloud.
+---
+spring:
+  profiles: cloud
+  application:
+    name: online-store-web
+
+zuul:
+  ignored-services: '*'
+  routes:
+    edge-service:
+      path: /api/**
+      url: ${vcap.services.edge-service.credentials.uri:http://localhost:9999}
+    auth-service:
+      path: /user/**
+      url: ${vcap.services.user-service.credentials.uri:http://localhost:8181}/uaa/user
+    user-service:
+      path: /users/**
+security:
+  enable-csrf: false
+  oauth2:
+    resource:
+      userInfoUri: ${vcap.services.user-service.credentials.uri:http://localhost:8181}/uaa/user
+    client:
+      accessTokenUri: ${vcap.services.user-service.credentials.uri:http://localhost:8181}/uaa/oauth/token
+      userAuthorizationUri: ${vcap.services.user-service.credentials.uri:http://localhost:8181}/uaa/oauth/authorize
+      clientId: acme
+      clientSecret: acmesecret
+  ignored: /assets/**

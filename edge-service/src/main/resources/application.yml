@@ -1,33 +1,6 @@
 spring:
   profiles:
     active: development
-
-
----
-spring:
-  profiles: cloud
-zuul:
-  ignored-services: '*'
-  ignoredPatterns: /**/api/**
-  routes:
-    account-service: /account/**
-    payment-service: /payment/**
-    inventory-service: /inventory/**
-    order-service: /order/**
-    user-service: /user/**
-    catalog-service: /catalog/**
-    shopping-cart-service: /shoppingcart/**
-security:
-  oauth2:
-    resource:
-      userInfoUri: ${vcap.services.user-service.credentials.uri:http://localhost:8181}/uaa/user
-  ignored: /catalog/**
-hystrix.command.default.execution.isolation.thread.timeoutInMilliseconds: 60000
-ribbon:
-  ConnectTimeout: 3000
-  ReadTimeout: 60000
-
-
 ---
 spring:
   profiles: development
@@ -38,6 +11,7 @@ spring:
       percentage: 1
     enabled: false
   rabbitmq:
+    # setup your own rabbitmq installation for local env.
     host: "localhost"
     username: "user"
     password: "pass"
@@ -98,6 +72,31 @@ eureka:
     fetchRegistry: true
     serviceUrl:
       defaultZone: http://discovery-service:8761/eureka/
+hystrix.command.default.execution.isolation.thread.timeoutInMilliseconds: 60000
+ribbon:
+  ConnectTimeout: 3000
+  ReadTimeout: 60000
+
+# for self running without config-server on cloud.
+---
+spring:
+  profiles: cloud
+zuul:
+  ignored-services: '*'
+  ignoredPatterns: /**/api/**
+  routes:
+    account-service: /account/**
+    payment-service: /payment/**
+    inventory-service: /inventory/**
+    order-service: /order/**
+    user-service: /user/**
+    catalog-service: /catalog/**
+    shopping-cart-service: /shoppingcart/**
+security:
+  oauth2:
+    resource:
+      userInfoUri: ${vcap.services.user-service.credentials.uri:http://localhost:8181}/uaa/user
+  ignored: /catalog/**
 hystrix.command.default.execution.isolation.thread.timeoutInMilliseconds: 60000
 ribbon:
   ConnectTimeout: 3000

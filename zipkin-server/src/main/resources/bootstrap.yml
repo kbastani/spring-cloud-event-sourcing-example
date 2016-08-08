@@ -13,9 +13,6 @@ spring:
 server:
   port: 9411
 
-#turbine:
-#  stream:
-#    port:8989
 ---
 spring:
   profiles: docker

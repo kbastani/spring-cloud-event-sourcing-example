@@ -1,11 +1,4 @@
 spring.profiles.active: development
-
-
----
-spring:
-  profiles: cloud
-
-
 ---
 spring:
   profiles: development

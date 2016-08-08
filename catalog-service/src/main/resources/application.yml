@@ -1,13 +1,6 @@
 spring:
   profiles:
     active: development
-
-
----
-spring:
-  profiles: cloud
-
-
 ---
 spring:
   profiles: development
@@ -58,4 +51,3 @@ spring:
     database: H2
   datasource:
     initialize: false
-

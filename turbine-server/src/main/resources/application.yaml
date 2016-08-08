@@ -12,7 +12,7 @@ spring:
     username: ${vcap.services.rabbitmq.credentials.username:user}
     password: ${vcap.services.rabbitmq.credentials.password:pass}
 
-
+# for self running without config-server on cloud.
 ---
 spring:
   profiles: cloud

@@ -4,7 +4,7 @@ applications:
   memory: 512mb
   instances: 1
 #  buildpack: java_buildpack_offline
-  host: turbine-sample
+  host: turbine-sample-${random-word}
   path: target/turbine-sample-0.0.1-SNAPSHOT.jar
   timeout: 180
   env:
@@ -13,5 +13,3 @@ applications:
    - discovery-service
 #   - config-service
    - rabbitmq
-
-

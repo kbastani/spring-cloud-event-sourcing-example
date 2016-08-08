@@ -29,20 +29,15 @@
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-hystrix</artifactId>
 		</dependency>
-		<!--<dependency>-->
-			<!--<groupId>org.springframework.cloud</groupId>-->
-			<!--<artifactId>spring-cloud-starter-hystrix-dashboard</artifactId>-->
-		<!--</dependency>-->
-		<!--<dependency>-->
-			<!--<groupId>org.springframework.cloud</groupId>-->
-			<!--<artifactId>spring-cloud-starter-turbine</artifactId>-->
-		<!--</dependency>-->
-
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-netflix-turbine-stream</artifactId>
 			<version>1.1.0.RELEASE</version>
 			<exclusions>
+				<!--# there is a bug when you deploy turbine-server to CF.-->
+				<!--## java.net.BindException: Address already in use-->
+				<!--# you cann't control tomcat port 8080 which turbine don't need.-->
+				<!--# just remove maven dependency(pom.xml) for spring-boot-starter-web, spring-boot-starter-actuator, so that netty can use 8080-->
 				<exclusion>
 					<groupId>org.springframework.boot</groupId>
 					<artifactId>spring-boot-starter-web</artifactId>
@@ -53,14 +48,9 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
-		<!--<dependency>-->
-			<!--<groupId>org.springframework.cloud</groupId>-->
-			<!--<artifactId>spring-cloud-starter-stream-rabbit</artifactId>-->
-			<!--<version>1.0.0.RELEASE</version>-->
-		<!--</dependency>-->
 		<dependency>
-		<groupId>org.springframework.cloud</groupId>
-		<artifactId>spring-cloud-stream-binder-rabbit</artifactId>
+		    <groupId>org.springframework.cloud</groupId>
+		    <artifactId>spring-cloud-stream-binder-rabbit</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
