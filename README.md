@@ -52,29 +52,27 @@ If everything has loaded correctly, navigate to the online store at `http://DOCK
 ### Deploy to Pivotal Cloud Foundry
 
 1. pcf resource requirements
-
-* more than 11GB app memory.
+  * more than 11GB app memory.
 
 1. make sure backend service installed on PCF marketplace.
-* p-mysql
-* p-rabbitmq
-* p-redis
+  * p-mysql
+  * p-rabbitmq
+  * p-redis
 
 1. target to PCF
-```
-cf login -a api.your.pcf.deployment
-```
+  ```
+  cf login -a api.your.pcf.deployment
+  ```
 
 1. install all apps to PCF
+  ```
+  deploy.sh
+  ```
 
-```
-deploy.sh
-```
+1. navigate apps
 
-1. navigate apps.
-
-check if all app is registered to discovery-service. then go to online-store web http://online-store-web2.YOUR.PCF.DOMAIN
-login with user/password
+  check if all app is registered to discovery-service. then go to online-store web http://online-store-web2.YOUR.PCF.DOMAIN. 
+  and login with user/password
 
 
 ### screen shot
