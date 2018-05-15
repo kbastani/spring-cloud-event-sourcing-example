@@ -27,9 +27,9 @@ CREATE TABLE invoice (
 );
 
 CREATE TABLE invoice_orders (
-  invoice_invoiceid VARCHAR(255) NOT NULL,
-  orders_orderid    VARCHAR(255) NOT NULL,
-  CONSTRAINT constraint_3 PRIMARY KEY (invoice_invoiceid, orders_orderid)
+  invoice_invoice_id VARCHAR(255) NOT NULL,
+  orders_order_id    VARCHAR(255) NOT NULL,
+  CONSTRAINT constraint_3 PRIMARY KEY (invoice_invoice_id, orders_order_id)
 );
 
 CREATE TABLE line_item (
@@ -59,9 +59,9 @@ CREATE TABLE orders (
 );
 
 CREATE TABLE orders_line_items (
-  orders_orderid VARCHAR(255) NOT NULL,
+  orders_order_id VARCHAR(255) NOT NULL,
   line_items_id  BIGINT       NOT NULL,
-  CONSTRAINT constraint_6 PRIMARY KEY (orders_orderid, line_items_id)
+  CONSTRAINT constraint_6 PRIMARY KEY (orders_order_id, line_items_id)
 );
 
 ALTER TABLE invoice
@@ -72,15 +72,15 @@ CREATE INDEX fk_c2fcw5sa2lj5p18js8pi68cld_index_9 ON invoice (billing_address_id
 
 ALTER TABLE invoice_orders
   ADD
-  FOREIGN KEY (invoice_invoiceid) REFERENCES invoice (invoice_id);
+  FOREIGN KEY (invoice_invoice_id) REFERENCES invoice (invoice_id);
 
 ALTER TABLE invoice_orders
   ADD
-  FOREIGN KEY (orders_orderid) REFERENCES orders (order_id);
+  FOREIGN KEY (orders_order_id) REFERENCES orders (order_id);
 
-CREATE UNIQUE INDEX uk_ivfpej2xy47jq7s12a6v0epn6_index_3 ON invoice_orders (orders_orderid);
+CREATE UNIQUE INDEX uk_ivfpej2xy47jq7s12a6v0epn6_index_3 ON invoice_orders (orders_order_id);
 
-CREATE INDEX fk_messjw8yb9yoewmjv20ycl44q_index_3 ON invoice_orders (invoice_invoiceid);
+CREATE INDEX fk_messjw8yb9yoewmjv20ycl44q_index_3 ON invoice_orders (invoice_invoice_id);
 
 ALTER TABLE orders
   ADD
@@ -94,8 +94,8 @@ ALTER TABLE orders_line_items
 
 ALTER TABLE orders_line_items
   ADD
-  FOREIGN KEY (orders_orderid) REFERENCES orders (order_id);
+  FOREIGN KEY (orders_order_id) REFERENCES orders (order_id);
 
 CREATE UNIQUE INDEX uk_frp259x5fvoyc35w6dd1rnj84_index_6 ON orders_line_items (line_items_id);
 
-CREATE INDEX fk_sbs9bq1hgkawxyvau17jhuvkx_index_6 ON orders_line_items (orders_orderid);
+CREATE INDEX fk_sbs9bq1hgkawxyvau17jhuvkx_index_6 ON orders_line_items (orders_order_id);

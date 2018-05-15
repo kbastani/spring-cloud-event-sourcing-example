@@ -25,11 +25,13 @@
         <dependency>
             <groupId>io.zipkin.java</groupId>
             <artifactId>zipkin-server</artifactId>
+            <version>0.4.3</version>
         </dependency>
 
         <dependency>
             <groupId>io.zipkin</groupId>
             <artifactId>zipkin-ui</artifactId>
+            <version>1.40.2</version>
             <scope>runtime</scope>
         </dependency>
     </dependencies>
