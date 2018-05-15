@@ -6,6 +6,7 @@ import demo.order.OrderEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,6 +24,7 @@ public class OrderControllerV1 {
         this.orderService = orderService;
     }
 
+    @Transactional(readOnly = true)
     @RequestMapping(path = "/accounts/{accountNumber}/orders")
     public ResponseEntity getOrders(@PathVariable("accountNumber") String accountNumber) throws Exception {
         return Optional.ofNullable(orderService.getOrdersForAccount(accountNumber))
@@ -30,6 +32,7 @@ public class OrderControllerV1 {
                 .orElseThrow(() -> new Exception("Accounts for user do not exist"));
     }
 
+    @Transactional(readOnly = false)
     @RequestMapping(path = "/orders/{orderId}/events", method = RequestMethod.POST)
     public ResponseEntity addOrderEvent(@RequestBody OrderEvent orderEvent,
                                         @PathVariable("orderId") String orderId) throws Exception {
@@ -41,6 +44,7 @@ public class OrderControllerV1 {
                 .orElseThrow(() -> new Exception("Order event could not be applied to order"));
     }
 
+    @Transactional(readOnly = true)
     @RequestMapping(path = "/orders/{orderId}")
     public ResponseEntity getOrder(@PathVariable("orderId") String orderId) throws Exception {
         assert orderId != null;
@@ -49,6 +53,7 @@ public class OrderControllerV1 {
                 .orElseThrow(() -> new Exception("Could not retrieve order"));
     }
 
+    @Transactional(readOnly = false)
     @RequestMapping(path = "/orders", method = RequestMethod.POST)
     public ResponseEntity createOrder(@RequestBody List<LineItem> lineItems) throws Exception {
         assert lineItems != null;
