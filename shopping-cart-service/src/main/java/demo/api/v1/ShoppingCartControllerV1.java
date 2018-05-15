@@ -4,6 +4,7 @@ import demo.cart.CartEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -29,6 +30,7 @@ public class ShoppingCartControllerV1 {
                 .orElseThrow(() -> new Exception("Could not find shopping cart"));
     }
 
+    @Transactional(readOnly = false)
     @RequestMapping(path = "/checkout", method = RequestMethod.POST)
     public ResponseEntity checkoutCart() throws Exception {
         return Optional.ofNullable(shoppingCartService.checkout())
@@ -36,6 +38,7 @@ public class ShoppingCartControllerV1 {
                 .orElseThrow(() -> new Exception("Could not checkout"));
     }
 
+    @Transactional(readOnly = false)
     @RequestMapping(path = "/cart", method = RequestMethod.GET)
     public ResponseEntity getCart() throws Exception {
         return Optional.ofNullable(shoppingCartService.getShoppingCart())
