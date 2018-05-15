@@ -1,6 +1,19 @@
 spring:
   profiles:
     active: development
+
+---
+server:
+  contextPath: /uaa
+security:
+  user:
+    password: password
+  enable-csrf: false
+  # https://github.com/spring-projects/spring-boot/issues/10415
+  oauth2.resource.filter-order: 3
+spring:
+  profiles: cloud
+security.ignored: /resources/**
 ---
 server:
   port: 8181
@@ -9,6 +22,8 @@ security:
   user:
     password: password
   enable-csrf: false
+# https://github.com/spring-projects/spring-boot/issues/10415
+  oauth2.resource.filter-order: 3
 logging.level.org.springframework.security: DEBUG
 spring:
   profiles: development
