@@ -50,4 +50,4 @@ If everything has loaded correctly, navigate to the online store at `http://DOCK
 
 ## License
 
-This project is licensed under Apache License 2.0.
+This project is an open source product licensed under GPLv3.
