@@ -14,12 +14,8 @@ import java.util.Optional;
 @RequestMapping(path = "/v1")
 public class AccountControllerV1 {
 
-    private AccountServiceV1 accountService;
-
     @Autowired
-    public AccountControllerV1(AccountServiceV1 accountService) {
-        this.accountService = accountService;
-    }
+    private AccountServiceV1 accountService;
 
     @RequestMapping(path = "/accounts")
     public ResponseEntity getUserAccount() throws Exception {
